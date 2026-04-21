@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BEAMS360 — Preview Access</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --indigo: #635BFF; --indigo-dark: #4F46E5; --indigo-light: #EEF2FF;
+    --slate-900: #0A2540; --slate-500: #425466; --slate-400: #697386;
+    --slate-200: #C1C9D2; --slate-100: #E3E8EE; --slate-50: #F6F9FC;
+    --red: #DF1B41; --red-light: #FFECEC;
+    --text-primary: #0A2540; --text-muted: #697386; --text-light: #8898AA;
+    --border: #E3E8EE;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0A2540 0%, #1A3A5C 50%, #243B55 100%);
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px;
+    letter-spacing: -0.005em;
+    color: var(--text-primary);
+  }
+  .gate-panel {
+    width: 420px; max-width: 100%;
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.32), 0 8px 24px rgba(0,0,0,0.18);
+    padding: 32px 32px 28px;
+    animation: rise 0.3s ease-out;
+  }
+  @keyframes rise {
+    from { transform: translateY(12px); opacity: 0; }
+    to { transform: none; opacity: 1; }
+  }
+  .gate-header {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 24px;
+  }
+  .gate-logo {
+    width: 44px; height: 44px; border-radius: 11px;
+    background: linear-gradient(135deg, #635BFF, #9B8FFF);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 12px rgba(99,91,255,0.28);
+  }
+  .gate-logo svg { width: 22px; height: 22px; fill: #fff; }
+  .gate-title h1 {
+    font-size: 18px; font-weight: 700; letter-spacing: -0.02em;
+    color: var(--text-primary);
+  }
+  .gate-title .sub {
+    font-size: 12.5px; color: var(--text-muted); margin-top: 2px;
+    letter-spacing: -0.005em;
+  }
+  .gate-body p {
+    font-size: 13.5px; color: var(--slate-500);
+    line-height: 1.5; margin-bottom: 20px;
+  }
+  .field-label {
+    font-size: 11px; font-weight: 600; color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: 0.06em;
+    display: block; margin-bottom: 6px;
+  }
+  .field-input {
+    width: 100%; height: 40px;
+    padding: 0 14px;
+    border: 1px solid var(--border); border-radius: 8px;
+    background: var(--slate-50);
+    font-family: inherit; font-size: 14px;
+    color: var(--text-primary);
+    letter-spacing: -0.005em;
+    transition: all 0.15s;
+    outline: none;
+  }
+  .field-input:focus {
+    background: #fff;
+    border-color: var(--indigo);
+    box-shadow: 0 0 0 3px rgba(99,91,255,0.16);
+  }
+  .field-error {
+    font-size: 12px; color: var(--red);
+    margin-top: 6px; font-weight: 500;
+    display: none;
+  }
+  .field-error.show { display: block; }
+  .submit-btn {
+    width: 100%; height: 40px;
+    margin-top: 18px;
+    background: var(--indigo); color: #fff;
+    border: none; border-radius: 8px;
+    font-family: inherit; font-size: 14px; font-weight: 600;
+    letter-spacing: -0.005em;
+    cursor: pointer;
+    transition: all 0.12s;
+    box-shadow: 0 1px 3px rgba(99,91,255,0.3);
+  }
+  .submit-btn:hover { background: var(--indigo-dark); }
+  .submit-btn:active { transform: translateY(1px); }
+  .submit-btn:disabled { opacity: 0.6; cursor: default; }
+  .gate-footer {
+    margin-top: 22px; padding-top: 18px;
+    border-top: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 11px; color: var(--text-light);
+  }
+  .gate-footer img { height: 14px; opacity: 0.7; }
+  .meta-row { display: flex; gap: 10px; align-items: center; }
+</style>
+</head>
+<body>
+
+<form class="gate-panel" onsubmit="return submitPassword(event)">
+  <div class="gate-header">
+    <div class="gate-logo">
+      <svg viewBox="0 0 24 24"><path d="M12 2L3 7v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-9-5zm-2 16l-4-4 1.41-1.41L10 15.17l6.59-6.59L18 10l-8 8z"/></svg>
+    </div>
+    <div class="gate-title">
+      <h1>BEAMS360 Preview</h1>
+      <div class="sub">Password-protected internal mockups</div>
+    </div>
+  </div>
+
+  <div class="gate-body">
+    <p>This is an internal preview of the BEAMS360 UX redesign. Enter the access password to view the mockups.</p>
+
+    <label class="field-label" for="pw">Access password</label>
+    <input class="field-input" id="pw" type="password" autocomplete="off" autofocus required>
+    <div class="field-error" id="err">Incorrect password. Try again.</div>
+
+    <button class="submit-btn" id="submitBtn" type="submit">Unlock preview</button>
+  </div>
+
+  <div class="gate-footer">
+    <span>© 2026 Beaconhouse Technology LLC</span>
+    <div class="meta-row">
+      <span>Powered by</span>
+      <img src="b360-logo-1000.png" alt="BEAMS360">
+    </div>
+  </div>
+</form>
+
+<script>
+  // If already authenticated, skip the gate entirely
+  if (sessionStorage.getItem('b360-auth') === 'ok') {
+    window.location.replace('home.html');
+  }
+
+  // SHA-256 hash of the access password
+  const PW_HASH = '5f006960edd9f3097db5d0cf76141186d5a3940a64457e254e2495563aa7f316';
+
+  async function sha256(msg) {
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(msg));
+    return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, '0')).join('');
+  }
+
+  async function submitPassword(e) {
+    e.preventDefault();
+    const pw = document.getElementById('pw').value;
+    const btn = document.getElementById('submitBtn');
+    const err = document.getElementById('err');
+    btn.disabled = true;
+    btn.textContent = 'Checking…';
+    err.classList.remove('show');
+
+    const hash = await sha256(pw);
+    if (hash === PW_HASH) {
+      sessionStorage.setItem('b360-auth', 'ok');
+      window.location.replace('home.html');
+    } else {
+      btn.disabled = false;
+      btn.textContent = 'Unlock preview';
+      err.classList.add('show');
+      document.getElementById('pw').value = '';
+      document.getElementById('pw').focus();
+    }
+    return false;
+  }
+</script>
+
+</body>
+</html>
