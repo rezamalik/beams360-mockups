@@ -1013,8 +1013,8 @@
   .records-filter.active { border-color: var(--indigo); color: var(--indigo); background: var(--indigo-light); }
   .records-filter svg { width: 12px; height: 12px; fill: currentColor; }
   .records-count { margin-left: auto; font-size: 12px; color: var(--text-muted); }
-  .records-row-link { cursor: pointer; }
-  .records-row-link:hover td:first-child { color: var(--indigo); font-weight: 600; }
+  .records-view tbody tr { cursor: pointer; }
+  .records-view tbody tr:hover td:first-child { color: var(--indigo); font-weight: 600; }
 
   /* ── Detail view ── */
   body[data-view="detail"] .ai-insights,
@@ -1863,7 +1863,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr class="records-row-link" onclick="location.hash='#detail'" title="Open invoice detail"><td class="time">FEE-2026-0142</td><td>Zara Ahmed · G8</td><td class="notes">Mr. Ahmed</td><td class="amount">Rs. 105,600</td><td class="notes">Feb 2</td><td class="stagnant-days">78 days</td><td class="notes">Mar 12</td><td><span class="status-pill status-overdue">Escalate</span></td></tr>
+            <tr><td class="time">FEE-2026-0142</td><td>Zara Ahmed · G8</td><td class="notes">Mr. Ahmed</td><td class="amount">Rs. 105,600</td><td class="notes">Feb 2</td><td class="stagnant-days">78 days</td><td class="notes">Mar 12</td><td><span class="status-pill status-overdue">Escalate</span></td></tr>
             <tr><td class="time">FEE-2026-0128</td><td>Yusuf Malik · G6</td><td class="notes">Mrs. Malik</td><td class="amount">Rs. 97,050</td><td class="notes">Feb 9</td><td class="stagnant-days">71 days</td><td class="notes">Mar 18</td><td><span class="status-pill status-overdue">Escalate</span></td></tr>
             <tr><td class="time">FEE-2026-0135</td><td>Eman Iqbal · G7</td><td class="notes">Mr. Iqbal</td><td class="amount">Rs. 105,600</td><td class="notes">Feb 11</td><td class="stagnant-days">69 days</td><td class="notes">Mar 20</td><td><span class="status-pill status-overdue">Escalate</span></td></tr>
             <tr><td class="time">FEE-2026-0171</td><td>Rayyan Khan · G5</td><td class="notes">Mr. Khan</td><td class="amount">Rs. 89,250</td><td class="notes">Feb 16</td><td class="stagnant-days">64 days</td><td class="notes">Mar 25</td><td><span class="status-pill status-overdue">Escalate</span></td></tr>
@@ -2603,7 +2603,7 @@
   });
 
   // ── Init ──
-  // ── Detail tab switching ──
+  // ── Detail tab switching + records-row click delegate ──
   function switchTab(tab) {
     document.querySelectorAll('.detail-tab').forEach(t => {
       t.classList.toggle('active', t.getAttribute('data-tab') === tab);
@@ -2614,7 +2614,9 @@
   }
   document.addEventListener('click', (e) => {
     const tab = e.target.closest('.detail-tab');
-    if (tab) switchTab(tab.getAttribute('data-tab'));
+    if (tab) { switchTab(tab.getAttribute('data-tab')); return; }
+    const row = e.target.closest('.records-view tbody tr');
+    if (row) { location.hash = '#detail'; }
   });
 
   renderWaffle();

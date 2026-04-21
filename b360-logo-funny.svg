@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 220" font-family="Impact, 'Arial Black', sans-serif">
+  <!-- Navy rounded-square badge -->
+  <rect x="10" y="10" width="200" height="200" rx="22" fill="#0f2b5b"/>
+
+  <!-- Chaotic yellow beams (no longer a tidy 90° fan) -->
+  <g fill="#f5c518">
+    <polygon points="110,110 230,30  230,55"/>
+    <polygon points="110,110 260,70  255,95"/>
+    <polygon points="110,110 270,130 255,150"/>
+    <polygon points="110,110 30,25   55,25"/>
+    <polygon points="110,110 -10,80  -5,105"/>
+    <polygon points="110,110 40,210  65,205"/>
+    <polygon points="110,110 180,230 160,220"/>
+    <!-- stray beam going backwards through the base -->
+    <polygon points="110,110 120,230 95,225"/>
+  </g>
+
+  <!-- Drunk/tilted lighthouse -->
+  <g transform="rotate(-11 110 140)">
+    <!-- base -->
+    <polygon points="78,185 142,185 134,150 86,150" fill="#ffffff"/>
+    <!-- tower -->
+    <rect x="90" y="70" width="40" height="80" fill="#ffffff"/>
+    <!-- red stripes, wobbly -->
+    <rect x="90" y="90"  width="40" height="10" fill="#e94b4b"/>
+    <rect x="90" y="120" width="40" height="10" fill="#e94b4b"/>
+    <!-- lamp house -->
+    <rect x="94" y="52" width="32" height="18" fill="#ffffff"/>
+    <!-- roof -->
+    <polygon points="90,52 130,52 110,36" fill="#ffffff"/>
+    <!-- tiny flag -->
+    <line x1="110" y1="36" x2="110" y2="22" stroke="#ffffff" stroke-width="2"/>
+    <polygon points="110,22 122,26 110,30" fill="#f5c518"/>
+
+    <!-- GOOGLY EYES on the lamp house -->
+    <circle cx="102" cy="61" r="6" fill="#ffffff" stroke="#0f2b5b" stroke-width="1.2"/>
+    <circle cx="118" cy="61" r="6" fill="#ffffff" stroke="#0f2b5b" stroke-width="1.2"/>
+    <circle cx="104" cy="63" r="2.6" fill="#0f2b5b"/>
+    <circle cx="116" cy="59" r="2.6" fill="#0f2b5b"/>
+
+    <!-- squiggly mouth -->
+    <path d="M98 80 Q104 76 110 80 T122 80" stroke="#0f2b5b" stroke-width="2" fill="none" stroke-linecap="round"/>
+
+    <!-- sweat drop -->
+    <path d="M138 56 Q142 64 138 68 Q134 64 138 56 Z" fill="#6cc0ff"/>
+  </g>
+
+  <!-- Wordmark, slightly off-kilter -->
+  <g fill="#0f2b5b">
+    <text x="250" y="155" font-size="128" letter-spacing="2">BEAMS</text>
+    <!-- "360" spinning, with swirl eyes -->
+    <g transform="rotate(18 830 120)">
+      <text x="770" y="155" font-size="128" letter-spacing="2">360</text>
+    </g>
+    <!-- ® becomes a wobbly ™ with googly dot -->
+    <text x="1020" y="70" font-size="26">™?</text>
+  </g>
+
+  <!-- little swirl/dizzy lines above the 360 -->
+  <g fill="none" stroke="#0f2b5b" stroke-width="3" stroke-linecap="round">
+    <path d="M820 40 q10 -10 20 0 t20 0"/>
+    <path d="M860 25 q8 -8 16 0 t16 0"/>
+  </g>
+
+  <!-- tagline -->
+  <text x="250" y="195" font-size="20" fill="#0f2b5b" font-family="Georgia, serif" font-style="italic">
+    now with 33% more confusion.™
+  </text>
+</svg>

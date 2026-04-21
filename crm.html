@@ -186,6 +186,116 @@
   .records-filter.active { border-color:var(--indigo); color:var(--indigo); background:var(--indigo-light); }
   .records-filter svg { width:12px; height:12px; fill:currentColor; }
   .records-count { margin-left:auto; font-size:12px; color:var(--text-muted); }
+  .records-view tbody tr { cursor: pointer; }
+  .records-view tbody tr:hover td:first-child { color: var(--indigo); font-weight: 600; }
+
+  /* ── Detail view ── */
+  body[data-view="detail"] .ai-insights,
+  body[data-view="detail"] .dashboard-body,
+  body[data-view="detail"] .records-view { display: none; }
+  .detail-view { display: none; }
+  body[data-view="detail"] .detail-view { display: block; }
+
+  .detail-header-wrap { background: #fff; border-bottom: 1px solid var(--border-light); padding: 18px 28px 0; }
+  .detail-breadcrumb { font-size: 12px; color: var(--text-muted); margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+  .detail-breadcrumb a { color: var(--indigo); text-decoration: none; font-weight: 500; }
+  .detail-breadcrumb a:hover { text-decoration: underline; }
+  .detail-breadcrumb span.sep { color: var(--slate-200); font-size: 14px; }
+  .detail-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 18px; padding-bottom: 14px; }
+  .detail-identity { display: flex; align-items: flex-start; gap: 14px; flex: 1; min-width: 0; }
+  .detail-avatar { width: 52px; height: 52px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: #fff; box-shadow: 0 2px 6px rgba(10,37,64,0.10); font-size: 18px; font-weight: 700; }
+  .detail-avatar svg { width: 24px; height: 24px; fill: #fff; }
+  .detail-title h2 { font-size: 22px; font-weight: 700; letter-spacing: -0.025em; color: var(--text-primary); line-height: 1.2; }
+  .detail-subtitle { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--text-muted); margin-top: 4px; flex-wrap: wrap; }
+  .detail-subtitle .id { font-variant-numeric: tabular-nums; font-weight: 500; color: var(--text-secondary); }
+  .detail-subtitle .dot { width: 3px; height: 3px; background: var(--slate-200); border-radius: 50%; }
+  .detail-actions { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
+
+  .detail-tabs { display: flex; gap: 2px; border-bottom: 1px solid var(--border-light); margin-top: 2px; }
+  .detail-tab { padding: 10px 16px 12px; font-size: 13.5px; font-weight: 500; color: var(--text-muted); background: none; border: none; border-bottom: 2px solid transparent; cursor: pointer; font-family: inherit; letter-spacing: -0.005em; transition: color 0.1s; position: relative; top: 1px; }
+  .detail-tab:hover { color: var(--text-primary); }
+  .detail-tab.active { color: var(--indigo); border-bottom-color: var(--indigo); font-weight: 600; }
+  .detail-tab-count { display: inline-block; margin-left: 4px; font-size: 11px; padding: 1px 6px; border-radius: 999px; background: var(--slate-100); color: var(--text-muted); font-weight: 600; }
+  .detail-tab.active .detail-tab-count { background: var(--indigo-light); color: var(--indigo); }
+
+  .detail-body { display: grid; grid-template-columns: 1fr 320px; gap: 20px; padding: 20px 28px; align-items: flex-start; }
+  .detail-main { min-width: 0; display: flex; flex-direction: column; gap: 16px; }
+  .detail-rail { display: flex; flex-direction: column; gap: 16px; position: sticky; top: 72px; }
+  .detail-tab-panel { display: none; }
+  .detail-tab-panel.active { display: flex; flex-direction: column; gap: 16px; }
+
+  /* CRM pipeline hero */
+  .pipeline-hero { background: linear-gradient(135deg, #F0EEFF 0%, #FAF9FF 100%); border: 1px solid #C7D2FE; border-radius: 12px; padding: 20px 22px; }
+  .pipeline-hero .hero-top { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 16px; }
+  .pipeline-hero .hero-label { font-size: 11px; font-weight: 600; color: var(--indigo); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+  .pipeline-hero .hero-score { font-size: 22px; font-weight: 700; letter-spacing: -0.025em; line-height: 1.1; color: var(--text-primary); display: flex; align-items: center; gap: 10px; }
+  .pipeline-hero .intent-tag-lg { display:inline-flex; align-items:center; height:24px; padding:0 10px; border-radius:999px; font-size:12px; font-weight:600; background:#FEF3C7; color:#B45309; letter-spacing:0.01em; }
+  .pipeline-hero .stagnant-note { font-size: 12.5px; color: var(--text-secondary); text-align: right; line-height: 1.5; }
+  .pipeline-hero .stagnant-note strong { color: var(--red); font-weight: 600; }
+
+  .stage-flow { display: flex; align-items: center; gap: 4px; }
+  .stage-node { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+  .stage-node .dot-stage { width: 12px; height: 12px; border-radius: 50%; background: #fff; border: 2px solid var(--slate-200); }
+  .stage-node.done .dot-stage { background: var(--indigo); border-color: var(--indigo); }
+  .stage-node.current .dot-stage { background: var(--amber); border-color: var(--amber); box-shadow: 0 0 0 4px rgba(255,178,36,0.2); }
+  .stage-node .stage-name { font-size: 11px; font-weight: 500; color: var(--text-muted); letter-spacing: -0.005em; text-align: center; }
+  .stage-node.done .stage-name { color: var(--indigo); font-weight: 600; }
+  .stage-node.current .stage-name { color: #B45309; font-weight: 600; }
+  .stage-connector { flex: 0 0 auto; height: 2px; width: 20px; background: var(--slate-200); margin-bottom: 16px; }
+  .stage-connector.done { background: var(--indigo); }
+
+  .signal-list { display: flex; flex-wrap: wrap; gap: 6px; padding: 14px 18px 4px; }
+  .signal-chip { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px 4px 8px; border-radius: 999px; font-size: 12px; font-weight: 500; background: var(--slate-50); border: 1px solid var(--border); color: var(--text-secondary); letter-spacing: -0.005em; }
+  .signal-chip svg { width: 11px; height: 11px; fill: var(--text-muted); }
+  .signal-chip.positive { background: var(--green-light); border-color: rgba(28,184,126,0.3); color: var(--green); }
+  .signal-chip.positive svg { fill: var(--green); }
+  .signal-chip.warn { background: #FFF8EB; border-color: #FCD34D; color: #B45309; }
+  .signal-chip.warn svg { fill: #B45309; }
+
+  .facts-list { display: flex; flex-direction: column; gap: 9px; }
+  .facts-row { display: grid; grid-template-columns: 96px 1fr; gap: 10px; font-size: 12.5px; line-height: 1.45; }
+  .facts-row .label { color: var(--text-muted); }
+  .facts-row .value { color: var(--text-primary); font-weight: 500; letter-spacing: -0.005em; word-break: break-word; }
+  .facts-row .value.num { font-variant-numeric: tabular-nums; }
+  .facts-row .value.link { color: var(--indigo); cursor: pointer; }
+  .facts-row .value.link:hover { text-decoration: underline; }
+
+  .related-list { display: flex; flex-direction: column; gap: 2px; margin: -4px -6px 0; }
+  .related-item { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 6px; text-decoration: none; color: var(--text-primary); transition: background 0.1s; font-size: 12.5px; }
+  .related-item:hover { background: var(--slate-50); }
+  .related-item .r-icon { width: 28px; height: 28px; border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .related-item .r-icon svg { width: 13px; height: 13px; fill: #fff; }
+  .related-item .r-body { flex: 1; min-width: 0; }
+  .related-item .r-title { font-weight: 500; letter-spacing: -0.005em; line-height: 1.3; }
+  .related-item .r-sub { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+  .related-item .r-meta { font-size: 11px; color: var(--text-muted); flex-shrink: 0; font-weight: 500; }
+
+  .action-stack { display: flex; flex-direction: column; gap: 6px; }
+  .stack-btn { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 6px; border: 1px solid var(--border); background: #fff; cursor: pointer; font-family: inherit; font-size: 13px; color: var(--text-primary); font-weight: 500; text-align: left; letter-spacing: -0.005em; transition: all 0.12s; box-shadow: var(--shadow-btn); width: 100%; }
+  .stack-btn:hover { background: var(--slate-50); border-color: var(--slate-200); }
+  .stack-btn svg { width: 14px; height: 14px; fill: var(--text-muted); flex-shrink: 0; }
+  .stack-btn.primary { background: var(--indigo); color: #fff; border-color: var(--indigo); box-shadow: 0 1px 3px rgba(99,91,255,0.3); }
+  .stack-btn.primary:hover { background: var(--indigo-dark); border-color: var(--indigo-dark); }
+  .stack-btn.primary svg { fill: #fff; }
+  .stack-btn.danger { color: var(--red); border-color: rgba(223,27,65,0.2); }
+  .stack-btn.danger:hover { background: var(--red-light); border-color: var(--red); }
+  .stack-btn.danger svg { fill: var(--red); }
+
+  .timeline { display: flex; flex-direction: column; }
+  .timeline-row { display: flex; gap: 14px; padding: 12px 0; position: relative; }
+  .timeline-row:not(:last-child)::before { content: ''; position: absolute; left: 13px; top: 36px; bottom: -4px; width: 1px; background: var(--border); }
+  .timeline-dot { width: 28px; height: 28px; border-radius: 50%; background: #fff; border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; flex-shrink: 0; z-index: 1; }
+  .timeline-dot svg { width: 13px; height: 13px; fill: var(--text-muted); }
+  .timeline-dot.indigo { border-color: var(--indigo); background: var(--indigo-light); } .timeline-dot.indigo svg { fill: var(--indigo); }
+  .timeline-dot.green  { border-color: var(--green); background: var(--green-light); } .timeline-dot.green svg { fill: var(--green); }
+  .timeline-dot.amber  { border-color: var(--amber); background: #FFF8EB; } .timeline-dot.amber svg { fill: #B45309; }
+  .timeline-dot.red    { border-color: var(--red); background: var(--red-light); } .timeline-dot.red svg { fill: var(--red); }
+  .timeline-body { flex: 1; min-width: 0; padding-top: 2px; }
+  .timeline-body .t-title { font-size: 13.5px; font-weight: 500; letter-spacing: -0.005em; color: var(--text-primary); }
+  .timeline-body .t-meta { font-size: 11.5px; color: var(--text-muted); margin-top: 2px; display: flex; align-items: center; gap: 8px; }
+  .timeline-body .t-desc { font-size: 12.5px; color: var(--text-secondary); margin-top: 4px; line-height: 1.5; }
+
+  @media (max-width: 1100px) { .detail-body { grid-template-columns: 1fr; } .detail-rail { position: static; } }
 
   .topbar-divider { width:1px; height:18px; background:var(--border); }
   .topbar-breadcrumb { font-size:13px; color:var(--text-muted); }
@@ -894,6 +1004,296 @@
     </div>
   </div>
 
+  <!-- ── Detail view: Lead — Maya Lee (stagnant) ── -->
+  <div class="detail-view">
+
+    <div class="detail-header-wrap">
+      <div class="detail-breadcrumb">
+        <a href="#dashboard" class="nav-link" data-view="dashboard">Dashboard</a>
+        <span class="sep">/</span>
+        <a href="#records" class="nav-link" data-view="records">Leads</a>
+        <span class="sep">/</span>
+        <span>Maya Lee</span>
+      </div>
+
+      <div class="detail-header">
+        <div class="detail-identity">
+          <div class="detail-avatar mod-grad-crm">ML</div>
+          <div class="detail-title">
+            <h2>Maya Lee</h2>
+            <div class="detail-subtitle">
+              <span class="id">LEAD-2026-0314</span>
+              <span class="dot"></span>
+              <span>Grade 2 · Gulberg preferred</span>
+              <span class="dot"></span>
+              <span>Source: Referral</span>
+              <span class="dot"></span>
+              <span class="status-pill status-overdue">Stagnant · 18 days</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-actions">
+          <button class="topbar-btn" title="Send email">
+            <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+            <span>Email</span>
+          </button>
+          <button class="topbar-btn">
+            <svg viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/></svg>
+            <span>Schedule visit</span>
+          </button>
+          <button class="topbar-btn primary">
+            <svg viewBox="0 0 24 24"><path d="M20 15.5c-1.25 0-2.45-.2-3.57-.57-.35-.11-.74-.03-1.02.25l-2.2 2.2c-2.83-1.44-5.15-3.75-6.59-6.58l2.2-2.21c.28-.27.36-.66.25-1.01A11.36 11.36 0 018.5 4c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1 0 9.39 7.61 17 17 17 .55 0 1-.45 1-1v-3.5c0-.55-.45-1-1-1z"/></svg>
+            <span>Log call</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="detail-tabs">
+        <button class="detail-tab active" data-tab="overview">Overview</button>
+        <button class="detail-tab" data-tab="activity">Activity <span class="detail-tab-count">11</span></button>
+        <button class="detail-tab" data-tab="family">Family</button>
+        <button class="detail-tab" data-tab="audit">Audit <span class="detail-tab-count">7</span></button>
+      </div>
+    </div>
+
+    <div class="detail-body">
+
+      <div class="detail-main">
+
+        <!-- Overview panel -->
+        <div class="detail-tab-panel active" data-panel="overview">
+
+          <!-- Pipeline hero -->
+          <div class="pipeline-hero">
+            <div class="hero-top">
+              <div>
+                <div class="hero-label">Lead intent</div>
+                <div class="hero-score">
+                  72 / 100
+                  <span class="intent-tag-lg">High intent</span>
+                </div>
+              </div>
+              <div class="stagnant-note">
+                Stuck in <strong style="color:#B45309;">Awaiting Documents</strong><br>
+                <strong>18 days since last contact</strong>
+              </div>
+            </div>
+            <div class="stage-flow">
+              <div class="stage-node done"><div class="dot-stage"></div><div class="stage-name">New</div></div>
+              <div class="stage-connector done"></div>
+              <div class="stage-node done"><div class="dot-stage"></div><div class="stage-name">Contacted</div></div>
+              <div class="stage-connector done"></div>
+              <div class="stage-node done"><div class="dot-stage"></div><div class="stage-name">Visit Booked</div></div>
+              <div class="stage-connector done"></div>
+              <div class="stage-node done"><div class="dot-stage"></div><div class="stage-name">Trial Done</div></div>
+              <div class="stage-connector"></div>
+              <div class="stage-node current"><div class="dot-stage"></div><div class="stage-name">Awaiting Docs</div></div>
+              <div class="stage-connector"></div>
+              <div class="stage-node"><div class="dot-stage"></div><div class="stage-name">Applied</div></div>
+              <div class="stage-connector"></div>
+              <div class="stage-node"><div class="dot-stage"></div><div class="stage-name">Enrolled</div></div>
+            </div>
+          </div>
+
+          <!-- Intent signals -->
+          <div class="card">
+            <div class="card-header">
+              <div><h3>Intent signals</h3><div class="subtitle">Why we score this lead as High</div></div>
+              <span class="badge badge-indigo">5 signals</span>
+            </div>
+            <div class="signal-list" style="padding-bottom: 14px;">
+              <span class="signal-chip positive"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> Referred by existing family</span>
+              <span class="signal-chip positive"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> Visited campus twice</span>
+              <span class="signal-chip positive"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> Attended trial class</span>
+              <span class="signal-chip positive"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> Viewed fee page 3×</span>
+              <span class="signal-chip warn"><svg viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg> Stagnant for 18 days</span>
+            </div>
+          </div>
+
+          <!-- Recent activity -->
+          <div class="card">
+            <div class="card-header">
+              <div><h3>Recent activity</h3><div class="subtitle">Last 3 touchpoints</div></div>
+              <a class="row-action" href="#" onclick="switchTab('activity'); return false;">See all &rarr;</a>
+            </div>
+            <div class="timeline" style="padding: 4px 18px 14px;">
+              <div class="timeline-row">
+                <div class="timeline-dot red"><svg viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg></div>
+                <div class="timeline-body">
+                  <div class="t-title">Stagnation flag added</div>
+                  <div class="t-meta">Apr 17 · System</div>
+                  <div class="t-desc">No stage movement for 14 days. Added to Red Flags. Last contact: Apr 3.</div>
+                </div>
+              </div>
+              <div class="timeline-row">
+                <div class="timeline-dot amber"><svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2z"/></svg></div>
+                <div class="timeline-body">
+                  <div class="t-title">Follow-up email — no reply</div>
+                  <div class="t-meta">Apr 9 · Reza Malik</div>
+                  <div class="t-desc">Sent document checklist + WhatsApp link. Email opened, no response.</div>
+                </div>
+              </div>
+              <div class="timeline-row">
+                <div class="timeline-dot indigo"><svg viewBox="0 0 24 24"><path d="M20 15.5c-1.25 0-2.45-.2-3.57-.57-.35-.11-.74-.03-1.02.25l-2.2 2.2c-2.83-1.44-5.15-3.75-6.59-6.58l2.2-2.21c.28-.27.36-.66.25-1.01A11.36 11.36 0 018.5 4c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1 0 9.39 7.61 17 17 17 .55 0 1-.45 1-1v-3.5c0-.55-.45-1-1-1z"/></svg></div>
+                <div class="timeline-body">
+                  <div class="t-title">Phone call with Mr. Lee — 12 min</div>
+                  <div class="t-meta">Apr 3 · Reza Malik</div>
+                  <div class="t-desc">Discussed fee structure &amp; sibling discount. Parent asked for 2 weeks to collate documents.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Activity panel -->
+        <div class="detail-tab-panel" data-panel="activity">
+          <div class="card">
+            <div class="card-header">
+              <div><h3>All activity</h3><div class="subtitle">Calls, emails, visits, system events</div></div>
+              <span class="badge badge-indigo">11 events</span>
+            </div>
+            <div class="timeline" style="padding: 8px 18px 18px;">
+              <div class="timeline-row"><div class="timeline-dot red"><svg viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg></div><div class="timeline-body"><div class="t-title">Stagnation flag — system</div><div class="t-meta">Apr 17 · 02:00 AM</div></div></div>
+              <div class="timeline-row"><div class="timeline-dot amber"><svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2z"/></svg></div><div class="timeline-body"><div class="t-title">Email — follow-up with doc checklist</div><div class="t-meta">Apr 9 · 11:00 AM · Reza Malik</div><div class="t-desc">Opened within 20 min. No reply.</div></div></div>
+              <div class="timeline-row"><div class="timeline-dot indigo"><svg viewBox="0 0 24 24"><path d="M20 15.5c-1.25 0-2.45-.2-3.57-.57-.35-.11-.74-.03-1.02.25l-2.2 2.2c-2.83-1.44-5.15-3.75-6.59-6.58l2.2-2.21c.28-.27.36-.66.25-1.01A11.36 11.36 0 018.5 4c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1 0 9.39 7.61 17 17 17 .55 0 1-.45 1-1v-3.5c0-.55-.45-1-1-1z"/></svg></div><div class="timeline-body"><div class="t-title">Call — Mr. Lee (12 min)</div><div class="t-meta">Apr 3 · 03:20 PM · Reza Malik</div><div class="t-desc">Discussed fees &amp; sibling discount. Parent requested 2 weeks to prepare documents.</div></div></div>
+              <div class="timeline-row"><div class="timeline-dot green"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div><div class="timeline-body"><div class="t-title">Stage advanced: Trial Done → Awaiting Documents</div><div class="t-meta">Mar 30 · Reza Malik</div></div></div>
+              <div class="timeline-row"><div class="timeline-dot green"><svg viewBox="0 0 24 24"><path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/></svg></div><div class="timeline-body"><div class="t-title">Attended trial class — G2, Ms. Fatima's section</div><div class="t-meta">Mar 28 · 11:00 AM</div><div class="t-desc">Positive feedback from teacher. Child engaged well with group.</div></div></div>
+              <div class="timeline-row"><div class="timeline-dot indigo"><svg viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg></div><div class="timeline-body"><div class="t-title">Second campus visit — 45 min</div><div class="t-meta">Mar 22 · Reza Malik</div><div class="t-desc">Met with Ms. Ayesha (Head of Primary). Asked detailed curriculum questions.</div></div></div>
+              <div class="timeline-row"><div class="timeline-dot"><svg viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg></div><div class="timeline-body"><div class="t-title">First campus visit</div><div class="t-meta">Mar 14 · Reza Malik</div></div></div>
+              <div class="timeline-row"><div class="timeline-dot amber"><svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2z"/></svg></div><div class="timeline-body"><div class="t-title">Email — intro &amp; visit link</div><div class="t-meta">Mar 10 · System</div></div></div>
+              <div class="timeline-row"><div class="timeline-dot indigo"><svg viewBox="0 0 24 24"><path d="M20 15.5c-1.25 0-2.45-.2-3.57-.57-.35-.11-.74-.03-1.02.25l-2.2 2.2c-2.83-1.44-5.15-3.75-6.59-6.58l2.2-2.21c.28-.27.36-.66.25-1.01A11.36 11.36 0 018.5 4c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1 0 9.39 7.61 17 17 17 .55 0 1-.45 1-1v-3.5c0-.55-.45-1-1-1z"/></svg></div><div class="timeline-body"><div class="t-title">Inbound call — first inquiry</div><div class="t-meta">Mar 10 · 10:15 AM · Reza Malik</div><div class="t-desc">Warm intro. Referred by the Khan family (existing G5 student).</div></div></div>
+              <div class="timeline-row"><div class="timeline-dot"><svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></div><div class="timeline-body"><div class="t-title">Lead created</div><div class="t-meta">Mar 10 · System</div></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Family panel -->
+        <div class="detail-tab-panel" data-panel="family">
+          <div class="card">
+            <div class="card-header">
+              <div><h3>Parents &amp; guardians</h3></div>
+            </div>
+            <table class="task-table">
+              <thead><tr><th>Name</th><th>Relation</th><th>Phone</th><th>Email</th><th>Occupation</th></tr></thead>
+              <tbody>
+                <tr><td>Mr. David Lee</td><td class="notes">Father · primary contact</td><td class="time">+92 321 9876543</td><td class="notes">david.lee@example.com</td><td class="notes">Engineer · Jazz Telecom</td></tr>
+                <tr><td>Mrs. Sarah Lee</td><td class="notes">Mother</td><td class="time">+92 321 9876544</td><td class="notes">sarah.lee@example.com</td><td class="notes">Paediatrician</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <div><h3>Household context</h3></div>
+            </div>
+            <div style="padding: 16px 18px 18px;">
+              <div class="facts-list">
+                <div class="facts-row"><span class="label">Address</span><span class="value">DHA Phase 5, Lahore</span></div>
+                <div class="facts-row"><span class="label">Siblings</span><span class="value">Zoe Lee · 5 (not yet school age)</span></div>
+                <div class="facts-row"><span class="label">Referred by</span><span class="value link">The Khan family (G5 · Arya Khan)</span></div>
+                <div class="facts-row"><span class="label">Preferred start</span><span class="value">Aug 2026 · Academic session 26-27</span></div>
+                <div class="facts-row"><span class="label">Fees sensitivity</span><span class="value">Asked about sibling discount &amp; payment plans</span></div>
+                <div class="facts-row"><span class="label">Distance to campus</span><span class="value num">3.2 km · Gulberg preferred</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Audit panel -->
+        <div class="detail-tab-panel" data-panel="audit">
+          <div class="card">
+            <div class="card-header">
+              <div><h3>Change log</h3><div class="subtitle">System and user events on this lead</div></div>
+            </div>
+            <table class="task-table">
+              <thead><tr><th>When</th><th>Who</th><th>What</th></tr></thead>
+              <tbody>
+                <tr><td class="time">Apr 17, 02:00</td><td>System</td><td>Stagnation flag added (&gt; 14 days no stage movement)</td></tr>
+                <tr><td class="time">Apr 9, 11:02</td><td>Reza Malik</td><td>Email sent — follow-up with document checklist</td></tr>
+                <tr><td class="time">Apr 3, 15:32</td><td>Reza Malik</td><td>Call logged (12 min, outcome: parent deferred)</td></tr>
+                <tr><td class="time">Mar 30, 09:10</td><td>Reza Malik</td><td>Stage advanced: Trial Done → Awaiting Documents</td></tr>
+                <tr><td class="time">Mar 28, 12:15</td><td>Reza Malik</td><td>Trial class attendance logged</td></tr>
+                <tr><td class="time">Mar 14, 16:40</td><td>Reza Malik</td><td>Lead assigned: unassigned → Reza Malik</td></tr>
+                <tr><td class="time">Mar 10, 10:15</td><td>System</td><td>Lead created (source: Referral)</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ── Right rail ── -->
+      <div class="detail-rail">
+
+        <div class="stat-widget">
+          <h3>Quick facts</h3>
+          <div class="facts-list">
+            <div class="facts-row"><span class="label">Parent</span><span class="value">Mr. David Lee</span></div>
+            <div class="facts-row"><span class="label">Phone</span><span class="value num">+92 321 9876543</span></div>
+            <div class="facts-row"><span class="label">Email</span><span class="value">david.lee@example.com</span></div>
+            <div class="facts-row"><span class="label">Location</span><span class="value">DHA Phase 5, Lahore</span></div>
+            <div class="facts-row"><span class="label">Seeking</span><span class="value">Grade 2 · Gulberg</span></div>
+            <div class="facts-row"><span class="label">Source</span><span class="value">Referral</span></div>
+            <div class="facts-row"><span class="label">Referrer</span><span class="value link">Khan family</span></div>
+            <div class="facts-row"><span class="label">Created</span><span class="value num">Mar 10, 2026</span></div>
+            <div class="facts-row"><span class="label">In pipeline</span><span class="value num">42 days</span></div>
+            <div class="facts-row"><span class="label">Owner</span><span class="value">Reza Malik</span></div>
+          </div>
+        </div>
+
+        <div class="stat-widget">
+          <h3>Related</h3>
+          <div class="related-list">
+            <a class="related-item" href="#">
+              <span class="r-icon mod-grad-sis"><svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></span>
+              <div class="r-body"><div class="r-title">Arya Khan</div><div class="r-sub">Referrer · G5 · BH-2022-0198</div></div>
+              <span class="r-meta" style="color:var(--green);">Active</span>
+            </a>
+            <a class="related-item" href="#">
+              <span class="r-icon mod-grad-crm"><svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4z"/></svg></span>
+              <div class="r-body"><div class="r-title">Zoe Lee</div><div class="r-sub">Future lead · Age 5</div></div>
+            </a>
+            <a class="related-item" href="#">
+              <span class="r-icon mod-grad-crm"><svg viewBox="0 0 24 24"><path d="M21 6h-3.17L16 4h-5c-1.1 0-1.99.9-1.99 2L9 18c0 1.1.89 2 2 2h10c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2z"/></svg></span>
+              <div class="r-body"><div class="r-title">Referral Programme Q2</div><div class="r-sub">Campaign · 24 leads generated</div></div>
+            </a>
+          </div>
+        </div>
+
+        <div class="stat-widget">
+          <h3>Next actions</h3>
+          <div class="action-stack">
+            <button class="stack-btn primary">
+              <svg viewBox="0 0 24 24"><path d="M20 15.5c-1.25 0-2.45-.2-3.57-.57-.35-.11-.74-.03-1.02.25l-2.2 2.2c-2.83-1.44-5.15-3.75-6.59-6.58l2.2-2.21c.28-.27.36-.66.25-1.01A11.36 11.36 0 018.5 4c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1 0 9.39 7.61 17 17 17 .55 0 1-.45 1-1v-3.5c0-.55-.45-1-1-1z"/></svg>
+              Call Mr. Lee
+            </button>
+            <button class="stack-btn">
+              <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2z"/></svg>
+              Send WhatsApp reminder
+            </button>
+            <button class="stack-btn">
+              <svg viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg>
+              Schedule 2nd trial
+            </button>
+            <button class="stack-btn">
+              <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+              Convert to applicant
+            </button>
+            <button class="stack-btn danger">
+              <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+              Archive as lost
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+  <!-- end detail-view -->
+
   <footer class="page-footer">
     &copy; 2026 Beaconhouse Technology LLC &middot; Powered by <img src="b360-logo-1000.png" alt="BEAMS360">
   </footer>
@@ -1112,6 +1512,22 @@
       if (e.target.id === 'waffleOverlay')  closeWaffle();
       if (e.target.id === 'paletteOverlay') closePalette();
     }
+  });
+
+  // ── Detail tab switching ──
+  function switchTab(tab) {
+    document.querySelectorAll('.detail-tab').forEach(t => {
+      t.classList.toggle('active', t.getAttribute('data-tab') === tab);
+    });
+    document.querySelectorAll('.detail-tab-panel').forEach(p => {
+      p.classList.toggle('active', p.getAttribute('data-panel') === tab);
+    });
+  }
+  document.addEventListener('click', (e) => {
+    const tab = e.target.closest('.detail-tab');
+    if (tab) { switchTab(tab.getAttribute('data-tab')); return; }
+    const row = e.target.closest('.records-view tbody tr');
+    if (row) { location.hash = '#detail'; }
   });
 
   renderWaffle();
