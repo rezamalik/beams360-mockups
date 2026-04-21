@@ -1013,6 +1013,186 @@
   .records-filter.active { border-color: var(--indigo); color: var(--indigo); background: var(--indigo-light); }
   .records-filter svg { width: 12px; height: 12px; fill: currentColor; }
   .records-count { margin-left: auto; font-size: 12px; color: var(--text-muted); }
+  .records-row-link { cursor: pointer; }
+  .records-row-link:hover td:first-child { color: var(--indigo); font-weight: 600; }
+
+  /* ── Detail view ── */
+  body[data-view="detail"] .ai-insights,
+  body[data-view="detail"] .dashboard-body,
+  body[data-view="detail"] .records-view { display: none; }
+  .detail-view { display: none; }
+  body[data-view="detail"] .detail-view { display: block; }
+
+  .detail-header-wrap {
+    background: #fff;
+    border-bottom: 1px solid var(--border-light);
+    padding: 18px 28px 0;
+  }
+  .detail-breadcrumb { font-size: 12px; color: var(--text-muted); margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+  .detail-breadcrumb a { color: var(--indigo); text-decoration: none; font-weight: 500; }
+  .detail-breadcrumb a:hover { text-decoration: underline; }
+  .detail-breadcrumb span.sep { color: var(--slate-200); font-size: 14px; }
+
+  .detail-header {
+    display: flex; align-items: flex-start; justify-content: space-between;
+    gap: 18px; padding-bottom: 14px;
+  }
+  .detail-identity { display: flex; align-items: flex-start; gap: 14px; flex: 1; min-width: 0; }
+  .detail-avatar {
+    width: 52px; height: 52px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; color: #fff;
+    box-shadow: 0 2px 6px rgba(10,37,64,0.10);
+  }
+  .detail-avatar svg { width: 24px; height: 24px; fill: #fff; }
+  .detail-title h2 {
+    font-size: 22px; font-weight: 700;
+    letter-spacing: -0.025em; color: var(--text-primary); line-height: 1.2;
+  }
+  .detail-subtitle {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 13px; color: var(--text-muted);
+    margin-top: 4px; flex-wrap: wrap;
+  }
+  .detail-subtitle .id { font-variant-numeric: tabular-nums; font-weight: 500; color: var(--text-secondary); }
+  .detail-subtitle .dot { width: 3px; height: 3px; background: var(--slate-200); border-radius: 50%; }
+  .detail-actions { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
+
+  .detail-tabs { display: flex; gap: 2px; border-bottom: 1px solid var(--border-light); margin-top: 2px; }
+  .detail-tab {
+    padding: 10px 16px 12px;
+    font-size: 13.5px; font-weight: 500; color: var(--text-muted);
+    background: none; border: none; border-bottom: 2px solid transparent;
+    cursor: pointer; font-family: inherit;
+    letter-spacing: -0.005em; transition: color 0.1s;
+    position: relative; top: 1px;
+  }
+  .detail-tab:hover { color: var(--text-primary); }
+  .detail-tab.active { color: var(--indigo); border-bottom-color: var(--indigo); font-weight: 600; }
+  .detail-tab-count {
+    display: inline-block; margin-left: 4px;
+    font-size: 11px; padding: 1px 6px; border-radius: 999px;
+    background: var(--slate-100); color: var(--text-muted); font-weight: 600;
+  }
+  .detail-tab.active .detail-tab-count { background: var(--indigo-light); color: var(--indigo); }
+
+  .detail-body {
+    display: grid; grid-template-columns: 1fr 320px;
+    gap: 20px; padding: 20px 28px; align-items: flex-start;
+  }
+  .detail-main { min-width: 0; display: flex; flex-direction: column; gap: 16px; }
+  .detail-rail { display: flex; flex-direction: column; gap: 16px; position: sticky; top: 72px; }
+  .detail-tab-panel { display: none; }
+  .detail-tab-panel.active { display: flex; flex-direction: column; gap: 16px; }
+
+  .amount-hero {
+    background: linear-gradient(135deg, #FFF8EB 0%, #FFFBEF 100%);
+    border: 1px solid #FCD34D; border-radius: 12px;
+    padding: 22px 24px;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  }
+  .amount-hero .primary-num { font-size: 32px; font-weight: 700; letter-spacing: -0.03em; line-height: 1; color: var(--text-primary); }
+  .amount-hero .primary-num .currency { font-size: 16px; color: var(--text-muted); font-weight: 500; margin-right: 4px; }
+  .amount-hero .primary-label { font-size: 11px; font-weight: 600; color: #B45309; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px; }
+  .amount-hero .meta-stack { text-align: right; font-size: 12.5px; color: var(--text-secondary); line-height: 1.6; }
+  .amount-hero .meta-stack strong { color: var(--red); font-weight: 600; }
+
+  .breakdown-table { width: 100%; border-collapse: collapse; }
+  .breakdown-table td { padding: 10px 18px; font-size: 13.5px; color: var(--text-primary); letter-spacing: -0.005em; }
+  .breakdown-table tr + tr td { border-top: 1px solid var(--border-light); }
+  .breakdown-table td.num { font-variant-numeric: tabular-nums; text-align: right; font-weight: 500; }
+  .breakdown-table tr.subtotal td { background: var(--slate-50); font-weight: 600; border-top: 1px solid var(--border); }
+  .breakdown-table tr.total td { background: var(--slate-50); font-weight: 700; font-size: 14.5px; }
+  .breakdown-table tr.discount td.num { color: var(--green); }
+
+  .aging-bar { display: flex; align-items: center; gap: 3px; padding: 4px 0; }
+  .aging-step { flex: 1; height: 8px; border-radius: 4px; background: var(--slate-100); }
+  .aging-step.passed { background: var(--green); }
+  .aging-step.passed.warn { background: var(--amber); }
+  .aging-step.passed.danger { background: var(--coral); }
+  .aging-step.current { background: var(--red); position: relative; box-shadow: 0 0 0 3px rgba(223,27,65,0.15); }
+  .aging-labels { display: flex; justify-content: space-between; margin-top: 8px; font-size: 11px; color: var(--text-muted); }
+
+  .facts-list { display: flex; flex-direction: column; gap: 9px; }
+  .facts-row {
+    display: grid; grid-template-columns: 96px 1fr;
+    gap: 10px; font-size: 12.5px; line-height: 1.45;
+  }
+  .facts-row .label { color: var(--text-muted); }
+  .facts-row .value { color: var(--text-primary); font-weight: 500; letter-spacing: -0.005em; word-break: break-word; }
+  .facts-row .value.num { font-variant-numeric: tabular-nums; }
+  .facts-row .value.link { color: var(--indigo); cursor: pointer; }
+  .facts-row .value.link:hover { text-decoration: underline; }
+
+  .related-list { display: flex; flex-direction: column; gap: 2px; margin: -4px -6px 0; }
+  .related-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 10px; border-radius: 6px;
+    text-decoration: none; color: var(--text-primary);
+    transition: background 0.1s; font-size: 12.5px;
+  }
+  .related-item:hover { background: var(--slate-50); }
+  .related-item .r-icon {
+    width: 28px; height: 28px; border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .related-item .r-icon svg { width: 13px; height: 13px; fill: #fff; }
+  .related-item .r-body { flex: 1; min-width: 0; }
+  .related-item .r-title { font-weight: 500; letter-spacing: -0.005em; line-height: 1.3; }
+  .related-item .r-sub { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+  .related-item .r-meta { font-size: 11px; color: var(--text-muted); flex-shrink: 0; font-weight: 500; }
+
+  .action-stack { display: flex; flex-direction: column; gap: 6px; }
+  .stack-btn {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 12px; border-radius: 6px;
+    border: 1px solid var(--border); background: #fff;
+    cursor: pointer; font-family: inherit;
+    font-size: 13px; color: var(--text-primary); font-weight: 500;
+    text-align: left; letter-spacing: -0.005em;
+    transition: all 0.12s; box-shadow: var(--shadow-btn); width: 100%;
+  }
+  .stack-btn:hover { background: var(--slate-50); border-color: var(--slate-200); }
+  .stack-btn svg { width: 14px; height: 14px; fill: var(--text-muted); flex-shrink: 0; }
+  .stack-btn.primary { background: var(--indigo); color: #fff; border-color: var(--indigo); box-shadow: 0 1px 3px rgba(99,91,255,0.3); }
+  .stack-btn.primary:hover { background: var(--indigo-dark); border-color: var(--indigo-dark); }
+  .stack-btn.primary svg { fill: #fff; }
+  .stack-btn.danger { color: var(--red); border-color: rgba(223,27,65,0.2); }
+  .stack-btn.danger:hover { background: var(--red-light); border-color: var(--red); }
+  .stack-btn.danger svg { fill: var(--red); }
+
+  .timeline { display: flex; flex-direction: column; }
+  .timeline-row { display: flex; gap: 14px; padding: 12px 0; position: relative; }
+  .timeline-row:not(:last-child)::before {
+    content: ''; position: absolute;
+    left: 13px; top: 36px; bottom: -4px;
+    width: 1px; background: var(--border);
+  }
+  .timeline-dot {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: #fff; border: 2px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; z-index: 1;
+  }
+  .timeline-dot svg { width: 13px; height: 13px; fill: var(--text-muted); }
+  .timeline-dot.indigo { border-color: var(--indigo); background: var(--indigo-light); }
+  .timeline-dot.indigo svg { fill: var(--indigo); }
+  .timeline-dot.green  { border-color: var(--green); background: var(--green-light); }
+  .timeline-dot.green svg { fill: var(--green); }
+  .timeline-dot.amber  { border-color: var(--amber); background: #FFF8EB; }
+  .timeline-dot.amber svg { fill: #B45309; }
+  .timeline-dot.red    { border-color: var(--red); background: var(--red-light); }
+  .timeline-dot.red svg { fill: var(--red); }
+  .timeline-body { flex: 1; min-width: 0; padding-top: 2px; }
+  .timeline-body .t-title { font-size: 13.5px; font-weight: 500; letter-spacing: -0.005em; color: var(--text-primary); }
+  .timeline-body .t-meta { font-size: 11.5px; color: var(--text-muted); margin-top: 2px; display: flex; align-items: center; gap: 8px; }
+  .timeline-body .t-desc { font-size: 12.5px; color: var(--text-secondary); margin-top: 4px; line-height: 1.5; }
+
+  @media (max-width: 1100px) {
+    .detail-body { grid-template-columns: 1fr; }
+    .detail-rail { position: static; }
+  }
 
   /* ── AI Insights Strip ── */
   .ai-insights {
@@ -1683,7 +1863,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr><td class="time">FEE-2026-0142</td><td>Zara Ahmed · G8</td><td class="notes">Mr. Ahmed</td><td class="amount">Rs. 105,600</td><td class="notes">Feb 2</td><td class="stagnant-days">78 days</td><td class="notes">Mar 12</td><td><span class="status-pill status-overdue">Escalate</span></td></tr>
+            <tr class="records-row-link" onclick="location.hash='#detail'" title="Open invoice detail"><td class="time">FEE-2026-0142</td><td>Zara Ahmed · G8</td><td class="notes">Mr. Ahmed</td><td class="amount">Rs. 105,600</td><td class="notes">Feb 2</td><td class="stagnant-days">78 days</td><td class="notes">Mar 12</td><td><span class="status-pill status-overdue">Escalate</span></td></tr>
             <tr><td class="time">FEE-2026-0128</td><td>Yusuf Malik · G6</td><td class="notes">Mrs. Malik</td><td class="amount">Rs. 97,050</td><td class="notes">Feb 9</td><td class="stagnant-days">71 days</td><td class="notes">Mar 18</td><td><span class="status-pill status-overdue">Escalate</span></td></tr>
             <tr><td class="time">FEE-2026-0135</td><td>Eman Iqbal · G7</td><td class="notes">Mr. Iqbal</td><td class="amount">Rs. 105,600</td><td class="notes">Feb 11</td><td class="stagnant-days">69 days</td><td class="notes">Mar 20</td><td><span class="status-pill status-overdue">Escalate</span></td></tr>
             <tr><td class="time">FEE-2026-0171</td><td>Rayyan Khan · G5</td><td class="notes">Mr. Khan</td><td class="amount">Rs. 89,250</td><td class="notes">Feb 16</td><td class="stagnant-days">64 days</td><td class="notes">Mar 25</td><td><span class="status-pill status-overdue">Escalate</span></td></tr>
@@ -1703,6 +1883,354 @@
       </div>
     </div>
   </div>
+
+  <!-- ── Detail view: Invoice FEE-2026-0142 (Zara Ahmed) ── -->
+  <div class="detail-view">
+
+    <div class="detail-header-wrap">
+      <div class="detail-breadcrumb">
+        <a href="#dashboard" class="nav-link" data-view="dashboard">Dashboard</a>
+        <span class="sep">/</span>
+        <a href="#records" class="nav-link" data-view="records">Overdue</a>
+        <span class="sep">/</span>
+        <span>FEE-2026-0142</span>
+      </div>
+
+      <div class="detail-header">
+        <div class="detail-identity">
+          <div class="detail-avatar mod-grad-fees">
+            <svg viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>
+          </div>
+          <div class="detail-title">
+            <h2>Invoice FEE-2026-0142</h2>
+            <div class="detail-subtitle">
+              <span class="id">Zara Ahmed</span>
+              <span class="dot"></span>
+              <span>G8 · Gulberg Campus</span>
+              <span class="dot"></span>
+              <span>Issued Feb 2, 2026</span>
+              <span class="dot"></span>
+              <span class="status-pill status-overdue">Escalate · 78 days overdue</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="detail-actions">
+          <button class="topbar-btn" title="Download invoice PDF">
+            <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+            <span>Download</span>
+          </button>
+          <button class="topbar-btn">
+            <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+            <span>Send reminder</span>
+          </button>
+          <button class="topbar-btn primary">
+            <svg viewBox="0 0 24 24"><path d="M21 4H3c-1.11 0-1.99.89-1.99 2L1 18c0 1.11.89 2 2 2h18c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2zm0 14H3v-6h18v6zm0-10H3V6h18v2z"/></svg>
+            <span>Record payment</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="detail-tabs">
+        <button class="detail-tab active" data-tab="overview">Overview</button>
+        <button class="detail-tab" data-tab="payments">Payments <span class="detail-tab-count">0</span></button>
+        <button class="detail-tab" data-tab="comms">Communications <span class="detail-tab-count">6</span></button>
+        <button class="detail-tab" data-tab="audit">Audit <span class="detail-tab-count">9</span></button>
+      </div>
+    </div>
+
+    <div class="detail-body">
+
+      <div class="detail-main">
+
+        <!-- Overview panel -->
+        <div class="detail-tab-panel active" data-panel="overview">
+
+          <div class="amount-hero">
+            <div>
+              <div class="primary-label">Outstanding</div>
+              <div class="primary-num"><span class="currency">Rs.</span>105,600</div>
+            </div>
+            <div class="meta-stack">
+              Due: <strong style="color:var(--text-primary);">Feb 2, 2026</strong><br>
+              <strong>78 days overdue</strong>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div><h3>Amount breakdown</h3><div class="subtitle">Term 2 · February invoice</div></div>
+              <span class="badge badge-amber">Unpaid</span>
+            </div>
+            <table class="breakdown-table">
+              <tbody>
+                <tr><td>Tuition fee · G8</td><td class="num">Rs. 85,000</td></tr>
+                <tr><td>Transport · 2-way</td><td class="num">Rs. 12,000</td></tr>
+                <tr><td>Examination fee · Term 2</td><td class="num">Rs. 8,000</td></tr>
+                <tr><td>Library &amp; resources</td><td class="num">Rs. 2,000</td></tr>
+                <tr class="subtotal"><td>Subtotal</td><td class="num">Rs. 107,000</td></tr>
+                <tr class="discount"><td>Sibling discount (2%)</td><td class="num">− Rs. 1,400</td></tr>
+                <tr class="total"><td>Total due</td><td class="num">Rs. 105,600</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div><h3>Aging status</h3><div class="subtitle">Where this invoice sits on the aging scale</div></div>
+              <span class="badge badge-red">&gt; 60 days</span>
+            </div>
+            <div style="padding: 18px;">
+              <div class="aging-bar">
+                <div class="aging-step passed" title="Current (0–30 d)"></div>
+                <div class="aging-step passed warn" title="31–60 d"></div>
+                <div class="aging-step current" title="61–90 d · now"></div>
+                <div class="aging-step" title="&gt; 90 d"></div>
+              </div>
+              <div class="aging-labels">
+                <span>Current</span>
+                <span>31–60 days</span>
+                <span style="color:var(--red); font-weight:600;">Today · 78 days</span>
+                <span>&gt; 90 days</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div><h3>Recent activity</h3><div class="subtitle">Last 3 events</div></div>
+              <a class="row-action" href="#" onclick="switchTab('comms'); return false;">See all &rarr;</a>
+            </div>
+            <div class="timeline" style="padding: 4px 18px 14px;">
+              <div class="timeline-row">
+                <div class="timeline-dot red">
+                  <svg viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+                </div>
+                <div class="timeline-body">
+                  <div class="t-title">Escalation flag added</div>
+                  <div class="t-meta">Apr 18 · System</div>
+                  <div class="t-desc">Exceeded 60-day threshold. Added to Red Flags queue for Head of Finance review.</div>
+                </div>
+              </div>
+              <div class="timeline-row">
+                <div class="timeline-dot amber">
+                  <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                </div>
+                <div class="timeline-body">
+                  <div class="t-title">Second reminder sent</div>
+                  <div class="t-meta">Apr 2 · Reza Malik</div>
+                  <div class="t-desc">Email + SMS reminder dispatched. No response from parent.</div>
+                </div>
+              </div>
+              <div class="timeline-row">
+                <div class="timeline-dot indigo">
+                  <svg viewBox="0 0 24 24"><path d="M20 15.5c-1.25 0-2.45-.2-3.57-.57-.35-.11-.74-.03-1.02.25l-2.2 2.2c-2.83-1.44-5.15-3.75-6.59-6.58l2.2-2.21c.28-.27.36-.66.25-1.01A11.36 11.36 0 018.5 4c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1 0 9.39 7.61 17 17 17 .55 0 1-.45 1-1v-3.5c0-.55-.45-1-1-1z"/></svg>
+                </div>
+                <div class="timeline-body">
+                  <div class="t-title">Phone call — no answer</div>
+                  <div class="t-meta">Mar 12 · Reza Malik</div>
+                  <div class="t-desc">Called Mr. Ahmed twice. Voicemail full. No callback.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Payments panel -->
+        <div class="detail-tab-panel" data-panel="payments">
+          <div class="card">
+            <div class="card-header">
+              <div><h3>Payments received</h3><div class="subtitle">Reconciled transactions against this invoice</div></div>
+              <span class="badge badge-amber">None</span>
+            </div>
+            <div style="padding: 48px 20px; text-align: center; color: var(--text-muted); font-size: 13.5px;">
+              <div style="font-size:14px; font-weight:500; color:var(--text-primary); margin-bottom:4px;">No payments received</div>
+              Use <strong>Record payment</strong> in the header to reconcile a bank transfer, cash, or cheque against this invoice.
+            </div>
+          </div>
+        </div>
+
+        <!-- Communications panel -->
+        <div class="detail-tab-panel" data-panel="comms">
+          <div class="card">
+            <div class="card-header">
+              <div><h3>All communications</h3><div class="subtitle">Reminders, calls, and replies</div></div>
+              <span class="badge badge-indigo">6 touchpoints</span>
+            </div>
+            <div class="timeline" style="padding: 8px 18px 18px;">
+              <div class="timeline-row">
+                <div class="timeline-dot red"><svg viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg></div>
+                <div class="timeline-body">
+                  <div class="t-title">Escalation flag added — system</div>
+                  <div class="t-meta">Apr 18, 2026 · 09:12 AM</div>
+                </div>
+              </div>
+              <div class="timeline-row">
+                <div class="timeline-dot amber"><svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg></div>
+                <div class="timeline-body">
+                  <div class="t-title">Second reminder — Email + SMS</div>
+                  <div class="t-meta">Apr 2, 2026 · 11:40 AM · Reza Malik</div>
+                  <div class="t-desc">Subject: "Urgent — 60+ day overdue invoice for Zara Ahmed". No response received.</div>
+                </div>
+              </div>
+              <div class="timeline-row">
+                <div class="timeline-dot indigo"><svg viewBox="0 0 24 24"><path d="M20 15.5c-1.25 0-2.45-.2-3.57-.57-.35-.11-.74-.03-1.02.25l-2.2 2.2c-2.83-1.44-5.15-3.75-6.59-6.58l2.2-2.21c.28-.27.36-.66.25-1.01A11.36 11.36 0 018.5 4c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1 0 9.39 7.61 17 17 17 .55 0 1-.45 1-1v-3.5c0-.55-.45-1-1-1z"/></svg></div>
+                <div class="timeline-body">
+                  <div class="t-title">Phone call — no answer</div>
+                  <div class="t-meta">Mar 12, 2026 · 02:15 PM · Reza Malik</div>
+                  <div class="t-desc">Tried Mr. Ahmed on two numbers. Voicemail full. Left SMS follow-up.</div>
+                </div>
+              </div>
+              <div class="timeline-row">
+                <div class="timeline-dot amber"><svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg></div>
+                <div class="timeline-body">
+                  <div class="t-title">First reminder — Email</div>
+                  <div class="t-meta">Feb 20, 2026 · 09:00 AM · System</div>
+                  <div class="t-desc">Automated 14-day-overdue reminder dispatched.</div>
+                </div>
+              </div>
+              <div class="timeline-row">
+                <div class="timeline-dot"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+                <div class="timeline-body">
+                  <div class="t-title">Invoice issued — Email</div>
+                  <div class="t-meta">Feb 2, 2026 · 06:00 PM · System</div>
+                  <div class="t-desc">Delivered to haroon.ahmed@example.com. Opened within 2 hours.</div>
+                </div>
+              </div>
+              <div class="timeline-row">
+                <div class="timeline-dot"><svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2z"/></svg></div>
+                <div class="timeline-body">
+                  <div class="t-title">Invoice issued — SMS confirmation</div>
+                  <div class="t-meta">Feb 2, 2026 · 06:00 PM · System</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Audit panel -->
+        <div class="detail-tab-panel" data-panel="audit">
+          <div class="card">
+            <div class="card-header">
+              <div><h3>Change log</h3><div class="subtitle">System and user events on this invoice</div></div>
+            </div>
+            <table class="task-table">
+              <thead>
+                <tr><th>When</th><th>Who</th><th>What</th></tr>
+              </thead>
+              <tbody>
+                <tr><td class="time">Apr 18, 09:12</td><td>System</td><td>Escalation flag added (aging threshold &gt; 60d)</td></tr>
+                <tr><td class="time">Apr 2, 11:40</td><td>Reza Malik</td><td>Manual reminder sent (email + SMS)</td></tr>
+                <tr><td class="time">Mar 12, 14:18</td><td>Reza Malik</td><td>Activity logged: phone call attempt</td></tr>
+                <tr><td class="time">Mar 3, 09:00</td><td>System</td><td>Status updated: Overdue → Escalate candidate</td></tr>
+                <tr><td class="time">Feb 20, 09:00</td><td>System</td><td>Automated reminder sent (14-day)</td></tr>
+                <tr><td class="time">Feb 3, 00:00</td><td>System</td><td>Status updated: Unpaid → Overdue</td></tr>
+                <tr><td class="time">Feb 2, 18:00</td><td>System</td><td>Invoice issued and delivered</td></tr>
+                <tr><td class="time">Feb 2, 17:58</td><td>Reza Malik</td><td>Invoice approved for issue</td></tr>
+                <tr><td class="time">Feb 2, 17:40</td><td>Reza Malik</td><td>Invoice drafted from term template</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ── Right rail ── -->
+      <div class="detail-rail">
+
+        <div class="stat-widget">
+          <h3>Quick facts</h3>
+          <div class="facts-list">
+            <div class="facts-row"><span class="label">Student</span><span class="value link">Zara Ahmed</span></div>
+            <div class="facts-row"><span class="label">Parent</span><span class="value">Mr. Haroon Ahmed</span></div>
+            <div class="facts-row"><span class="label">Phone</span><span class="value num">+92 300 1234567</span></div>
+            <div class="facts-row"><span class="label">Email</span><span class="value">haroon.ahmed@example.com</span></div>
+            <div class="facts-row"><span class="label">Grade</span><span class="value">G8 · Section A</span></div>
+            <div class="facts-row"><span class="label">Branch</span><span class="value">Gulberg Campus</span></div>
+            <div class="facts-row"><span class="label">Invoice date</span><span class="value num">Feb 2, 2026</span></div>
+            <div class="facts-row"><span class="label">Due date</span><span class="value num">Feb 2, 2026</span></div>
+            <div class="facts-row"><span class="label">Days overdue</span><span class="value num" style="color:var(--red); font-weight:600;">78</span></div>
+            <div class="facts-row"><span class="label">Owner</span><span class="value">Reza Malik</span></div>
+          </div>
+        </div>
+
+        <div class="stat-widget">
+          <h3>Related</h3>
+          <div class="related-list">
+            <a class="related-item" href="#">
+              <span class="r-icon mod-grad-sis">
+                <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+              </span>
+              <div class="r-body">
+                <div class="r-title">Zara Ahmed</div>
+                <div class="r-sub">Student · BH-2022-0471</div>
+              </div>
+            </a>
+            <a class="related-item" href="#">
+              <span class="r-icon mod-grad-sis">
+                <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+              </span>
+              <div class="r-body">
+                <div class="r-title">Kamran Ahmed</div>
+                <div class="r-sub">Sibling · G5 · BH-2023-0892</div>
+              </div>
+            </a>
+            <a class="related-item" href="#">
+              <span class="r-icon mod-grad-fees">
+                <svg viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>
+              </span>
+              <div class="r-body">
+                <div class="r-title">FEE-2026-0089</div>
+                <div class="r-sub">Previous invoice · Jan 2026</div>
+              </div>
+              <span class="r-meta" style="color:var(--green);">Paid</span>
+            </a>
+            <a class="related-item" href="#">
+              <span class="r-icon mod-grad-fees">
+                <svg viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>
+              </span>
+              <div class="r-body">
+                <div class="r-title">FEE-2026-0366</div>
+                <div class="r-sub">Next invoice · May 2026</div>
+              </div>
+              <span class="r-meta">Upcoming</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="stat-widget">
+          <h3>Next actions</h3>
+          <div class="action-stack">
+            <button class="stack-btn primary">
+              <svg viewBox="0 0 24 24"><path d="M20 15.5c-1.25 0-2.45-.2-3.57-.57-.35-.11-.74-.03-1.02.25l-2.2 2.2c-2.83-1.44-5.15-3.75-6.59-6.58l2.2-2.21c.28-.27.36-.66.25-1.01A11.36 11.36 0 018.5 4c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1 0 9.39 7.61 17 17 17 .55 0 1-.45 1-1v-3.5c0-.55-.45-1-1-1z"/></svg>
+              Call Mr. Ahmed
+            </button>
+            <button class="stack-btn">
+              <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+              Send final reminder
+            </button>
+            <button class="stack-btn">
+              <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 6h-3V6h3v3zM9 6h3v3H9V6zm3 5v3H9v-3h3zM6 6h1v3H6V6zm0 5h1v3H6v-3zm1 7H6v-3h1v3zm5 0H9v-3h3v3zm5 0h-3v-3h3v3zm0-5h-3v-3h3v3z"/></svg>
+              Offer payment plan
+            </button>
+            <button class="stack-btn">
+              <svg viewBox="0 0 24 24"><path d="M16.5 6v11.5a4 4 0 11-4-4V3.5h5V1H8.5v16.5a6.5 6.5 0 1013 0V6h-5z"/></svg>
+              Apply concession
+            </button>
+            <button class="stack-btn danger">
+              <svg viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+              Escalate to Head of Finance
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+  <!-- end detail-view -->
 
   <!-- ── Footer ── -->
   <footer class="page-footer">
@@ -2075,6 +2603,20 @@
   });
 
   // ── Init ──
+  // ── Detail tab switching ──
+  function switchTab(tab) {
+    document.querySelectorAll('.detail-tab').forEach(t => {
+      t.classList.toggle('active', t.getAttribute('data-tab') === tab);
+    });
+    document.querySelectorAll('.detail-tab-panel').forEach(p => {
+      p.classList.toggle('active', p.getAttribute('data-panel') === tab);
+    });
+  }
+  document.addEventListener('click', (e) => {
+    const tab = e.target.closest('.detail-tab');
+    if (tab) switchTab(tab.getAttribute('data-tab'));
+  });
+
   renderWaffle();
   applyView();
   updateProgress();
