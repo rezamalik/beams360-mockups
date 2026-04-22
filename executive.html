@@ -902,8 +902,10 @@
       <div class="scope-strip-left">
         <span class="label">Persona</span>
         <div class="scope-tabs" id="scopeTabs">
-          <button class="scope-tab active" data-persona="ro_director">Nasir · RO MENA + BIC/BEL/BT <span class="count">5</span></button>
-          <button class="scope-tab" data-persona="ro_director_sea">Basit · RO SEA <span class="count">3</span></button>
+          <button class="scope-tab active" data-persona="ro_director">Nasir · Group Int'l <span class="count">8</span></button>
+          <button class="scope-tab" data-persona="ro_director_mena">Rizwan · MENA <span class="count">2</span></button>
+          <button class="scope-tab" data-persona="ro_director_sea">Basit · SEA <span class="count">3</span></button>
+          <button class="scope-tab" data-persona="bt_director">Reza · BT <span class="count">1</span></button>
           <button class="scope-tab" data-persona="ho_chairperson">Chairperson · BG <span class="count">22</span></button>
           <button class="scope-tab" data-persona="bss_pk_coo">Ali Khan · BSS PK <span class="count">17</span></button>
           <button class="scope-tab" data-persona="ho_head_audit">Head of Audit <span class="count">22</span></button>
@@ -1529,18 +1531,32 @@
   // Persona scope switching
   const PERSONAS = {
     ro_director: {
-      name: 'Nasir Kasuri', role: 'RO Director · MENA + BIC + BEL + BT',
-      welcome: 'Nasir', badge: 'MENA + BIC + BEL + BT · 5 BUs',
-      sbScope: 'RO MENA + BIC + BEL + BT', sbSub: '5 BUs · BSS UAE, BSS Oman, BIC, BEL, BT · FY 2025–2026',
-      buCount: 5,
-      scopes: ['bt','bic','bel','bss_ae','bss_om','ro_ops']
+      name: 'Nasir Kasuri', role: 'Group Director · International Portfolio',
+      welcome: 'Nasir', badge: 'Int\'l + BIC + BEL + BT · 8 BUs',
+      sbScope: 'International + BIC + BEL + BT', sbSub: '8 BUs · MENA + SEA + BIC + BEL + BT · FY 2025–2026',
+      buCount: 8,
+      scopes: ['bt','bic','bel','bss_ae','bss_om','bss_my','bss_th','bss_ph','ro_ops']
+    },
+    ro_director_mena: {
+      name: 'Rizwan Sheikh', role: 'RO Director · MENA (reports to Nasir)',
+      welcome: 'Rizwan', badge: 'MENA · 2 BUs',
+      sbScope: 'RO MENA', sbSub: '2 BUs · BSS UAE, BSS Oman · FY 2025–2026',
+      buCount: 2,
+      scopes: ['bss_ae','bss_om','ro_ops']
     },
     ro_director_sea: {
-      name: 'Basit Humayun', role: 'RO Director · SEA',
+      name: 'Basit Humayun', role: 'RO Director · SEA (reports to Nasir)',
       welcome: 'Basit', badge: 'SEA · 3 BUs',
       sbScope: 'RO SEA', sbSub: '3 BUs · BSS MY, BSS TH, BSS PH · FY 2025–2026',
       buCount: 3,
       scopes: ['bss_my','bss_th','bss_ph','ro_ops']
+    },
+    bt_director: {
+      name: 'Reza Malik', role: 'Director · Beaconhouse Technology (reports to Nasir)',
+      welcome: 'Reza', badge: 'BT · SaaS',
+      sbScope: 'Beaconhouse Technology', sbSub: '1 BU · Pakistan · SaaS · FY 2025–2026',
+      buCount: 1,
+      scopes: ['bt']
     },
     ho_chairperson: {
       name: 'Nasreen Kasuri', role: 'Chairperson · Beaconhouse Group',
