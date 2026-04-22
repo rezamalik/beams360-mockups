@@ -1,0 +1,1458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>if(sessionStorage.getItem("b360-auth")!=="ok"){window.location.replace("./");}</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BEAMS360 — Campus Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --indigo: #635BFF; --indigo-dark: #4F46E5; --indigo-light: #EEF2FF;
+    --teal: #00D4AA; --teal-light: #CCFBF1; --teal-dark: #0D9488;
+    --coral: #FF6B6B; --coral-light: #FFE4E4;
+    --amber: #FFB224; --amber-light: #FFF3CD;
+    --green: #1CB87E; --green-light: #D1FAE5;
+    --red: #DF1B41; --red-light: #FFECEC;
+    --cyan: #0891B2;
+
+    --slate-900: #0A2540; --slate-800: #1A3A5C; --slate-700: #243B55;
+    --slate-500: #425466; --slate-400: #697386; --slate-300: #8898AA;
+    --slate-200: #C1C9D2; --slate-100: #E3E8EE; --slate-50: #F6F9FC;
+
+    --text-primary: #0A2540; --text-secondary: #425466; --text-muted: #697386; --text-light: #8898AA;
+    --bg-page: #F6F9FC; --bg-card: #FFFFFF; --bg-table-head: #F7FAFC;
+    --border: #E3E8EE; --border-light: #EEF2F7;
+
+    --shadow-card: 0 2px 5px rgba(50,50,93,0.10), 0 1px 1px rgba(0,0,0,0.07);
+    --shadow-btn: 0 1px 3px rgba(50,50,93,0.15), 0 1px 0 rgba(0,0,0,0.02);
+
+    --radius-card: 8px; --radius-sm: 6px; --radius-pill: 999px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg-page); color: var(--text-primary);
+    display: flex; min-height: 100vh;
+    font-size: 14px; line-height: 1.5;
+    -webkit-font-smoothing: antialiased; letter-spacing: -0.005em;
+  }
+
+  /* ── Sidebar ── */
+  .sidebar {
+    width: 220px; background: var(--slate-900);
+    display: flex; flex-direction: column;
+    position: fixed; top: 0; left: 0; bottom: 0; z-index: 100;
+  }
+  .sidebar-logo {
+    padding: 16px 14px 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+  }
+  .sidebar-logo .logo-container {
+    background: #fff; border-radius: 8px; padding: 8px 12px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .sidebar-logo img { height: 32px; }
+  .sidebar-campus {
+    padding: 14px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .campus-emblem {
+    width: 36px; height: 36px; border-radius: 8px;
+    background: linear-gradient(135deg, #0891B2, #14B8A6);
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-weight: 700; font-size: 13px;
+    flex-shrink: 0;
+    letter-spacing: -0.01em;
+  }
+  .campus-meta .name {
+    font-size: 13.5px; font-weight: 600; color: #fff;
+    line-height: 1.2; letter-spacing: -0.01em;
+  }
+  .campus-meta .loc {
+    font-size: 11px; color: rgba(255,255,255,0.55);
+    margin-top: 2px;
+  }
+  .sidebar-nav {
+    flex: 1; padding: 10px 10px;
+    display: flex; flex-direction: column; gap: 1px;
+    overflow-y: auto;
+  }
+  .sidebar-section-label {
+    font-size: 10.5px; font-weight: 600; color: rgba(255,255,255,0.35);
+    text-transform: uppercase; letter-spacing: 0.08em;
+    padding: 14px 8px 5px;
+  }
+  .sidebar-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 7px 10px; border-radius: var(--radius-sm);
+    cursor: pointer; text-decoration: none;
+    color: rgba(255,255,255,0.58); font-size: 13px; font-weight: 500;
+    transition: all 0.12s; position: relative;
+  }
+  .sidebar-item:hover { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.88); }
+  .sidebar-item.active {
+    background: rgba(99,91,255,0.18); color: #fff;
+    border-left: 3px solid var(--indigo); padding-left: 7px;
+  }
+  .sidebar-item svg { width: 17px; height: 17px; fill: currentColor; opacity: 0.8; flex-shrink: 0; }
+  .sidebar-item.active svg { opacity: 1; }
+  .sidebar-badge {
+    margin-left: auto; background: rgba(255,255,255,0.10);
+    color: rgba(255,255,255,0.6); font-size: 11px; font-weight: 600;
+    padding: 1px 7px; border-radius: var(--radius-pill);
+    min-width: 20px; text-align: center;
+  }
+  .sidebar-badge.danger { background: rgba(223,27,65,0.22); color: #FCA5A5; }
+  .sidebar-badge.warn   { background: rgba(255,178,36,0.22); color: #FCD34D; }
+  .sidebar-badge.ok     { background: rgba(28,184,126,0.22); color: #86EFAC; }
+
+  /* ── Main ── */
+  .main { margin-left: 220px; flex: 1; display: flex; flex-direction: column; min-height: 100vh; }
+  .topbar {
+    background: #fff; border-bottom: 1px solid var(--border);
+    padding: 0 28px; height: 56px;
+    display: flex; align-items: center; justify-content: space-between;
+    position: sticky; top: 0; z-index: 50;
+    box-shadow: 0 1px 3px rgba(50,50,93,0.06);
+  }
+  .topbar-left { display: flex; align-items: center; gap: 12px; }
+  .topbar-divider { width: 1px; height: 18px; background: var(--border); }
+  .topbar-breadcrumb { font-size: 13px; color: var(--text-muted); }
+  .topbar-right { display: flex; align-items: center; gap: 8px; }
+
+  .module-chip {
+    display: flex; align-items: center; gap: 8px;
+    padding: 0 12px 0 6px; height: 32px;
+    border: 1px solid var(--border); border-radius: var(--radius-sm);
+    background: #fff; font-size: 13.5px; font-weight: 600;
+    color: var(--text-primary);
+    box-shadow: var(--shadow-btn);
+  }
+  .module-chip .module-icon {
+    width: 22px; height: 22px; border-radius: 5px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .module-chip .module-icon svg { width: 12px; height: 12px; fill: #fff; }
+  .mod-grad-campus     { background: linear-gradient(135deg, #0891B2, #14B8A6); }
+  .mod-grad-executive  { background: linear-gradient(135deg, #4F46E5, #1E1B4B); }
+  .mod-grad-admissions { background: linear-gradient(135deg, #635BFF, #9B8FFF); }
+  .mod-grad-crm        { background: linear-gradient(135deg, #00D4AA, #1CB87E); }
+  .mod-grad-sis        { background: linear-gradient(135deg, #0A8DCC, #3FB5E8); }
+  .mod-grad-fees       { background: linear-gradient(135deg, #FFB224, #FFD166); }
+  .mod-grad-hr         { background: linear-gradient(135deg, #F59E0B, #FCD34D); }
+
+  .section-pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    height: 28px; padding: 0 12px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #0891B2, #14B8A6);
+    color: #fff;
+    font-size: 12px; font-weight: 600;
+    box-shadow: 0 2px 6px rgba(8,145,178,0.25);
+  }
+  .section-pill svg { width: 12px; height: 12px; fill: #fff; }
+
+  .topbar-btn {
+    height: 32px; padding: 0 12px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; border: 1px solid var(--border);
+    background: #fff; border-radius: var(--radius-sm);
+    gap: 6px; font-family: inherit; font-size: 13px;
+    color: var(--text-secondary); font-weight: 500;
+    box-shadow: var(--shadow-btn); transition: all 0.12s;
+  }
+  .topbar-btn:hover { background: var(--slate-50); border-color: var(--slate-200); }
+  .topbar-btn svg { width: 14px; height: 14px; fill: var(--text-muted); }
+  .topbar-btn.primary {
+    background: var(--indigo); color: #fff; border-color: var(--indigo);
+    box-shadow: 0 1px 3px rgba(99,91,255,0.3);
+  }
+  .topbar-btn.primary svg { fill: #fff; }
+  .topbar-btn.primary:hover { background: var(--indigo-dark); }
+
+  .search-box {
+    display: flex; align-items: center;
+    background: var(--bg-page); border: 1px solid var(--border);
+    border-radius: var(--radius-sm); padding: 0 12px; height: 32px;
+    gap: 7px; min-width: 220px; cursor: pointer;
+  }
+  .search-box input {
+    border: none; background: none; outline: none;
+    font-family: inherit; font-size: 13px; width: 100%;
+    pointer-events: none;
+  }
+  .search-box svg { width: 13px; height: 13px; fill: var(--text-light); }
+  .palette-hint {
+    font-size: 10.5px; font-weight: 600; color: var(--text-muted);
+    background: var(--slate-100); padding: 2px 6px; border-radius: 4px;
+    letter-spacing: 0.03em; margin-left: auto;
+  }
+
+  .waffle-btn {
+    width: 32px; height: 32px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; border: 1px solid var(--border);
+    background: #fff; border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-btn);
+  }
+  .waffle-btn svg { width: 16px; height: 16px; fill: var(--text-muted); }
+
+  .user-chip {
+    display: flex; align-items: center; gap: 8px;
+    padding: 4px 10px 4px 4px; border-radius: var(--radius-pill);
+    cursor: pointer; border: 1px solid var(--border);
+    background: #fff; box-shadow: var(--shadow-btn);
+  }
+  .avatar { width: 28px; height: 28px; border-radius: 50%; overflow: hidden; border: 1.5px solid var(--border); }
+  .avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .user-info .name { font-size: 12.5px; font-weight: 600; line-height: 1.2; }
+  .user-info .role { font-size: 11px; color: var(--text-muted); line-height: 1.2; }
+
+  /* Page header */
+  .page-header {
+    padding: 22px 28px 18px;
+    background: #fff;
+    border-bottom: 1px solid var(--border-light);
+  }
+  .breadcrumb {
+    font-size: 12px; color: var(--text-muted); margin-bottom: 6px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .breadcrumb a { color: var(--indigo); text-decoration: none; font-weight: 500; }
+  .breadcrumb-sep { color: var(--slate-200); font-size: 14px; }
+  .page-title-row {
+    display: flex; align-items: flex-end; justify-content: space-between;
+    flex-wrap: wrap; gap: 14px;
+  }
+  .page-title-row h2 {
+    font-size: 26px; font-weight: 700; letter-spacing: -0.03em; line-height: 1.2;
+  }
+  .page-title-row h2 span { color: var(--cyan); }
+  .page-meta {
+    font-size: 13.5px; color: var(--text-muted); margin-top: 3px;
+  }
+  .page-meta strong { color: var(--text-primary); font-weight: 600; }
+  .header-pills { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .badge {
+    display: inline-flex; align-items: center; height: 24px; padding: 0 10px;
+    border-radius: 999px; font-size: 12px; font-weight: 600;
+  }
+  .badge-indigo { background: var(--indigo-light); color: var(--indigo); }
+  .badge-teal   { background: var(--teal-light); color: var(--teal-dark); }
+  .badge-amber  { background: var(--amber-light); color: #B45309; }
+  .badge-green  { background: var(--green-light); color: var(--green); }
+  .badge-red    { background: var(--red-light); color: var(--red); }
+
+  /* Body */
+  .campus-body { padding: 20px 28px 32px; }
+
+  /* KPI tiles */
+  .kpi-row {
+    display: grid; grid-template-columns: repeat(5, 1fr);
+    gap: 14px; margin-bottom: 20px;
+  }
+  .kpi-tile {
+    background: #fff; border: 1px solid var(--border);
+    border-radius: var(--radius-card); padding: 14px 16px;
+    box-shadow: var(--shadow-card);
+    display: flex; gap: 12px; align-items: center;
+    position: relative; overflow: hidden;
+  }
+  .kpi-tile .k-icon {
+    width: 42px; height: 42px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .kpi-tile .k-icon svg { width: 18px; height: 18px; fill: #fff; }
+  .k-icon.k-att   { background: linear-gradient(135deg, #0891B2, #06B6D4); }
+  .k-icon.k-coll  { background: linear-gradient(135deg, #1CB87E, #10B981); }
+  .k-icon.k-cap   { background: linear-gradient(135deg, #635BFF, #818CF8); }
+  .k-icon.k-staff { background: linear-gradient(135deg, #F59E0B, #FBBF24); }
+  .k-icon.k-inc   { background: linear-gradient(135deg, #DF1B41, #FF6B6B); }
+
+  .kpi-tile .k-body { flex: 1; min-width: 0; }
+  .k-label {
+    font-size: 11px; font-weight: 600; color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: 0.06em;
+  }
+  .k-value {
+    font-size: 22px; font-weight: 700; color: var(--text-primary);
+    letter-spacing: -0.025em; line-height: 1.15;
+    font-variant-numeric: tabular-nums;
+    margin-top: 2px;
+  }
+  .k-sub {
+    font-size: 11.5px; color: var(--text-light);
+    margin-top: 2px;
+  }
+  .k-sub.up { color: var(--green); font-weight: 600; }
+  .k-sub.down { color: var(--red); font-weight: 600; }
+
+  /* Section header */
+  .section-title {
+    display: flex; align-items: center; justify-content: space-between;
+    margin: 6px 0 14px;
+  }
+  .section-title h3 {
+    font-size: 15px; font-weight: 600; letter-spacing: -0.015em;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .section-title .muted { font-size: 12.5px; font-weight: 400; color: var(--text-muted); }
+  .section-action {
+    font-size: 12.5px; font-weight: 600; color: var(--indigo);
+    text-decoration: none;
+    display: inline-flex; align-items: center; gap: 4px;
+  }
+  .section-action svg { width: 11px; height: 11px; fill: currentColor; }
+
+  /* Main layout: Approvals (left) + Today/Staff/Events (right) */
+  .campus-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 18px;
+  }
+
+  /* Card */
+  .card {
+    background: #fff; border: 1px solid var(--border);
+    border-radius: var(--radius-card); box-shadow: var(--shadow-card);
+    overflow: hidden;
+    margin-bottom: 18px;
+  }
+  .card-header {
+    padding: 14px 18px 12px;
+    display: flex; align-items: flex-start; justify-content: space-between;
+    border-bottom: 1px solid var(--border-light);
+  }
+  .card-header h3 {
+    font-size: 14.5px; font-weight: 600; color: var(--text-primary);
+    letter-spacing: -0.02em;
+  }
+  .card-header .subtitle {
+    font-size: 12px; color: var(--text-muted); margin-top: 2px; font-weight: 400;
+  }
+
+  /* Approvals tabs */
+  .approvals-tabs {
+    display: flex; gap: 0; padding: 0 4px;
+    border-bottom: 1px solid var(--border-light);
+    background: #fff;
+    overflow-x: auto;
+  }
+  .appr-tab {
+    padding: 10px 14px;
+    font-size: 12.5px; font-weight: 500; color: var(--text-muted);
+    background: none; border: none; border-bottom: 2px solid transparent;
+    cursor: pointer; font-family: inherit;
+    position: relative; top: 1px; white-space: nowrap;
+    letter-spacing: -0.005em;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .appr-tab .appr-count {
+    font-size: 10.5px; font-weight: 700;
+    background: var(--slate-100); color: var(--text-muted);
+    padding: 1px 6px; border-radius: 999px; min-width: 20px; text-align: center;
+  }
+  .appr-tab.active .appr-count {
+    background: var(--indigo-light); color: var(--indigo);
+  }
+  .appr-tab:hover { color: var(--text-primary); }
+  .appr-tab.active {
+    color: var(--indigo); border-bottom-color: var(--indigo); font-weight: 600;
+  }
+
+  /* Approval rows */
+  .appr-row {
+    display: grid;
+    grid-template-columns: 42px 1fr 120px 150px;
+    gap: 12px;
+    padding: 12px 18px;
+    border-top: 1px solid var(--border-light);
+    align-items: center;
+  }
+  .appr-row:first-of-type { border-top: none; }
+  .appr-row:hover { background: var(--slate-50); }
+  .appr-row .appr-avatar {
+    width: 36px; height: 36px; border-radius: 50%;
+    overflow: hidden; border: 1.5px solid var(--border-light);
+  }
+  .appr-row .appr-avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .appr-body { min-width: 0; }
+  .appr-body .t1 {
+    font-size: 13.5px; font-weight: 500; color: var(--text-primary);
+    letter-spacing: -0.005em; line-height: 1.3;
+  }
+  .appr-body .t1 strong { font-weight: 600; }
+  .appr-body .t2 {
+    font-size: 12px; color: var(--text-muted);
+    margin-top: 2px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .appr-body .t2 .dot { width: 3px; height: 3px; border-radius: 50%; background: var(--slate-200); }
+  .appr-amount {
+    font-size: 13px; font-weight: 600; text-align: right;
+    font-variant-numeric: tabular-nums;
+    color: var(--text-primary);
+  }
+  .appr-amount .sub { display: block; font-size: 11px; color: var(--text-muted); font-weight: 500; margin-top: 1px; }
+
+  .appr-actions {
+    display: flex; gap: 6px; justify-content: flex-end;
+  }
+  .appr-btn {
+    height: 30px; padding: 0 12px;
+    border-radius: 6px; font-family: inherit;
+    font-size: 12px; font-weight: 600;
+    cursor: pointer; transition: all 0.12s;
+    display: inline-flex; align-items: center; gap: 4px;
+    letter-spacing: -0.005em;
+  }
+  .appr-btn svg { width: 11px; height: 11px; fill: currentColor; }
+  .appr-btn.approve {
+    background: var(--green-light); color: var(--green); border: 1px solid rgba(28,184,126,0.28);
+  }
+  .appr-btn.approve:hover { background: var(--green); color: #fff; }
+  .appr-btn.reject {
+    background: #fff; color: var(--red); border: 1px solid rgba(223,27,65,0.28);
+  }
+  .appr-btn.reject:hover { background: var(--red); color: #fff; }
+  .appr-btn.open {
+    background: #fff; color: var(--indigo); border: 1px solid var(--border);
+  }
+  .appr-btn.open:hover { background: var(--indigo-light); }
+
+  .appr-card-foot {
+    padding: 10px 18px;
+    display: flex; justify-content: space-between;
+    border-top: 1px solid var(--border-light);
+    background: var(--slate-50);
+    font-size: 12px; color: var(--text-muted);
+    font-weight: 500;
+  }
+  .appr-card-foot a {
+    color: var(--indigo); text-decoration: none; font-weight: 600;
+  }
+
+  /* Compact list */
+  .list-row {
+    display: grid;
+    grid-template-columns: 32px 1fr auto;
+    gap: 10px; align-items: center;
+    padding: 10px 18px;
+    border-top: 1px solid var(--border-light);
+    font-size: 13px;
+  }
+  .list-row:first-of-type { border-top: none; }
+  .list-row:hover { background: var(--slate-50); }
+  .list-row .l-icon {
+    width: 28px; height: 28px; border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .list-row .l-icon svg { width: 13px; height: 13px; fill: #fff; }
+  .l-icon.ind-amber  { background: var(--amber); }
+  .l-icon.ind-red    { background: var(--red); }
+  .l-icon.ind-indigo { background: var(--indigo); }
+  .l-icon.ind-teal   { background: var(--teal); }
+  .l-icon.ind-green  { background: var(--green); }
+  .l-icon.ind-slate  { background: var(--slate-400); }
+
+  .list-row .l-title {
+    font-weight: 500; color: var(--text-primary);
+    letter-spacing: -0.005em; line-height: 1.3;
+  }
+  .list-row .l-sub {
+    font-size: 11.5px; color: var(--text-muted); margin-top: 1px;
+  }
+  .list-row .l-meta {
+    font-size: 11.5px; color: var(--text-muted); text-align: right;
+    flex-shrink: 0; font-variant-numeric: tabular-nums;
+  }
+  .list-row .l-meta.red { color: var(--red); font-weight: 600; }
+  .list-row .l-meta.green { color: var(--green); font-weight: 600; }
+  .list-row .l-meta.amber { color: #B45309; font-weight: 600; }
+
+  /* Status pills */
+  .status-pill {
+    display: inline-flex; align-items: center;
+    height: 20px; padding: 0 8px; border-radius: 999px;
+    font-size: 11px; font-weight: 600; letter-spacing: 0.01em;
+  }
+  .status-urgent  { background: var(--red-light); color: var(--red); }
+  .status-normal  { background: var(--indigo-light); color: var(--indigo); }
+  .status-pending { background: var(--amber-light); color: #B45309; }
+
+  /* Attendance split card */
+  .attendance-split {
+    padding: 14px 18px;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+  .att-group .grp-label {
+    font-size: 11px; font-weight: 600; color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: 0.06em;
+    margin-bottom: 6px;
+  }
+  .att-group .grp-value {
+    font-size: 28px; font-weight: 700; letter-spacing: -0.03em;
+    color: var(--text-primary); line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  .att-group .grp-value .unit { font-size: 14px; color: var(--text-muted); font-weight: 500; margin-left: 2px; }
+  .att-group .grp-sub {
+    font-size: 11.5px; color: var(--text-muted); margin-top: 4px;
+  }
+  .att-bar {
+    width: 100%; height: 6px; background: var(--slate-100);
+    border-radius: 999px; overflow: hidden; margin-top: 8px;
+  }
+  .att-bar-fill {
+    height: 100%; border-radius: 999px;
+    background: linear-gradient(90deg, #1CB87E, #10B981);
+  }
+  .att-bar-fill.warn { background: linear-gradient(90deg, var(--amber), #F59E0B); }
+
+  /* Red flags row card */
+  .flags-card .card-header {
+    background: linear-gradient(135deg, #DF1B41 0%, #FF6B6B 100%);
+    border-bottom: none;
+  }
+  .flags-card .card-header h3 { color: #fff; }
+  .flags-card .card-header .subtitle { color: rgba(255,255,255,0.75); }
+  .flags-card .card-header .badge {
+    background: rgba(255,255,255,0.22); color: #fff;
+  }
+
+  /* Attendance mini-chart */
+  .att-week-chart { padding: 14px 18px; }
+  .att-week-chart canvas { display: block; width: 100%; max-width: 100%; }
+
+  /* Footer */
+  .page-footer {
+    text-align: center;
+    padding: 18px 28px;
+    font-size: 11.5px; color: var(--text-light);
+    border-top: 1px solid var(--border-light);
+    background: #fff;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .page-footer img { height: 18px; opacity: 0.8; }
+
+  /* Scope tabs (Principal / HoS / HoP) */
+  .scope-strip {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 18px;
+    padding: 12px 16px;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card);
+  }
+  .scope-strip-left { display: flex; align-items: center; gap: 14px; }
+  .scope-strip-left .label {
+    font-size: 11px; font-weight: 600; color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: 0.06em;
+  }
+  .scope-tabs { display: flex; gap: 4px; }
+  .scope-tab {
+    height: 28px; padding: 0 14px;
+    border: 1px solid var(--border); background: #fff;
+    border-radius: 999px; cursor: pointer;
+    font-family: inherit; font-size: 12.5px; font-weight: 500;
+    color: var(--text-secondary);
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .scope-tab:hover { background: var(--slate-50); border-color: var(--slate-200); }
+  .scope-tab.active {
+    background: var(--cyan); color: #fff; border-color: var(--cyan);
+    box-shadow: 0 1px 3px rgba(8,145,178,0.3);
+  }
+  .scope-strip-right { display: flex; align-items: center; gap: 8px; }
+  .fy-select {
+    height: 28px; padding: 0 30px 0 12px;
+    border: 1px solid var(--border); border-radius: 6px;
+    background: #fff; font-family: inherit; font-size: 12.5px;
+    color: var(--text-secondary); cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23697386'><path d='M7 10l5 5 5-5z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    background-size: 14px;
+    outline: none;
+  }
+
+  /* Waffle */
+  .overlay {
+    position: fixed; inset: 0; z-index: 500;
+    background: rgba(10,37,64,0.45);
+    backdrop-filter: blur(3px);
+    display: none; align-items: flex-start; justify-content: center;
+    padding-top: 8vh;
+  }
+  .overlay.open { display: flex; }
+  .waffle-panel {
+    width: 680px; max-width: 95vw;
+    background: #fff; border-radius: 14px;
+    box-shadow: 0 24px 60px rgba(10,37,64,0.24); overflow: hidden;
+  }
+  .waffle-header {
+    padding: 16px 22px; border-bottom: 1px solid var(--border-light);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .waffle-header h3 { font-size: 15px; font-weight: 600; }
+  .waffle-close {
+    width: 28px; height: 28px; border-radius: 6px;
+    border: none; background: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--text-muted);
+  }
+  .waffle-close:hover { background: var(--slate-50); }
+  .waffle-close svg { width: 14px; height: 14px; fill: currentColor; }
+  .waffle-body { padding: 14px 18px 20px; }
+  .waffle-grid {
+    display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px;
+  }
+  .waffle-tile {
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    padding: 14px 8px;
+    border-radius: 10px; text-decoration: none; color: var(--text-primary);
+    cursor: pointer; transition: background 0.12s; text-align: center;
+  }
+  .waffle-tile:hover { background: var(--slate-50); }
+  .waffle-tile.current { background: var(--indigo-light); }
+  .waffle-tile-icon {
+    width: 44px; height: 44px; border-radius: 11px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .waffle-tile-icon svg { width: 20px; height: 20px; fill: #fff; }
+  .waffle-tile-label { font-size: 11.5px; font-weight: 500; }
+
+  @media (max-width: 1200px) {
+    .kpi-row { grid-template-columns: repeat(3, 1fr); }
+    .campus-grid { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 800px) {
+    .sidebar { width: 52px; }
+    .main { margin-left: 52px; }
+    .sidebar-item span, .sidebar-section-label, .sidebar-campus .campus-meta { display: none; }
+    .campus-emblem { margin: 0 auto; }
+    .kpi-row { grid-template-columns: 1fr 1fr; }
+    .appr-row { grid-template-columns: 42px 1fr; }
+    .appr-row > *:nth-child(n+3) { grid-column: 2; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-container">
+      <img src="beaconhouse_my-logo.jpg" alt="Beaconhouse">
+    </div>
+  </div>
+
+  <div class="sidebar-campus">
+    <div class="campus-emblem">DC</div>
+    <div class="campus-meta">
+      <div class="name" id="campusName">Defence Campus</div>
+      <div class="loc" id="campusLoc">BSS Pakistan · Lahore</div>
+    </div>
+  </div>
+
+  <div class="sidebar-nav">
+    <div class="sidebar-section-label">Campus</div>
+    <a class="sidebar-item active" href="#">
+      <svg viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+      <span>Overview</span>
+    </a>
+    <a class="sidebar-item" href="#">
+      <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+      <span>Approvals</span>
+      <span class="sidebar-badge danger">23</span>
+    </a>
+    <a class="sidebar-item" href="#">
+      <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+      <span>Academic alerts</span>
+      <span class="sidebar-badge warn">9</span>
+    </a>
+    <a class="sidebar-item" href="#">
+      <svg viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/></svg>
+      <span>Today</span>
+    </a>
+
+    <div class="sidebar-section-label">Functions</div>
+    <a class="sidebar-item" href="admissions.html">
+      <svg viewBox="0 0 24 24"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg>
+      <span>Admissions</span>
+      <span class="sidebar-badge">6</span>
+    </a>
+    <a class="sidebar-item" href="crm.html">
+      <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+      <span>CRM / Leads</span>
+    </a>
+    <a class="sidebar-item" href="sis.html">
+      <svg viewBox="0 0 24 24"><path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/></svg>
+      <span>Students</span>
+    </a>
+    <a class="sidebar-item" href="fees.html">
+      <svg viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>
+      <span>Fees</span>
+      <span class="sidebar-badge warn">4</span>
+    </a>
+    <a class="sidebar-item" href="hr.html">
+      <svg viewBox="0 0 24 24"><path d="M16.5 12c1.38 0 2.5-1.12 2.5-2.5S17.88 7 16.5 7 14 8.12 14 9.5s1.12 2.5 2.5 2.5zM9 11c1.66 0 3-1.34 3-3S10.66 5 9 5 6 6.34 6 8s1.34 3 3 3zm7.5 3c-1.83 0-5.5.92-5.5 2.75V19h11v-2.25c0-1.83-3.67-2.75-5.5-2.75zM9 13c-2.33 0-7 1.17-7 3.5V19h9v-2.25c0-.85.33-2.34 2.37-3.47C12.5 13.1 10.66 13 9 13z"/></svg>
+      <span>Staff / HR</span>
+      <span class="sidebar-badge">8</span>
+    </a>
+
+    <div class="sidebar-section-label">Campus life</div>
+    <a class="sidebar-item" href="#">
+      <svg viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/></svg>
+      <span>Events</span>
+    </a>
+    <a class="sidebar-item" href="#">
+      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-6h2v6zm0-8h-2V7h2v4z"/></svg>
+      <span>Incidents</span>
+      <span class="sidebar-badge danger">2</span>
+    </a>
+    <a class="sidebar-item" href="#">
+      <svg viewBox="0 0 24 24"><path d="M12 2l-5.5 9h11z M17.5 17.5c0 2.5-2 4.5-4.5 4.5s-4.5-2-4.5-4.5 2-4.5 4.5-4.5 4.5 2 4.5 4.5zM3 22h8v-8H3v8z"/></svg>
+      <span>Reports</span>
+    </a>
+  </div>
+</nav>
+
+<!-- Main -->
+<div class="main">
+
+  <header class="topbar">
+    <div class="topbar-left">
+      <div class="module-chip">
+        <span class="module-icon mod-grad-campus">
+          <svg viewBox="0 0 24 24"><path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3zM5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z"/></svg>
+        </span>
+        <span>Campus</span>
+      </div>
+      <div class="topbar-divider"></div>
+      <span class="topbar-breadcrumb">Dashboard</span>
+      <span class="section-pill" id="topSectionPill">
+        <svg viewBox="0 0 24 24"><path d="M16.5 12c1.38 0 2.5-1.12 2.5-2.5S17.88 7 16.5 7 14 8.12 14 9.5s1.12 2.5 2.5 2.5zM9 11c1.66 0 3-1.34 3-3S10.66 5 9 5 6 6.34 6 8s1.34 3 3 3zm7.5 3c-1.83 0-5.5.92-5.5 2.75V19h11v-2.25c0-1.83-3.67-2.75-5.5-2.75zM9 13c-2.33 0-7 1.17-7 3.5V19h9v-2.25c0-.85.33-2.34 2.37-3.47C12.5 13.1 10.66 13 9 13z"/></svg>
+        Primary + Secondary · 1,284 students
+      </span>
+    </div>
+    <div class="topbar-right">
+      <div class="search-box" onclick="openWaffle()">
+        <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+        <input placeholder="Search students, staff, approvals…" readonly>
+        <span class="palette-hint">⌘K</span>
+      </div>
+      <button class="waffle-btn" onclick="openWaffle()">
+        <svg viewBox="0 0 24 24"><path d="M4 4h4v4H4V4zm6 0h4v4h-4V4zm6 0h4v4h-4V4zM4 10h4v4H4v-4zm6 0h4v4h-4v-4zm6 0h4v4h-4v-4zM4 16h4v4H4v-4zm6 0h4v4h-4v-4zm6 0h4v4h-4v-4z"/></svg>
+      </button>
+      <button class="topbar-btn">
+        <svg viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/></svg>
+        Wed, Apr 22
+      </button>
+      <button class="topbar-btn primary">
+        <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6z"/></svg>
+        <span>New Announcement</span>
+      </button>
+      <button class="topbar-btn">
+        <svg viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+      </button>
+      <div class="user-chip">
+        <div class="avatar"><img src="https://i.pravatar.cc/80?img=47" alt="Principal"></div>
+        <div class="user-info">
+          <div class="name" id="personaName">Nasreen Ahmed</div>
+          <div class="role" id="personaRole">Principal · Defence Campus</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="breadcrumb">
+      <a href="home.html">Home</a>
+      <span class="breadcrumb-sep">/</span>
+      <span>Campus Dashboard · Defence Campus</span>
+    </div>
+    <div class="page-title-row">
+      <div>
+        <h2>Good morning, <span id="welcomeName">Nasreen</span></h2>
+        <p class="page-meta">
+          You have <strong>23</strong> approvals awaiting review, <strong>9</strong> academic alerts, and <strong>2</strong> incidents to close out.
+          <span style="color:var(--text-light);">Campus on-time attendance: 94%.</span>
+        </p>
+      </div>
+      <div class="header-pills">
+        <span class="badge badge-teal">Campus dashboard</span>
+        <span class="badge badge-amber">23 approvals</span>
+        <span class="badge badge-red">2 incidents</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="campus-body">
+
+    <!-- Scope selector: Principal / HoS / HoP -->
+    <div class="scope-strip">
+      <div class="scope-strip-left">
+        <span class="label">View</span>
+        <div class="scope-tabs" id="scopeTabs">
+          <button class="scope-tab active" data-persona="principal">Principal (all)</button>
+          <button class="scope-tab" data-persona="head_secondary">Head of Secondary</button>
+          <button class="scope-tab" data-persona="head_primary">Head of Primary</button>
+        </div>
+      </div>
+      <div class="scope-strip-right">
+        <select class="fy-select">
+          <option>Today</option>
+          <option>This week</option>
+          <option>MTD</option>
+        </select>
+        <select class="fy-select">
+          <option>Defence Campus</option>
+          <option>Clifton Campus</option>
+          <option>DHA Campus</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- KPI tiles -->
+    <div class="kpi-row">
+      <div class="kpi-tile">
+        <div class="k-icon k-att">
+          <svg viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/></svg>
+        </div>
+        <div class="k-body">
+          <div class="k-label">Attendance Today</div>
+          <div class="k-value">94<span class="unit">%</span></div>
+          <div class="k-sub up">+1.2 pts vs yesterday</div>
+        </div>
+      </div>
+      <div class="kpi-tile">
+        <div class="k-icon k-coll">
+          <svg viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>
+        </div>
+        <div class="k-body">
+          <div class="k-label">Collections MTD</div>
+          <div class="k-value">82<span class="unit">%</span></div>
+          <div class="k-sub down">-3 pts vs target</div>
+        </div>
+      </div>
+      <div class="kpi-tile">
+        <div class="k-icon k-cap">
+          <svg viewBox="0 0 24 24"><path d="M16.5 12c1.38 0 2.5-1.12 2.5-2.5S17.88 7 16.5 7 14 8.12 14 9.5s1.12 2.5 2.5 2.5zM9 11c1.66 0 3-1.34 3-3S10.66 5 9 5 6 6.34 6 8s1.34 3 3 3zm7.5 3c-1.83 0-5.5.92-5.5 2.75V19h11v-2.25c0-1.83-3.67-2.75-5.5-2.75zM9 13c-2.33 0-7 1.17-7 3.5V19h9v-2.25c0-.85.33-2.34 2.37-3.47C12.5 13.1 10.66 13 9 13z"/></svg>
+        </div>
+        <div class="k-body">
+          <div class="k-label">Enrolment</div>
+          <div class="k-value">1,284<span style="font-size:12px;color:var(--text-muted);margin-left:4px;">/ 1,400</span></div>
+          <div class="k-sub">92% capacity · 116 seats open</div>
+        </div>
+      </div>
+      <div class="kpi-tile">
+        <div class="k-icon k-staff">
+          <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2z"/></svg>
+        </div>
+        <div class="k-body">
+          <div class="k-label">Staff on leave</div>
+          <div class="k-value">12<span style="font-size:12px;color:var(--text-muted);margin-left:4px;">/ 140</span></div>
+          <div class="k-sub">3 teachers, substitutes arranged</div>
+        </div>
+      </div>
+      <div class="kpi-tile">
+        <div class="k-icon k-inc">
+          <svg viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+        </div>
+        <div class="k-body">
+          <div class="k-label">Open incidents</div>
+          <div class="k-value">2</div>
+          <div class="k-sub down">1 safeguarding · 1 behavioural</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="campus-grid">
+
+      <!-- Left column: Pending Approvals with tabs -->
+      <div>
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <h3>Pending Approvals</h3>
+              <div class="subtitle">Items waiting on your decision — inline approve / reject</div>
+            </div>
+            <span class="badge badge-amber">23 pending</span>
+          </div>
+
+          <div class="approvals-tabs">
+            <button class="appr-tab active">Leave <span class="appr-count">8</span></button>
+            <button class="appr-tab">Concessions <span class="appr-count">4</span></button>
+            <button class="appr-tab">Admissions <span class="appr-count">6</span></button>
+            <button class="appr-tab">Withdrawals <span class="appr-count">2</span></button>
+            <button class="appr-tab">Transfers <span class="appr-count">3</span></button>
+          </div>
+
+          <!-- Leave rows -->
+          <div class="appr-row">
+            <div class="appr-avatar"><img src="https://i.pravatar.cc/80?img=12" alt=""></div>
+            <div class="appr-body">
+              <div class="t1"><strong>Alex Jackson</strong> — Annual leave request</div>
+              <div class="t2">EMP14 · Administrative Staff <span class="dot"></span> Apr 24 – Apr 26 <span class="dot"></span> 3 days <span class="status-pill status-normal" style="margin-left:4px;">Normal</span></div>
+            </div>
+            <div class="appr-amount">3 days<span class="sub">reliever: Hamna</span></div>
+            <div class="appr-actions">
+              <button class="appr-btn reject">Reject</button>
+              <button class="appr-btn approve">
+                <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                Approve
+              </button>
+            </div>
+          </div>
+
+          <div class="appr-row">
+            <div class="appr-avatar"><img src="https://i.pravatar.cc/80?img=32" alt=""></div>
+            <div class="appr-body">
+              <div class="t1"><strong>John Smith</strong> — Sick leave</div>
+              <div class="t2">EMP13 · Teaching Staff (Grade 8) <span class="dot"></span> Apr 22 <span class="dot"></span> 1 day <span class="status-pill status-urgent" style="margin-left:4px;">Urgent</span></div>
+            </div>
+            <div class="appr-amount">1 day<span class="sub">medical cert</span></div>
+            <div class="appr-actions">
+              <button class="appr-btn reject">Reject</button>
+              <button class="appr-btn approve">
+                <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                Approve
+              </button>
+            </div>
+          </div>
+
+          <div class="appr-row">
+            <div class="appr-avatar"><img src="https://i.pravatar.cc/80?img=48" alt=""></div>
+            <div class="appr-body">
+              <div class="t1"><strong>Hamna Farooq</strong> — Casual leave</div>
+              <div class="t2">EMP11 · Admissions Officer <span class="dot"></span> Apr 28 <span class="dot"></span> 1 day <span class="status-pill status-normal" style="margin-left:4px;">Normal</span></div>
+            </div>
+            <div class="appr-amount">1 day<span class="sub">personal</span></div>
+            <div class="appr-actions">
+              <button class="appr-btn reject">Reject</button>
+              <button class="appr-btn approve">
+                <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                Approve
+              </button>
+            </div>
+          </div>
+
+          <div class="appr-row">
+            <div class="appr-avatar"><img src="https://i.pravatar.cc/80?img=36" alt=""></div>
+            <div class="appr-body">
+              <div class="t1"><strong>Natalya Idrees</strong> — Annual leave</div>
+              <div class="t2">EMP10 · Teaching Staff (Grade 6) <span class="dot"></span> May 5 – May 9 <span class="dot"></span> 5 days <span class="status-pill status-pending" style="margin-left:4px;">Reliever needed</span></div>
+            </div>
+            <div class="appr-amount">5 days<span class="sub">no reliever yet</span></div>
+            <div class="appr-actions">
+              <button class="appr-btn reject">Reject</button>
+              <button class="appr-btn approve">
+                <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                Approve
+              </button>
+            </div>
+          </div>
+
+          <div class="appr-row">
+            <div class="appr-avatar"><img src="https://i.pravatar.cc/80?img=67" alt=""></div>
+            <div class="appr-body">
+              <div class="t1"><strong>Joe Hernandez</strong> — Half-day leave</div>
+              <div class="t2">EMP8 · Support Staff <span class="dot"></span> Apr 22 (afternoon) <span class="dot"></span> 0.5 day</div>
+            </div>
+            <div class="appr-amount">0.5 day<span class="sub">family</span></div>
+            <div class="appr-actions">
+              <button class="appr-btn reject">Reject</button>
+              <button class="appr-btn approve">
+                <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                Approve
+              </button>
+            </div>
+          </div>
+
+          <div class="appr-card-foot">
+            <span><strong>5</strong> of 8 shown · oldest pending: 2 days</span>
+            <a href="hr.html">View all leave applications →</a>
+          </div>
+        </div>
+
+        <!-- Concessions (sample, collapsed) -->
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <h3>Fee concession requests</h3>
+              <div class="subtitle">Waivers pending Principal approval · threshold Rs. 10,000+</div>
+            </div>
+            <span class="badge badge-amber">4 pending</span>
+          </div>
+
+          <div class="appr-row">
+            <div class="appr-avatar"><img src="https://i.pravatar.cc/80?img=52" alt=""></div>
+            <div class="appr-body">
+              <div class="t1"><strong>Ibrahim Qadir, G8</strong> — Sibling concession</div>
+              <div class="t2">Parent: Mr. Qadir <span class="dot"></span> 20% waiver <span class="dot"></span> Supporting docs attached</div>
+            </div>
+            <div class="appr-amount">Rs. 9,700<span class="sub">monthly</span></div>
+            <div class="appr-actions">
+              <button class="appr-btn open">View docs</button>
+              <button class="appr-btn approve">
+                <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                Approve
+              </button>
+            </div>
+          </div>
+
+          <div class="appr-row">
+            <div class="appr-avatar"><img src="https://i.pravatar.cc/80?img=41" alt=""></div>
+            <div class="appr-body">
+              <div class="t1"><strong>Nida Sheikh, G5</strong> — Staff child concession</div>
+              <div class="t2">Parent: Mrs. Sheikh (teacher) <span class="dot"></span> 50% waiver <span class="dot"></span> HR verified</div>
+            </div>
+            <div class="appr-amount">Rs. 24,250<span class="sub">monthly</span></div>
+            <div class="appr-actions">
+              <button class="appr-btn open">View docs</button>
+              <button class="appr-btn approve">
+                <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                Approve
+              </button>
+            </div>
+          </div>
+
+          <div class="appr-row">
+            <div class="appr-avatar"><img src="https://i.pravatar.cc/80?img=38" alt=""></div>
+            <div class="appr-body">
+              <div class="t1"><strong>Hamza Tariq, G7</strong> — Hardship request</div>
+              <div class="t2">Parent: Mrs. Tariq <span class="dot"></span> 30% waiver <span class="dot"></span> <span class="status-pill status-pending" style="margin-left:4px;">Needs review</span></div>
+            </div>
+            <div class="appr-amount">Rs. 15,840<span class="sub">monthly</span></div>
+            <div class="appr-actions">
+              <button class="appr-btn reject">Reject</button>
+              <button class="appr-btn approve">
+                <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                Approve
+              </button>
+            </div>
+          </div>
+
+          <div class="appr-card-foot">
+            <span>Total exposure: Rs. 49,790/month if all approved</span>
+            <a href="fees.html">Open Fees module →</a>
+          </div>
+        </div>
+
+        <!-- Admissions approvals -->
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <h3>Admissions decisions</h3>
+              <div class="subtitle">Post-interview approvals for AY 2026</div>
+            </div>
+            <span class="badge badge-indigo">6 pending</span>
+          </div>
+
+          <div class="appr-row">
+            <div class="appr-avatar"><img src="https://i.pravatar.cc/80?img=10" alt=""></div>
+            <div class="appr-body">
+              <div class="t1"><strong>Ayesha Rauf</strong> — Grade 3 application</div>
+              <div class="t2">Interview: 9/10 <span class="dot"></span> Assessment: 92% <span class="dot"></span> Sibling: Zainab (G7)</div>
+            </div>
+            <div class="appr-amount">Strong<span class="sub">recommended</span></div>
+            <div class="appr-actions">
+              <button class="appr-btn open">Open profile</button>
+              <button class="appr-btn approve">
+                <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                Admit
+              </button>
+            </div>
+          </div>
+
+          <div class="appr-row">
+            <div class="appr-avatar"><img src="https://i.pravatar.cc/80?img=26" alt=""></div>
+            <div class="appr-body">
+              <div class="t1"><strong>Daniel Park</strong> — Grade 1 application</div>
+              <div class="t2">Interview: 8/10 <span class="dot"></span> Assessment: 88% <span class="dot"></span> Waitlist: yes</div>
+            </div>
+            <div class="appr-amount">Good<span class="sub">if capacity</span></div>
+            <div class="appr-actions">
+              <button class="appr-btn reject">Defer</button>
+              <button class="appr-btn approve">
+                <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                Admit
+              </button>
+            </div>
+          </div>
+
+          <div class="appr-card-foot">
+            <span><strong>2</strong> of 6 shown · 184 on waitlist (all grades)</span>
+            <a href="admissions.html">Open Admissions →</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right column: Today's snapshot + alerts + staff + events + incidents -->
+      <div>
+
+        <!-- Attendance split -->
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <h3>Attendance today</h3>
+              <div class="subtitle">Students + staff · as of 10:45</div>
+            </div>
+          </div>
+          <div class="attendance-split">
+            <div class="att-group">
+              <div class="grp-label">Students</div>
+              <div class="grp-value">1,207<span class="unit">/ 1,284</span></div>
+              <div class="att-bar"><div class="att-bar-fill" style="width:94%"></div></div>
+              <div class="grp-sub">94% present · 12 sick · 65 absent</div>
+            </div>
+            <div class="att-group">
+              <div class="grp-label">Staff</div>
+              <div class="grp-value">128<span class="unit">/ 140</span></div>
+              <div class="att-bar"><div class="att-bar-fill" style="width:91%"></div></div>
+              <div class="grp-sub">91% on-site · 12 on leave · 0 late</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Academic alerts -->
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <h3>Academic alerts</h3>
+              <div class="subtitle">Action required this week</div>
+            </div>
+            <a class="section-action">View all <svg viewBox="0 0 24 24"><path d="M10 17l5-5-5-5v10z"/></svg></a>
+          </div>
+
+          <div class="list-row">
+            <div class="l-icon ind-amber">
+              <svg viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+            </div>
+            <div>
+              <div class="l-title">Gradebook entry overdue — Grade 9 Math</div>
+              <div class="l-sub">Teacher: Mr. Khan · Week 15 marks not yet submitted</div>
+            </div>
+            <div class="l-meta amber">5 days</div>
+          </div>
+
+          <div class="list-row">
+            <div class="l-icon ind-amber">
+              <svg viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+            </div>
+            <div>
+              <div class="l-title">TEF review overdue — 3 teachers</div>
+              <div class="l-sub">Q2 evaluations pending sign-off by Head of Primary</div>
+            </div>
+            <div class="l-meta amber">3 days</div>
+          </div>
+
+          <div class="list-row">
+            <div class="l-icon ind-red">
+              <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+            </div>
+            <div>
+              <div class="l-title">4 students flagged — Student Support</div>
+              <div class="l-sub">Attendance &lt; 80% past 4 weeks · counsellor review</div>
+            </div>
+            <div class="l-meta red">today</div>
+          </div>
+
+          <div class="list-row">
+            <div class="l-icon ind-indigo">
+              <svg viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg>
+            </div>
+            <div>
+              <div class="l-title">Curriculum plan — Grade 5 SS</div>
+              <div class="l-sub">Term 3 unit plan awaiting HoP approval</div>
+            </div>
+            <div class="l-meta">Apr 25</div>
+          </div>
+
+          <div class="list-row">
+            <div class="l-icon ind-green">
+              <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+            </div>
+            <div>
+              <div class="l-title">Grade 8 Science — all marks submitted</div>
+              <div class="l-sub">Term 3 complete · averages Grade-8: 78%</div>
+            </div>
+            <div class="l-meta green">done</div>
+          </div>
+        </div>
+
+        <!-- Staff on leave today -->
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <h3>Staff on leave today</h3>
+              <div class="subtitle">12 of 140 · 3 teachers, substitutes arranged</div>
+            </div>
+            <a class="section-action" href="hr.html">Roster <svg viewBox="0 0 24 24"><path d="M10 17l5-5-5-5v10z"/></svg></a>
+          </div>
+
+          <div class="list-row">
+            <div class="l-icon ind-indigo">
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            </div>
+            <div>
+              <div class="l-title">Mr. Bashir Ali · Teacher, Grade 7 English</div>
+              <div class="l-sub">Sick leave · reliever: Ms. Saba Iqbal</div>
+            </div>
+            <div class="l-meta">1 day</div>
+          </div>
+          <div class="list-row">
+            <div class="l-icon ind-indigo">
+              <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+            </div>
+            <div>
+              <div class="l-title">Ms. Reema Shahid · Teacher, Grade 3 Math</div>
+              <div class="l-sub">Annual leave · reliever: Ms. Anum</div>
+            </div>
+            <div class="l-meta">Day 2 of 3</div>
+          </div>
+          <div class="list-row">
+            <div class="l-icon ind-slate">
+              <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2z"/></svg>
+            </div>
+            <div>
+              <div class="l-title">Mr. Faisal · Admin / Office Staff</div>
+              <div class="l-sub">Casual leave · no cover needed</div>
+            </div>
+            <div class="l-meta">1 day</div>
+          </div>
+          <div class="list-row">
+            <div class="l-icon ind-slate">
+              <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2z"/></svg>
+            </div>
+            <div>
+              <div class="l-title">+ 9 more across support &amp; admin</div>
+              <div class="l-sub">Security, cafeteria, transport — see roster</div>
+            </div>
+            <div class="l-meta">mixed</div>
+          </div>
+        </div>
+
+        <!-- Today's events / announcements -->
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <h3>Today &amp; this week</h3>
+              <div class="subtitle">Scheduled events, PTMs, assemblies</div>
+            </div>
+          </div>
+
+          <div class="list-row">
+            <div class="l-icon ind-teal">
+              <svg viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/></svg>
+            </div>
+            <div>
+              <div class="l-title">Morning assembly · 8:15 AM</div>
+              <div class="l-sub">Hall · Grade 6–8 · Pakistan Day theme</div>
+            </div>
+            <div class="l-meta">today</div>
+          </div>
+          <div class="list-row">
+            <div class="l-icon ind-indigo">
+              <svg viewBox="0 0 24 24"><path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z"/></svg>
+            </div>
+            <div>
+              <div class="l-title">Parent-Teacher Meeting · Grade 3–5</div>
+              <div class="l-sub">2:30 – 5:30 PM · 68 parents booked</div>
+            </div>
+            <div class="l-meta">Apr 24</div>
+          </div>
+          <div class="list-row">
+            <div class="l-icon ind-amber">
+              <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+            </div>
+            <div>
+              <div class="l-title">Inter-school Science Fair</div>
+              <div class="l-sub">Lahore Grammar · Grade 7–9 · 14 students travelling</div>
+            </div>
+            <div class="l-meta">Apr 26</div>
+          </div>
+          <div class="list-row">
+            <div class="l-icon ind-teal">
+              <svg viewBox="0 0 24 24"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg>
+            </div>
+            <div>
+              <div class="l-title">Teacher CPD · Assessment Literacy</div>
+              <div class="l-sub">Training room 2 · 3:30 – 5:00 PM</div>
+            </div>
+            <div class="l-meta">Apr 25</div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Red flags full-width -->
+    <div class="card flags-card" style="margin-top: 6px;">
+      <div class="card-header">
+        <div>
+          <h3>Campus red flags</h3>
+          <div class="subtitle">Items requiring Principal sign-off or escalation</div>
+        </div>
+        <span class="badge">5 items · follow-up today</span>
+      </div>
+
+      <div class="list-row">
+        <div class="l-icon ind-red">
+          <svg viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+        </div>
+        <div>
+          <div class="l-title">Safeguarding referral — Grade 6 student</div>
+          <div class="l-sub">Logged 2 days ago · Counsellor + DSL notified · parent meeting pending</div>
+        </div>
+        <div class="l-meta red">Open 2d</div>
+      </div>
+
+      <div class="list-row">
+        <div class="l-icon ind-red">
+          <svg viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+        </div>
+        <div>
+          <div class="l-title">Behavioural incident — Grade 8</div>
+          <div class="l-sub">Physical altercation · both families contacted · written statements filed</div>
+        </div>
+        <div class="l-meta red">Open 1d</div>
+      </div>
+
+      <div class="list-row">
+        <div class="l-icon ind-amber">
+          <svg viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+        </div>
+        <div>
+          <div class="l-title">5 parents overdue &gt; 60 days — Rs. 487K</div>
+          <div class="l-sub">Zara Ahmed (G8), Yusuf Malik (G6), Eman Iqbal (G7), Rayyan Khan (G5), Aaliyah Shah (G8)</div>
+        </div>
+        <div class="l-meta amber">Rs. 487K</div>
+      </div>
+
+      <div class="list-row">
+        <div class="l-icon ind-amber">
+          <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 16H7V5h10v14z"/></svg>
+        </div>
+        <div>
+          <div class="l-title">Grade 8 attendance at 82%</div>
+          <div class="l-sub">4 pts below campus average · section C driving the gap</div>
+        </div>
+        <div class="l-meta amber">Watch</div>
+      </div>
+
+      <div class="list-row">
+        <div class="l-icon ind-amber">
+          <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.11 0-1.99.89-1.99 2L2 18c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V6c0-1.11-.89-2-2-2z"/></svg>
+        </div>
+        <div>
+          <div class="l-title">Bus route 3 — repeated delays this week</div>
+          <div class="l-sub">Parent complaints logged · transport provider review scheduled</div>
+        </div>
+        <div class="l-meta amber">Review</div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <footer class="page-footer">
+    <span>© 2026 BEAMS360 · All Rights Reserved</span>
+    <span>·</span>
+    <span>Powered by</span>
+    <img src="b360-logo-1000.png" alt="BEAMS360">
+  </footer>
+
+</div>
+
+<!-- Waffle -->
+<div class="overlay" id="waffle" onclick="if(event.target===this)closeWaffle()">
+  <div class="waffle-panel">
+    <div class="waffle-header">
+      <div>
+        <h3>All Modules</h3>
+        <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">Jump to another module</div>
+      </div>
+      <button class="waffle-close" onclick="closeWaffle()">
+        <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+      </button>
+    </div>
+    <div class="waffle-body">
+      <div class="waffle-grid">
+        <a class="waffle-tile" href="admissions.html"><div class="waffle-tile-icon mod-grad-admissions"><svg viewBox="0 0 24 24"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg></div><div class="waffle-tile-label">Admissions</div></a>
+        <a class="waffle-tile" href="crm.html"><div class="waffle-tile-icon mod-grad-crm"><svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></div><div class="waffle-tile-label">CRM</div></a>
+        <a class="waffle-tile" href="sis.html"><div class="waffle-tile-icon mod-grad-sis"><svg viewBox="0 0 24 24"><path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/></svg></div><div class="waffle-tile-label">Student Info</div></a>
+        <a class="waffle-tile" href="fees.html"><div class="waffle-tile-icon mod-grad-fees"><svg viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg></div><div class="waffle-tile-label">Fee Invoices</div></a>
+        <a class="waffle-tile" href="hr.html"><div class="waffle-tile-icon mod-grad-hr"><svg viewBox="0 0 24 24"><path d="M16.5 12c1.38 0 2.5-1.12 2.5-2.5S17.88 7 16.5 7 14 8.12 14 9.5s1.12 2.5 2.5 2.5zM9 11c1.66 0 3-1.34 3-3S10.66 5 9 5 6 6.34 6 8s1.34 3 3 3zm7.5 3c-1.83 0-5.5.92-5.5 2.75V19h11v-2.25c0-1.83-3.67-2.75-5.5-2.75zM9 13c-2.33 0-7 1.17-7 3.5V19h9v-2.25c0-.85.33-2.34 2.37-3.47C12.5 13.1 10.66 13 9 13z"/></svg></div><div class="waffle-tile-label">Human Resources</div></a>
+        <a class="waffle-tile" href="executive.html"><div class="waffle-tile-icon mod-grad-executive"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div><div class="waffle-tile-label">Executive</div></a>
+        <a class="waffle-tile current" href="campus.html"><div class="waffle-tile-icon mod-grad-campus"><svg viewBox="0 0 24 24"><path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3zM5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z"/></svg></div><div class="waffle-tile-label">Campus</div></a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Persona scope (Principal / HoS / HoP)
+  const PERSONAS = {
+    principal: {
+      name: 'Nasreen Ahmed', role: 'Principal · Defence Campus',
+      welcome: 'Nasreen', scope: 'Primary + Secondary · 1,284 students'
+    },
+    head_secondary: {
+      name: 'Tariq Hussain', role: 'Head of Secondary · Defence Campus',
+      welcome: 'Tariq', scope: 'Secondary (G6–G12) · 612 students'
+    },
+    head_primary: {
+      name: 'Mehreen Siddiqui', role: 'Head of Primary · Defence Campus',
+      welcome: 'Mehreen', scope: 'Primary (KG–G5) · 672 students'
+    }
+  };
+
+  function setPersona(p) {
+    const d = PERSONAS[p] || PERSONAS.principal;
+    document.getElementById('personaName').textContent = d.name;
+    document.getElementById('personaRole').textContent = d.role;
+    document.getElementById('welcomeName').textContent = d.welcome;
+    document.getElementById('topSectionPill').innerHTML =
+      '<svg viewBox="0 0 24 24"><path d="M16.5 12c1.38 0 2.5-1.12 2.5-2.5S17.88 7 16.5 7 14 8.12 14 9.5s1.12 2.5 2.5 2.5zM9 11c1.66 0 3-1.34 3-3S10.66 5 9 5 6 6.34 6 8s1.34 3 3 3zm7.5 3c-1.83 0-5.5.92-5.5 2.75V19h11v-2.25c0-1.83-3.67-2.75-5.5-2.75zM9 13c-2.33 0-7 1.17-7 3.5V19h9v-2.25c0-.85.33-2.34 2.37-3.47C12.5 13.1 10.66 13 9 13z"/></svg>' + d.scope;
+    document.querySelectorAll('.scope-tab').forEach(t => {
+      t.classList.toggle('active', t.dataset.persona === p);
+    });
+  }
+
+  document.querySelectorAll('.scope-tab').forEach(t => {
+    t.addEventListener('click', () => setPersona(t.dataset.persona));
+  });
+
+  const role = sessionStorage.getItem('b360-role');
+  if (role && PERSONAS[role]) setPersona(role);
+
+  function openWaffle() { document.getElementById('waffle').classList.add('open'); }
+  function closeWaffle() { document.getElementById('waffle').classList.remove('open'); }
+
+  document.addEventListener('keydown', e => {
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); openWaffle(); }
+    if (e.key === 'Escape') closeWaffle();
+  });
+
+  // Tabs inside approvals card (visual only, rows are hardcoded to Leave tab above)
+  document.querySelectorAll('.appr-tab').forEach(t => {
+    t.addEventListener('click', () => {
+      t.parentElement.querySelectorAll('.appr-tab').forEach(x => x.classList.remove('active'));
+      t.classList.add('active');
+    });
+  });
+</script>
+
+</body>
+</html>

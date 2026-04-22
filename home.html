@@ -158,6 +158,8 @@
   .mockup-card.sis::after        { background: #0A8DCC; }
   .mockup-card.fees::after       { background: #FFB224; }
   .mockup-card.hr::after         { background: #F59E0B; }
+  .mockup-card.executive::after  { background: #4F46E5; }
+  .mockup-card.campus::after     { background: #0891B2; }
   .mockup-card.auth::after       { background: #4F46E5; }
   .mockup-card.hidden-by-role    { display: none; }
 
@@ -172,6 +174,8 @@
   .grad-sis        { background: linear-gradient(135deg, #0A8DCC, #3FB5E8); }
   .grad-fees       { background: linear-gradient(135deg, #FFB224, #FFD166); }
   .grad-hr         { background: linear-gradient(135deg, #F59E0B, #FCD34D); }
+  .grad-executive  { background: linear-gradient(135deg, #4F46E5, #1E1B4B); }
+  .grad-campus     { background: linear-gradient(135deg, #0891B2, #14B8A6); }
   .grad-auth       { background: linear-gradient(135deg, #4F46E5, #818CF8); }
 
   .card-head {
@@ -312,7 +316,7 @@
 </section>
 
 <main class="grid-wrap">
-  <div class="section-label" id="moduleSectionLabel">Reference mockups</div>
+  <div class="section-label" id="moduleSectionLabel">Functional modules</div>
   <div class="mockup-grid" id="moduleGrid">
 
     <a class="mockup-card admissions" data-module="admissions" href="admissions.html">
@@ -402,6 +406,47 @@
 
   </div>
 
+  <div id="landingsSection">
+  <div class="section-label" style="margin-top:28px;">Role-based landing dashboards</div>
+  <div class="mockup-grid">
+
+    <a class="mockup-card executive" data-module="executive" href="executive.html">
+      <div class="card-head">
+        <div class="card-icon grad-executive">
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </div>
+        <div class="card-meta">Executive Dashboard</div>
+      </div>
+      <div class="card-title">Regional &amp; group rollup</div>
+      <div class="card-desc">Multi-BU KPI grid, comparison table, and trend charts for RO Directors, HO Chairperson, COO BSS Pakistan, and Head of Audit. Read-only with drill-down.</div>
+      <div class="card-bullets">
+        <span class="card-bullet">9–22 BUs</span>
+        <span class="card-bullet">Comparison</span>
+        <span class="card-bullet">Trends</span>
+      </div>
+      <span class="card-link">Open dashboard →</span>
+    </a>
+
+    <a class="mockup-card campus" data-module="campus" href="campus.html">
+      <div class="card-head">
+        <div class="card-icon grad-campus">
+          <svg viewBox="0 0 24 24"><path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3zM5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z"/></svg>
+        </div>
+        <div class="card-meta">Campus Dashboard</div>
+      </div>
+      <div class="card-title">Principal &amp; section heads</div>
+      <div class="card-desc">Single-campus operational view: pending approvals (leave, concessions, admissions), attendance split, academic alerts, staff on leave, events, incidents.</div>
+      <div class="card-bullets">
+        <span class="card-bullet">Approvals</span>
+        <span class="card-bullet">Attendance</span>
+        <span class="card-bullet">Red flags</span>
+      </div>
+      <span class="card-link">Open dashboard →</span>
+    </a>
+
+  </div>
+  </div><!-- /#landingsSection -->
+
   <div class="section-label" style="margin-top:28px;">Authentication flow</div>
   <div class="mockup-grid">
 
@@ -465,9 +510,9 @@
   }
 
   // Role → module visibility + landing view
-  // ALL = ['admissions','crm','sis','fees','hr']
+  // Modules: 'admissions','crm','sis','fees','hr','executive','campus'
   const ROLE_META = {
-    ro_director:        { label: 'Nasir Kasuri · RO Director',            landing: 'Regional Executive Dashboard',   modules: ['admissions','crm','sis','fees','hr'] },
+    ro_director:        { label: 'Nasir Kasuri · RO Director',             landing: 'Regional Executive Dashboard',   modules: ['executive','admissions','crm','sis','fees','hr'] },
     ro_head_education:  { label: 'Head of Education · RO',                 landing: 'Academic Dashboard',              modules: ['sis'] },
     ro_team_education:  { label: 'Education · team member',                landing: 'Academic Dashboard (team)',       modules: ['sis'] },
     ro_head_marketing:  { label: 'Head of Marketing &amp; Admissions · RO',landing: 'Funnel Dashboard',                modules: ['crm','admissions','sis'] },
@@ -476,18 +521,18 @@
     ro_team_hr:         { label: 'HR · team member',                       landing: 'HR Operations Dashboard (team)',  modules: ['hr'] },
     ro_head_it:         { label: 'Head of IT · RO',                        landing: 'System Admin Dashboard',          modules: ['admissions','crm','sis','fees','hr'] },
     ro_team_it:         { label: 'IT · team member',                       landing: 'System Admin Dashboard (team)',   modules: ['admissions','crm','sis','fees','hr'] },
-    principal:          { label: 'School Principal',                       landing: 'Campus Dashboard',                modules: ['admissions','crm','sis','fees','hr'] },
-    head_secondary:     { label: 'Head of Secondary',                      landing: 'Campus Dashboard (Secondary)',    modules: ['sis','hr'] },
-    head_primary:       { label: 'Head of Primary',                        landing: 'Campus Dashboard (Primary)',      modules: ['sis','hr'] },
+    principal:          { label: 'School Principal',                       landing: 'Campus Dashboard',                modules: ['campus','admissions','crm','sis','fees','hr'] },
+    head_secondary:     { label: 'Head of Secondary',                      landing: 'Campus Dashboard (Secondary)',    modules: ['campus','sis','hr'] },
+    head_primary:       { label: 'Head of Primary',                        landing: 'Campus Dashboard (Primary)',      modules: ['campus','sis','hr'] },
     admissions_officer: { label: 'Admissions Officer / PRO',               landing: 'Admissions Today',                modules: ['admissions','crm','sis'] },
-    ho_chairperson:     { label: 'Chairperson · Beaconhouse Group',        landing: 'Group Executive Dashboard',       modules: ['admissions','crm','sis','fees','hr'] },
+    ho_chairperson:     { label: 'Chairperson · Beaconhouse Group',        landing: 'Group Executive Dashboard',       modules: ['executive','admissions','crm','sis','fees','hr'] },
     ho_head_finance:    { label: 'Head of Finance · HO',                   landing: 'Finance Dashboard',               modules: ['fees','hr'] },
     ho_team_finance:    { label: 'Finance · team member',                  landing: 'Finance Dashboard (team)',        modules: ['fees'] },
     ho_head_hr:         { label: 'Head of HR · HO',                        landing: 'HR Dashboard (group)',            modules: ['hr'] },
     ho_team_hr:         { label: 'HR · team member',                       landing: 'HR Dashboard (team)',             modules: ['hr'] },
-    ho_head_audit:      { label: 'Head of Audit · HO',                     landing: 'Audit Dashboard',                 modules: ['admissions','crm','sis','fees','hr'] },
-    ho_team_audit:      { label: 'Audit · team member',                    landing: 'Audit Dashboard (team)',          modules: ['admissions','crm','sis','fees','hr'] },
-    bss_pk_coo:         { label: 'COO · BSS Pakistan',                     landing: 'BSS PK Operating Dashboard',      modules: ['admissions','crm','sis','fees','hr'] }
+    ho_head_audit:      { label: 'Head of Audit · HO',                     landing: 'Audit Dashboard',                 modules: ['executive','admissions','crm','sis','fees','hr'] },
+    ho_team_audit:      { label: 'Audit · team member',                    landing: 'Audit Dashboard (team)',          modules: ['executive','admissions','crm','sis','fees','hr'] },
+    bss_pk_coo:         { label: 'COO · BSS Pakistan',                     landing: 'BSS PK Operating Dashboard',      modules: ['executive','admissions','crm','sis','fees','hr'] }
   };
 
   function applyRole() {
@@ -502,6 +547,9 @@
       const mod = card.dataset.module;
       card.classList.toggle('hidden-by-role', !meta.modules.includes(mod));
     });
+    // Hide the landings section entirely if no executive/campus cards are visible
+    const hasLandings = meta.modules.includes('executive') || meta.modules.includes('campus');
+    document.getElementById('landingsSection').style.display = hasLandings ? '' : 'none';
   }
 
   // Initialise from sessionStorage if set (e.g. coming from login.html)

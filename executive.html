@@ -1,0 +1,1736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>if(sessionStorage.getItem("b360-auth")!=="ok"){window.location.replace("./");}</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BEAMS360 — Regional Executive Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --indigo: #635BFF; --indigo-dark: #4F46E5; --indigo-light: #EEF2FF; --indigo-navy: #1E1B4B;
+    --teal: #00D4AA; --teal-light: #CCFBF1;
+    --coral: #FF6B6B; --coral-light: #FFE4E4;
+    --amber: #FFB224; --amber-light: #FFF3CD;
+    --green: #1CB87E; --green-light: #D1FAE5;
+    --red: #DF1B41; --red-light: #FFECEC;
+
+    --slate-900: #0A2540; --slate-800: #1A3A5C; --slate-700: #243B55;
+    --slate-500: #425466; --slate-400: #697386; --slate-300: #8898AA;
+    --slate-200: #C1C9D2; --slate-100: #E3E8EE; --slate-50: #F6F9FC;
+
+    --text-primary: #0A2540; --text-secondary: #425466; --text-muted: #697386; --text-light: #8898AA;
+    --bg-page: #F6F9FC; --bg-card: #FFFFFF; --bg-table-head: #F7FAFC;
+    --border: #E3E8EE; --border-light: #EEF2F7;
+
+    --shadow-card: 0 2px 5px rgba(50,50,93,0.10), 0 1px 1px rgba(0,0,0,0.07);
+    --shadow-md: 0 4px 14px rgba(50,50,93,0.12), 0 2px 4px rgba(0,0,0,0.06);
+    --shadow-btn: 0 1px 3px rgba(50,50,93,0.15), 0 1px 0 rgba(0,0,0,0.02);
+
+    --radius-card: 8px; --radius-sm: 6px; --radius-pill: 999px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg-page); color: var(--text-primary);
+    display: flex; min-height: 100vh;
+    font-size: 14px; line-height: 1.5;
+    -webkit-font-smoothing: antialiased; letter-spacing: -0.005em;
+  }
+
+  /* ── Sidebar ── */
+  .sidebar {
+    width: 228px; background: var(--slate-900);
+    display: flex; flex-direction: column;
+    position: fixed; top: 0; left: 0; bottom: 0; z-index: 100;
+  }
+  .sidebar-logo {
+    padding: 16px 14px 14px;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+  }
+  .sidebar-logo .logo-container {
+    background: #fff; border-radius: 8px; padding: 8px 12px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .sidebar-logo img { height: 32px; width: auto; }
+  .sidebar-scope {
+    padding: 14px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+  }
+  .sidebar-scope .s-label {
+    font-size: 10.5px; font-weight: 600;
+    color: rgba(255,255,255,0.4);
+    text-transform: uppercase; letter-spacing: 0.08em;
+    margin-bottom: 4px;
+  }
+  .sidebar-scope .s-value {
+    font-size: 13px; font-weight: 600; color: #fff;
+    line-height: 1.3;
+  }
+  .sidebar-scope .s-sub {
+    font-size: 11.5px; color: rgba(255,255,255,0.55);
+    margin-top: 2px;
+  }
+  .sidebar-nav {
+    flex: 1; padding: 10px 10px;
+    display: flex; flex-direction: column; gap: 1px;
+    overflow-y: auto;
+  }
+  .sidebar-section-label {
+    font-size: 10.5px; font-weight: 600; color: rgba(255,255,255,0.35);
+    text-transform: uppercase; letter-spacing: 0.08em;
+    padding: 14px 8px 5px;
+  }
+  .sidebar-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 7px 10px; border-radius: var(--radius-sm);
+    cursor: pointer; text-decoration: none;
+    color: rgba(255,255,255,0.58); font-size: 13px; font-weight: 500;
+    transition: all 0.12s; position: relative;
+  }
+  .sidebar-item:hover { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.88); }
+  .sidebar-item.active {
+    background: rgba(99,91,255,0.18); color: #fff;
+    border-left: 3px solid var(--indigo); padding-left: 7px;
+  }
+  .sidebar-item svg { width: 17px; height: 17px; fill: currentColor; opacity: 0.8; flex-shrink: 0; }
+  .sidebar-item.active svg { opacity: 1; }
+  .sidebar-item .sb-flag {
+    margin-left: auto;
+    width: 6px; height: 6px; border-radius: 50%;
+  }
+  .flag-ok { background: var(--green); }
+  .flag-warn { background: var(--amber); }
+  .flag-alert { background: var(--red); box-shadow: 0 0 0 3px rgba(223,27,65,0.2); }
+
+  /* ── Main / topbar ── */
+  .main { margin-left: 228px; flex: 1; display: flex; flex-direction: column; min-height: 100vh; }
+  .topbar {
+    background: #fff; border-bottom: 1px solid var(--border);
+    padding: 0 28px; height: 56px;
+    display: flex; align-items: center; justify-content: space-between;
+    position: sticky; top: 0; z-index: 50;
+    box-shadow: 0 1px 3px rgba(50,50,93,0.06);
+  }
+  .topbar-left { display: flex; align-items: center; gap: 12px; }
+  .topbar-divider { width: 1px; height: 18px; background: var(--border); }
+  .topbar-breadcrumb { font-size: 13px; color: var(--text-muted); }
+  .topbar-right { display: flex; align-items: center; gap: 8px; }
+
+  .module-chip {
+    display: flex; align-items: center; gap: 8px;
+    padding: 0 12px 0 6px; height: 32px;
+    border: 1px solid var(--border); border-radius: var(--radius-sm);
+    background: #fff; font-size: 13.5px; font-weight: 600;
+    color: var(--text-primary);
+    box-shadow: var(--shadow-btn);
+  }
+  .module-chip .module-icon {
+    width: 22px; height: 22px; border-radius: 5px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .module-chip .module-icon svg { width: 12px; height: 12px; fill: #fff; }
+  .mod-grad-executive { background: linear-gradient(135deg, #4F46E5 0%, #1E1B4B 100%); }
+  .mod-grad-campus    { background: linear-gradient(135deg, #0891B2 0%, #14B8A6 100%); }
+  .mod-grad-admissions { background: linear-gradient(135deg, #635BFF, #9B8FFF); }
+  .mod-grad-crm        { background: linear-gradient(135deg, #00D4AA, #1CB87E); }
+  .mod-grad-sis        { background: linear-gradient(135deg, #0A8DCC, #3FB5E8); }
+  .mod-grad-fees       { background: linear-gradient(135deg, #FFB224, #FFD166); }
+  .mod-grad-hr         { background: linear-gradient(135deg, #F59E0B, #FCD34D); }
+
+  .topbar-btn {
+    height: 32px; padding: 0 12px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; border: 1px solid var(--border);
+    background: #fff; border-radius: var(--radius-sm);
+    gap: 6px; font-family: inherit; font-size: 13px;
+    color: var(--text-secondary); font-weight: 500;
+    box-shadow: var(--shadow-btn); transition: all 0.12s;
+  }
+  .topbar-btn:hover { background: var(--slate-50); border-color: var(--slate-200); }
+  .topbar-btn svg { width: 14px; height: 14px; fill: var(--text-muted); }
+  .topbar-btn.primary {
+    background: var(--indigo); color: #fff; border-color: var(--indigo);
+    box-shadow: 0 1px 3px rgba(99,91,255,0.3);
+  }
+  .topbar-btn.primary svg { fill: #fff; }
+  .topbar-btn.primary:hover { background: var(--indigo-dark); }
+
+  .search-box {
+    display: flex; align-items: center;
+    background: var(--bg-page); border: 1px solid var(--border);
+    border-radius: var(--radius-sm); padding: 0 12px; height: 32px;
+    gap: 7px; min-width: 220px; cursor: pointer;
+  }
+  .search-box input {
+    border: none; background: none; outline: none;
+    font-family: inherit; font-size: 13px; width: 100%;
+    pointer-events: none;
+  }
+  .search-box input::placeholder { color: var(--text-light); }
+  .search-box svg { width: 13px; height: 13px; fill: var(--text-light); }
+  .palette-hint {
+    font-size: 10.5px; font-weight: 600; color: var(--text-muted);
+    background: var(--slate-100); padding: 2px 6px; border-radius: 4px;
+    letter-spacing: 0.03em; margin-left: auto;
+  }
+
+  .waffle-btn {
+    width: 32px; height: 32px;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; border: 1px solid var(--border);
+    background: #fff; border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-btn);
+  }
+  .waffle-btn:hover { background: var(--slate-50); }
+  .waffle-btn svg { width: 16px; height: 16px; fill: var(--text-muted); }
+
+  .scope-pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    height: 28px; padding: 0 12px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #4F46E5 0%, #1E1B4B 100%);
+    color: #fff;
+    font-size: 12px; font-weight: 600;
+    box-shadow: 0 2px 6px rgba(79,70,229,0.25);
+  }
+  .scope-pill svg { width: 12px; height: 12px; fill: #fff; }
+
+  .user-chip {
+    display: flex; align-items: center; gap: 8px;
+    padding: 4px 10px 4px 4px; border-radius: var(--radius-pill);
+    cursor: pointer; border: 1px solid var(--border);
+    background: #fff; box-shadow: var(--shadow-btn);
+  }
+  .avatar { width: 28px; height: 28px; border-radius: 50%; overflow: hidden; border: 1.5px solid var(--border); }
+  .avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .user-info .name { font-size: 12.5px; font-weight: 600; line-height: 1.2; }
+  .user-info .role { font-size: 11px; color: var(--text-muted); line-height: 1.2; }
+
+  /* ── Page header ── */
+  .page-header {
+    padding: 22px 28px 18px;
+    background: #fff;
+    border-bottom: 1px solid var(--border-light);
+  }
+  .breadcrumb {
+    font-size: 12px; color: var(--text-muted); margin-bottom: 6px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .breadcrumb a { color: var(--indigo); text-decoration: none; font-weight: 500; }
+  .breadcrumb-sep { color: var(--slate-200); font-size: 14px; }
+  .page-title-row {
+    display: flex; align-items: flex-end; justify-content: space-between;
+    flex-wrap: wrap; gap: 14px;
+  }
+  .page-title-row h2 {
+    font-size: 26px; font-weight: 700; letter-spacing: -0.03em; line-height: 1.2;
+  }
+  .page-title-row h2 span { color: var(--indigo); }
+  .page-meta {
+    font-size: 13.5px; color: var(--text-muted); margin-top: 3px;
+  }
+  .page-meta strong { color: var(--text-primary); font-weight: 600; }
+  .header-pills { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .badge {
+    display: inline-flex; align-items: center; height: 24px; padding: 0 10px;
+    border-radius: 999px; font-size: 12px; font-weight: 600;
+  }
+  .badge-indigo { background: var(--indigo-light); color: var(--indigo); }
+  .badge-teal   { background: var(--teal-light); color: #0D9488; }
+  .badge-amber  { background: var(--amber-light); color: #B45309; }
+  .badge-green  { background: var(--green-light); color: var(--green); }
+  .badge-red    { background: var(--red-light); color: var(--red); }
+
+  /* ── Body ── */
+  .exec-body { padding: 20px 28px 32px; }
+
+  /* Hero KPI row */
+  .hero-kpis {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 14px;
+    margin-bottom: 22px;
+  }
+  .kpi-tile {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-card);
+    padding: 16px 18px;
+    box-shadow: var(--shadow-card);
+    display: flex; flex-direction: column; gap: 8px;
+    position: relative;
+    overflow: hidden;
+  }
+  .kpi-tile::after {
+    content: ''; position: absolute; top: -30px; right: -30px;
+    width: 100px; height: 100px; border-radius: 50%;
+    opacity: 0.06; background: var(--indigo);
+    pointer-events: none;
+  }
+  .kpi-tile.k-students::after  { background: var(--indigo); }
+  .kpi-tile.k-revenue::after   { background: var(--amber); }
+  .kpi-tile.k-collect::after   { background: var(--green); }
+  .kpi-tile.k-ar::after        { background: var(--red); }
+  .kpi-tile.k-staff::after     { background: var(--teal); }
+
+  .kpi-label {
+    font-size: 11px; font-weight: 600; color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: 0.06em;
+  }
+  .kpi-value {
+    font-size: 26px; font-weight: 700; color: var(--text-primary);
+    letter-spacing: -0.03em; line-height: 1; font-variant-numeric: tabular-nums;
+  }
+  .kpi-value .c {
+    font-size: 14px; color: var(--text-muted); font-weight: 500; margin-right: 3px;
+  }
+  .kpi-delta {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-size: 12px; font-weight: 600;
+    width: fit-content;
+  }
+  .kpi-delta svg { width: 11px; height: 11px; fill: currentColor; }
+  .kpi-delta.up    { color: var(--green); }
+  .kpi-delta.down  { color: var(--red); }
+  .kpi-delta.flat  { color: var(--text-muted); }
+  .kpi-sub { font-size: 11.5px; color: var(--text-light); }
+
+  /* Section header */
+  .section-title {
+    display: flex; align-items: center; justify-content: space-between;
+    margin: 6px 0 14px;
+  }
+  .section-title h3 {
+    font-size: 15px; font-weight: 600; letter-spacing: -0.015em;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .section-title .muted {
+    font-size: 12.5px; font-weight: 400; color: var(--text-muted);
+  }
+  .section-action {
+    font-size: 12.5px; font-weight: 600; color: var(--indigo);
+    text-decoration: none;
+    display: inline-flex; align-items: center; gap: 4px;
+  }
+  .section-action svg { width: 11px; height: 11px; fill: currentColor; }
+
+  /* BU grid */
+  .bu-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-bottom: 26px;
+  }
+  .bu-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-card);
+    padding: 16px 18px;
+    box-shadow: var(--shadow-card);
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex; flex-direction: column; gap: 10px;
+    text-decoration: none; color: inherit;
+    position: relative;
+  }
+  .bu-card:hover {
+    border-color: rgba(79,70,229,0.3);
+    box-shadow: 0 8px 20px rgba(79,70,229,0.08);
+    transform: translateY(-1px);
+  }
+  .bu-card-head {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 10px;
+  }
+  .bu-identity { display: flex; align-items: center; gap: 10px; min-width: 0; }
+  .bu-logo {
+    width: 36px; height: 36px; border-radius: 8px;
+    background: linear-gradient(135deg, var(--indigo) 0%, var(--indigo-navy) 100%);
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-weight: 700; font-size: 12.5px;
+    flex-shrink: 0;
+    letter-spacing: -0.01em;
+  }
+  .bu-logo.teal  { background: linear-gradient(135deg, #00D4AA, #1CB87E); }
+  .bu-logo.amber { background: linear-gradient(135deg, #FFB224, #F59E0B); }
+  .bu-logo.coral { background: linear-gradient(135deg, #FF6B6B, #DF1B41); }
+  .bu-logo.blue  { background: linear-gradient(135deg, #0A8DCC, #3FB5E8); }
+  .bu-logo.purple{ background: linear-gradient(135deg, #8B5CF6, #A78BFA); }
+  .bu-logo.emerald { background: linear-gradient(135deg, #10B981, #34D399); }
+  .bu-logo.rose  { background: linear-gradient(135deg, #F43F5E, #FB7185); }
+  .bu-logo.slate { background: linear-gradient(135deg, #475569, #64748B); }
+  .bu-name {
+    font-size: 14px; font-weight: 600; color: var(--text-primary);
+    letter-spacing: -0.01em; line-height: 1.2;
+  }
+  .bu-region {
+    font-size: 11px; color: var(--text-muted); margin-top: 1px;
+  }
+  .bu-health {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 24px; height: 24px; border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .bu-health svg { width: 12px; height: 12px; fill: #fff; }
+  .health-ok   { background: var(--green); }
+  .health-warn { background: var(--amber); }
+  .health-alert{ background: var(--red); }
+
+  .bu-metrics {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 10px 14px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border-light);
+  }
+  .bu-metric { display: flex; flex-direction: column; gap: 2px; }
+  .bu-metric .m-label {
+    font-size: 10.5px; font-weight: 600; color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .bu-metric .m-value {
+    font-size: 14px; font-weight: 600; color: var(--text-primary);
+    font-variant-numeric: tabular-nums; line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+  .bu-metric .m-delta {
+    font-size: 10.5px; font-weight: 600;
+    display: inline-flex; align-items: center; gap: 2px;
+  }
+  .bu-metric .m-delta.up { color: var(--green); }
+  .bu-metric .m-delta.down { color: var(--red); }
+  .bu-metric .m-delta.flat { color: var(--text-muted); }
+
+  .bu-progress {
+    display: flex; flex-direction: column; gap: 4px; padding-top: 8px;
+  }
+  .bu-progress .bp-head {
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 11px; color: var(--text-muted);
+  }
+  .bu-progress .bp-head strong { color: var(--text-primary); font-weight: 600; }
+  .bu-progress .bp-track {
+    width: 100%; height: 6px; background: var(--slate-100);
+    border-radius: 999px; overflow: hidden;
+  }
+  .bu-progress .bp-fill {
+    height: 100%; border-radius: 999px;
+    background: linear-gradient(90deg, var(--green), #10B981);
+  }
+  .bu-progress .bp-fill.warn { background: linear-gradient(90deg, var(--amber), #F59E0B); }
+  .bu-progress .bp-fill.danger { background: linear-gradient(90deg, var(--coral), var(--red)); }
+
+  /* Comparison table */
+  .card {
+    background: #fff; border: 1px solid var(--border);
+    border-radius: var(--radius-card); box-shadow: var(--shadow-card);
+    overflow: hidden;
+  }
+  .card-header {
+    padding: 16px 18px 14px;
+    border-bottom: 1px solid var(--border-light);
+    display: flex; align-items: flex-start; justify-content: space-between;
+  }
+  .card-header h3 {
+    font-size: 14.5px; font-weight: 600; color: var(--text-primary);
+    letter-spacing: -0.02em;
+  }
+  .card-header .subtitle {
+    font-size: 12px; color: var(--text-muted);
+    font-weight: 400; margin-top: 2px;
+  }
+
+  .compare-table { width: 100%; border-collapse: collapse; }
+  .compare-table thead th {
+    text-align: left;
+    font-size: 11px; font-weight: 600; color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: 0.06em;
+    padding: 10px 14px;
+    background: var(--bg-table-head);
+    border-bottom: 1px solid var(--border-light);
+    white-space: nowrap;
+  }
+  .compare-table thead th.num,
+  .compare-table tbody td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  .compare-table tbody tr { transition: background 0.1s; }
+  .compare-table tbody tr:hover { background: var(--slate-50); }
+  .compare-table tbody tr + tr td { border-top: 1px solid var(--border-light); }
+  .compare-table td {
+    padding: 11px 14px; font-size: 13.5px; color: var(--text-primary);
+    letter-spacing: -0.005em;
+  }
+  .bu-cell {
+    display: flex; align-items: center; gap: 10px;
+  }
+  .bu-cell .bu-logo { width: 28px; height: 28px; border-radius: 6px; font-size: 10.5px; }
+  .bu-cell .bn { font-weight: 500; color: var(--text-primary); }
+  .bu-cell .br { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+  .mini-bar {
+    position: relative;
+    width: 100%; max-width: 80px;
+    display: inline-block;
+    height: 6px; background: var(--slate-100);
+    border-radius: 999px; overflow: hidden; vertical-align: middle; margin-right: 6px;
+  }
+  .mini-bar > span {
+    display: block; height: 100%;
+    background: linear-gradient(90deg, var(--green), #10B981);
+    border-radius: 999px;
+  }
+  .mini-bar > span.warn { background: linear-gradient(90deg, var(--amber), #F59E0B); }
+  .mini-bar > span.danger { background: linear-gradient(90deg, var(--coral), var(--red)); }
+
+  .rank-chip {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 22px; height: 22px; border-radius: 50%;
+    font-size: 11.5px; font-weight: 700;
+    background: var(--slate-100); color: var(--text-secondary);
+  }
+  .rank-chip.top { background: var(--green-light); color: var(--green); }
+  .rank-chip.bottom { background: var(--red-light); color: var(--red); }
+
+  .health-pill {
+    display: inline-flex; align-items: center; gap: 5px;
+    height: 22px; padding: 0 10px; border-radius: 999px;
+    font-size: 11.5px; font-weight: 600;
+  }
+  .health-pill .dot { width: 6px; height: 6px; border-radius: 50%; }
+  .health-pill.ok   { background: var(--green-light); color: var(--green); }
+  .health-pill.ok .dot { background: var(--green); }
+  .health-pill.warn { background: var(--amber-light); color: #B45309; }
+  .health-pill.warn .dot { background: var(--amber); }
+  .health-pill.alert { background: var(--red-light); color: var(--red); }
+  .health-pill.alert .dot { background: var(--red); }
+
+  /* AI Insights strip */
+  .ai-insights {
+    padding: 0;
+    margin-bottom: 22px;
+  }
+  .ai-insights-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 4px 0 10px;
+  }
+  .ai-insights-header h3 {
+    font-size: 13px; font-weight: 600; color: var(--text-secondary);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .ai-spark {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 20px; height: 20px;
+    background: linear-gradient(135deg, #635BFF 0%, #9B8FFF 100%);
+    border-radius: 6px;
+  }
+  .ai-spark svg { width: 12px; height: 12px; fill: #fff; }
+  .ai-dismiss {
+    font-size: 12px; color: var(--text-muted);
+    background: none; border: none; cursor: pointer;
+    padding: 4px 8px; border-radius: 6px; font-family: inherit;
+  }
+  .ai-dismiss:hover { background: var(--border-light); }
+  .ai-cards {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+  }
+  .ai-card {
+    background: #fff; border: 1px solid var(--border-light); border-radius: 8px;
+    padding: 14px 16px; display: flex; gap: 12px; align-items: flex-start;
+    transition: all 0.15s;
+  }
+  .ai-card:hover { box-shadow: 0 2px 8px rgba(99,91,255,0.08); border-color: rgba(99,91,255,0.25); }
+  .ai-card-icon {
+    width: 32px; height: 32px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .ai-card-icon svg { width: 16px; height: 16px; }
+  .ai-card-icon.alert { background: #FFEDED; } .ai-card-icon.alert svg { fill: #FF3B30; }
+  .ai-card-icon.warn  { background: #FFF4E5; } .ai-card-icon.warn svg { fill: #FF9500; }
+  .ai-card-icon.trend { background: #E8F6FC; } .ai-card-icon.trend svg { fill: #0A8DCC; }
+  .ai-card-icon.opportunity { background: #F0EEFF; } .ai-card-icon.opportunity svg { fill: #8B5CF6; }
+  .ai-card-icon.success { background: #E8FAF0; } .ai-card-icon.success svg { fill: #00A854; }
+  .ai-card-body { flex: 1; min-width: 0; }
+  .ai-card-body .ai-title { font-size: 13px; font-weight: 600; margin-bottom: 3px; line-height: 1.35; }
+  .ai-card-body .ai-desc { font-size: 12.5px; color: var(--text-muted); line-height: 1.4; }
+  .ai-card-body .ai-action {
+    display: inline-block; margin-top: 6px;
+    font-size: 12px; font-weight: 600; color: var(--indigo);
+    cursor: pointer;
+  }
+  .ai-card-body .ai-action:hover { text-decoration: underline; }
+
+  /* Charts row */
+  .charts-row {
+    display: grid; grid-template-columns: 2fr 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 22px;
+  }
+  .chart-card {
+    background: #fff; border: 1px solid var(--border);
+    border-radius: var(--radius-card); padding: 16px 18px;
+    box-shadow: var(--shadow-card);
+  }
+  .chart-card h3 {
+    font-size: 11.5px; font-weight: 600; color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: 0.06em;
+    margin-bottom: 4px;
+  }
+  .chart-card .chart-sub {
+    font-size: 12px; color: var(--text-light);
+    margin-bottom: 14px;
+  }
+  .chart-card canvas { display: block; width: 100%; }
+  .chart-legend {
+    display: flex; justify-content: center; gap: 16px; flex-wrap: wrap;
+    margin-top: 10px;
+    font-size: 11.5px; color: var(--text-muted);
+  }
+  .chart-legend .legend-item { display: flex; align-items: center; gap: 5px; }
+  .chart-legend .legend-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
+
+  .pie-legend {
+    display: flex; flex-direction: column; gap: 8px; margin-top: 10px;
+  }
+  .pie-legend .pl-row {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 12px; color: var(--text-muted);
+  }
+  .pie-legend .pl-row .dot { width: 9px; height: 9px; border-radius: 2px; }
+  .pie-legend .pl-row .pct {
+    margin-left: auto; font-variant-numeric: tabular-nums;
+    font-weight: 600; color: var(--text-primary);
+  }
+
+  /* Red flags card */
+  .flags-card .card-header {
+    background: linear-gradient(135deg, #DF1B41 0%, #FF6B6B 100%);
+    border-bottom: none;
+  }
+  .flags-card .card-header h3 { color: #fff; }
+  .flags-card .card-header .subtitle { color: rgba(255,255,255,0.75); }
+  .flags-card .card-header .badge {
+    background: rgba(255,255,255,0.22); color: #fff;
+  }
+  .flag-row {
+    display: grid;
+    grid-template-columns: 40px 1fr 140px 120px 120px 110px 110px;
+    gap: 14px;
+    align-items: center;
+    padding: 12px 18px;
+    border-top: 1px solid var(--border-light);
+    font-size: 13px;
+  }
+  .flag-row:hover { background: var(--slate-50); }
+  .flag-row .f-icon {
+    width: 32px; height: 32px; border-radius: 8px;
+    background: var(--red-light); color: var(--red);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .flag-row .f-icon svg { width: 16px; height: 16px; fill: currentColor; }
+  .flag-row .f-title { font-weight: 600; color: var(--text-primary); letter-spacing: -0.005em; }
+  .flag-row .f-desc { font-size: 11.5px; color: var(--text-muted); margin-top: 1px; }
+  .flag-row .f-bu {
+    font-size: 11.5px; color: var(--text-secondary); font-weight: 500;
+  }
+  .flag-row .f-metric {
+    font-variant-numeric: tabular-nums; font-weight: 600;
+    color: var(--text-primary); font-size: 13px;
+  }
+  .flag-row .f-metric.red { color: var(--red); }
+  .flag-row .f-cta {
+    font-size: 12px; font-weight: 600; color: var(--indigo);
+    text-decoration: none;
+    text-align: right;
+  }
+  .flag-row .f-cta:hover { text-decoration: underline; }
+
+  /* Scope selector (top of body) */
+  .scope-strip {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 18px;
+    padding: 12px 16px;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card);
+  }
+  .scope-strip-left {
+    display: flex; align-items: center; gap: 14px;
+  }
+  .scope-strip-left .label {
+    font-size: 11px; font-weight: 600; color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: 0.06em;
+  }
+  .scope-tabs {
+    display: flex; gap: 4px;
+  }
+  .scope-tab {
+    height: 28px; padding: 0 14px;
+    border: 1px solid var(--border); background: #fff;
+    border-radius: 999px; cursor: pointer;
+    font-family: inherit; font-size: 12.5px; font-weight: 500;
+    color: var(--text-secondary);
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .scope-tab:hover { background: var(--slate-50); border-color: var(--slate-200); }
+  .scope-tab.active {
+    background: var(--indigo); color: #fff; border-color: var(--indigo);
+    box-shadow: 0 1px 3px rgba(99,91,255,0.3);
+  }
+  .scope-tab .count {
+    font-size: 10.5px; font-weight: 700;
+    background: rgba(255,255,255,0.25); color: #fff;
+    padding: 1px 5px; border-radius: 3px;
+  }
+  .scope-tab:not(.active) .count {
+    background: var(--slate-100); color: var(--text-muted);
+  }
+  .scope-strip-right {
+    display: flex; align-items: center; gap: 8px;
+  }
+  .fy-select {
+    height: 28px; padding: 0 30px 0 12px;
+    border: 1px solid var(--border); border-radius: 6px;
+    background: #fff; font-family: inherit; font-size: 12.5px;
+    color: var(--text-secondary); cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23697386'><path d='M7 10l5 5 5-5z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    background-size: 14px;
+    outline: none;
+  }
+
+  .page-footer {
+    text-align: center;
+    padding: 18px 28px;
+    font-size: 11.5px; color: var(--text-light);
+    border-top: 1px solid var(--border-light);
+    background: #fff;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .page-footer img { height: 18px; opacity: 0.8; }
+
+  /* Waffle */
+  .overlay {
+    position: fixed; inset: 0; z-index: 500;
+    background: rgba(10,37,64,0.45);
+    -webkit-backdrop-filter: blur(3px); backdrop-filter: blur(3px);
+    display: none; align-items: flex-start; justify-content: center;
+    padding-top: 8vh;
+  }
+  .overlay.open { display: flex; }
+  .waffle-panel {
+    width: 680px; max-width: 95vw;
+    background: #fff; border-radius: 14px;
+    box-shadow: 0 24px 60px rgba(10,37,64,0.24); overflow: hidden;
+  }
+  .waffle-header {
+    padding: 16px 22px; border-bottom: 1px solid var(--border-light);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .waffle-header h3 { font-size: 15px; font-weight: 600; }
+  .waffle-close {
+    width: 28px; height: 28px; border-radius: 6px;
+    border: none; background: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--text-muted);
+  }
+  .waffle-close:hover { background: var(--slate-50); }
+  .waffle-close svg { width: 14px; height: 14px; fill: currentColor; }
+  .waffle-body { padding: 14px 18px 20px; }
+  .waffle-grid {
+    display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px;
+  }
+  .waffle-tile {
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    padding: 14px 8px;
+    border-radius: 10px; text-decoration: none; color: var(--text-primary);
+    cursor: pointer; transition: background 0.12s; text-align: center;
+  }
+  .waffle-tile:hover { background: var(--slate-50); }
+  .waffle-tile.current { background: var(--indigo-light); }
+  .waffle-tile-icon {
+    width: 44px; height: 44px; border-radius: 11px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .waffle-tile-icon svg { width: 20px; height: 20px; fill: #fff; }
+  .waffle-tile-label { font-size: 11.5px; font-weight: 500; }
+
+  @media (max-width: 1200px) {
+    .hero-kpis { grid-template-columns: repeat(3, 1fr); }
+    .charts-row { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 900px) {
+    .bu-grid { grid-template-columns: repeat(2, 1fr); }
+    .hero-kpis { grid-template-columns: repeat(2, 1fr); }
+    .charts-row { grid-template-columns: 1fr; }
+    .flag-row { grid-template-columns: 40px 1fr; gap: 10px; }
+    .flag-row > *:nth-child(n+3) { grid-column: 2; }
+  }
+  @media (max-width: 700px) {
+    .sidebar { width: 52px; }
+    .main { margin-left: 52px; }
+    .sidebar-scope, .sidebar-section-label, .sidebar-item span { display: none; }
+    .bu-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-container">
+      <img src="beaconhouse_my-logo.jpg" alt="Beaconhouse">
+    </div>
+  </div>
+
+  <div class="sidebar-scope">
+    <div class="s-label">Scope</div>
+    <div class="s-value" id="sbScope">RO MENA &amp; SEA</div>
+    <div class="s-sub" id="sbScopeSub">9 business units · FY 2025–2026</div>
+  </div>
+
+  <div class="sidebar-nav">
+    <div class="sidebar-section-label">Rollup</div>
+    <a class="sidebar-item active" href="#">
+      <svg viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+      <span>Overview</span>
+    </a>
+    <a class="sidebar-item" href="#">
+      <svg viewBox="0 0 24 24"><path d="M3 3v18h18V3H3zm16 16H5V5h14v14zM11 17h2v-6h-2v6zm-4 0h2v-4H7v4zm8 0h2v-8h-2v8z"/></svg>
+      <span>Comparison</span>
+    </a>
+    <a class="sidebar-item" href="#">
+      <svg viewBox="0 0 24 24"><path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z"/></svg>
+      <span>Trends</span>
+    </a>
+    <a class="sidebar-item" href="#">
+      <svg viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+      <span>Red Flags</span>
+      <span class="sb-flag flag-alert"></span>
+    </a>
+
+    <div class="sidebar-section-label">Business units</div>
+    <a class="sidebar-item" href="#"><svg viewBox="0 0 24 24"><path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2z"/></svg><span>Beaconhouse Technology</span><span class="sb-flag flag-ok"></span></a>
+    <a class="sidebar-item" href="#"><svg viewBox="0 0 24 24"><path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2z"/></svg><span>BIC</span><span class="sb-flag flag-ok"></span></a>
+    <a class="sidebar-item" href="#"><svg viewBox="0 0 24 24"><path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2z"/></svg><span>BEL</span><span class="sb-flag flag-warn"></span></a>
+    <a class="sidebar-item" href="#"><svg viewBox="0 0 24 24"><path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2z"/></svg><span>BSS Malaysia</span><span class="sb-flag flag-ok"></span></a>
+    <a class="sidebar-item" href="#"><svg viewBox="0 0 24 24"><path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2z"/></svg><span>BSS Thailand</span><span class="sb-flag flag-warn"></span></a>
+    <a class="sidebar-item" href="#"><svg viewBox="0 0 24 24"><path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2z"/></svg><span>BSS Philippines</span><span class="sb-flag flag-ok"></span></a>
+    <a class="sidebar-item" href="#"><svg viewBox="0 0 24 24"><path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2z"/></svg><span>BSS UAE</span><span class="sb-flag flag-alert"></span></a>
+    <a class="sidebar-item" href="#"><svg viewBox="0 0 24 24"><path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2z"/></svg><span>BSS Oman</span><span class="sb-flag flag-ok"></span></a>
+
+    <div class="sidebar-section-label">Functions</div>
+    <a class="sidebar-item" href="#"><svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg><span>Academics</span></a>
+    <a class="sidebar-item" href="#"><svg viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg><span>Finance</span></a>
+    <a class="sidebar-item" href="hr.html"><svg viewBox="0 0 24 24"><path d="M16.5 12c1.38 0 2.5-1.12 2.5-2.5S17.88 7 16.5 7 14 8.12 14 9.5s1.12 2.5 2.5 2.5zM9 11c1.66 0 3-1.34 3-3S10.66 5 9 5 6 6.34 6 8s1.34 3 3 3zm7.5 3c-1.83 0-5.5.92-5.5 2.75V19h11v-2.25c0-1.83-3.67-2.75-5.5-2.75zM9 13c-2.33 0-7 1.17-7 3.5V19h9v-2.25c0-.85.33-2.34 2.37-3.47C12.5 13.1 10.66 13 9 13z"/></svg><span>HR</span></a>
+    <a class="sidebar-item" href="#"><svg viewBox="0 0 24 24"><path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z"/></svg><span>Marketing</span></a>
+  </div>
+</nav>
+
+<!-- Main -->
+<div class="main">
+
+  <header class="topbar">
+    <div class="topbar-left">
+      <div class="module-chip">
+        <span class="module-icon mod-grad-executive">
+          <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </span>
+        <span>Regional Office</span>
+      </div>
+      <div class="topbar-divider"></div>
+      <span class="topbar-breadcrumb">Executive Dashboard</span>
+      <span class="scope-pill" id="topScopePill">
+        <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5z"/></svg>
+        MENA &amp; SEA · 9 BUs
+      </span>
+    </div>
+    <div class="topbar-right">
+      <div class="search-box" onclick="openWaffle()">
+        <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0016 9.5 6.5 6.5 0 109.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+        <input placeholder="Search BUs, metrics, drill-downs…" readonly>
+        <span class="palette-hint">⌘K</span>
+      </div>
+      <button class="waffle-btn" onclick="openWaffle()" title="All modules">
+        <svg viewBox="0 0 24 24"><path d="M4 4h4v4H4V4zm6 0h4v4h-4V4zm6 0h4v4h-4V4zM4 10h4v4H4v-4zm6 0h4v4h-4v-4zm6 0h4v4h-4v-4zM4 16h4v4H4v-4zm6 0h4v4h-4v-4zm6 0h4v4h-4v-4z"/></svg>
+      </button>
+      <button class="topbar-btn">
+        <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6z"/></svg>
+        Export PDF
+      </button>
+      <button class="topbar-btn">
+        <svg viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+      </button>
+      <div class="user-chip">
+        <div class="avatar"><img src="https://i.pravatar.cc/80?img=60" alt="Nasir Kasuri"></div>
+        <div class="user-info">
+          <div class="name" id="personaName">Nasir Kasuri</div>
+          <div class="role" id="personaRole">Director · RO MENA &amp; SEA</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="page-header">
+    <div class="breadcrumb">
+      <a href="home.html">Home</a>
+      <span class="breadcrumb-sep">/</span>
+      <span>Regional Executive Dashboard</span>
+    </div>
+    <div class="page-title-row">
+      <div>
+        <h2>Good morning, <span id="welcomeName">Nasir</span></h2>
+        <p class="page-meta">
+          <strong id="buCount">9</strong> business units · FY 2025–2026 · YTD snapshot as of <strong>22 Apr 2026</strong>.
+          <span style="color:var(--text-light);">Read-only — drill into any BU for operational views.</span>
+        </p>
+      </div>
+      <div class="header-pills">
+        <span class="badge badge-indigo">Executive rollup</span>
+        <span class="badge badge-green">3 BUs ahead of target</span>
+        <span class="badge badge-red">2 red flags</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="exec-body">
+
+    <!-- Scope selector -->
+    <div class="scope-strip">
+      <div class="scope-strip-left">
+        <span class="label">Persona</span>
+        <div class="scope-tabs" id="scopeTabs">
+          <button class="scope-tab active" data-persona="ro_director">Nasir Kasuri · RO <span class="count">9</span></button>
+          <button class="scope-tab" data-persona="ho_chairperson">Chairperson · BG <span class="count">22</span></button>
+          <button class="scope-tab" data-persona="bss_pk_coo">COO · BSS Pakistan <span class="count">17</span></button>
+          <button class="scope-tab" data-persona="ho_head_audit">Head of Audit <span class="count">22</span></button>
+        </div>
+      </div>
+      <div class="scope-strip-right">
+        <select class="fy-select">
+          <option>FY 2025–2026</option>
+          <option>FY 2024–2025</option>
+        </select>
+        <select class="fy-select">
+          <option>YTD</option>
+          <option>Q1</option>
+          <option>Q2</option>
+          <option>Q3</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Hero KPIs -->
+    <div class="hero-kpis">
+      <div class="kpi-tile k-students">
+        <div class="kpi-label">Students</div>
+        <div class="kpi-value" id="kpiStudents">47,820</div>
+        <div class="kpi-delta up">
+          <svg viewBox="0 0 24 24"><path d="M7 14l5-5 5 5z"/></svg> +3.2% YoY
+        </div>
+        <div class="kpi-sub">vs 46,339 last FY</div>
+      </div>
+      <div class="kpi-tile k-revenue">
+        <div class="kpi-label">YTD Revenue</div>
+        <div class="kpi-value"><span class="c">Rs.</span>482M</div>
+        <div class="kpi-delta up">
+          <svg viewBox="0 0 24 24"><path d="M7 14l5-5 5 5z"/></svg> +12.4% YoY
+        </div>
+        <div class="kpi-sub">76% of FY target</div>
+      </div>
+      <div class="kpi-tile k-collect">
+        <div class="kpi-label">Collections</div>
+        <div class="kpi-value">87<span style="font-size:18px;">%</span></div>
+        <div class="kpi-delta down">
+          <svg viewBox="0 0 24 24" style="transform:rotate(180deg);"><path d="M7 14l5-5 5 5z"/></svg> -2 pts vs target
+        </div>
+        <div class="kpi-sub">Target 92% · 5 BUs below</div>
+      </div>
+      <div class="kpi-tile k-ar">
+        <div class="kpi-label">AR &gt; 60 days</div>
+        <div class="kpi-value"><span class="c">Rs.</span>18.4M</div>
+        <div class="kpi-delta down">
+          <svg viewBox="0 0 24 24" style="transform:rotate(180deg);"><path d="M7 14l5-5 5 5z"/></svg> -5.1% MoM
+        </div>
+        <div class="kpi-sub">Improving — watch BSS UAE</div>
+      </div>
+      <div class="kpi-tile k-staff">
+        <div class="kpi-label">Active Staff</div>
+        <div class="kpi-value">2,840</div>
+        <div class="kpi-delta up">
+          <svg viewBox="0 0 24 24"><path d="M7 14l5-5 5 5z"/></svg> +1.8% YoY
+        </div>
+        <div class="kpi-sub">94.6% attendance MTD</div>
+      </div>
+    </div>
+
+    <!-- AI Insights -->
+    <div class="ai-insights">
+      <div class="ai-insights-header">
+        <h3>
+          <span class="ai-spark"><svg viewBox="0 0 24 24"><path d="M12 2L9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2z"/></svg></span>
+          AI Insights — Regional signals this week
+        </h3>
+        <button class="ai-dismiss">Dismiss</button>
+      </div>
+      <div class="ai-cards">
+        <div class="ai-card">
+          <div class="ai-card-icon alert">
+            <svg viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+          </div>
+          <div class="ai-card-body">
+            <div class="ai-title">BSS UAE collections dropped 14 pts WoW</div>
+            <div class="ai-desc">Rs. 6.2M uncollected this week (vs Rs. 1.8M last week). 42 overdue invoices &gt; 30 days — highest in region.</div>
+            <a class="ai-action">Drill into BSS UAE →</a>
+          </div>
+        </div>
+        <div class="ai-card">
+          <div class="ai-card-icon opportunity">
+            <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+          </div>
+          <div class="ai-card-body">
+            <div class="ai-title">BIC enrolment up 7.3% YoY</div>
+            <div class="ai-desc">Best organic growth in region. Waitlist at Defence + Avery Point campuses exceeds 180 students — capacity review warranted.</div>
+            <a class="ai-action">View capacity plan →</a>
+          </div>
+        </div>
+        <div class="ai-card">
+          <div class="ai-card-icon trend">
+            <svg viewBox="0 0 24 24"><path d="M16 6l2.29 2.29-4.88 4.88-4-4L2 16.59 3.41 18l6-6 4 4 6.3-6.29L22 12V6z"/></svg>
+          </div>
+          <div class="ai-card-body">
+            <div class="ai-title">BEL admissions pipeline softening</div>
+            <div class="ai-desc">Lead volume down 11% MoM across 4 of 6 campuses. Campaign ROI lagging — consider reallocating budget from generic-search to referrals.</div>
+            <a class="ai-action">Open BEL funnel →</a>
+          </div>
+        </div>
+        <div class="ai-card">
+          <div class="ai-card-icon warn">
+            <svg viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+          </div>
+          <div class="ai-card-body">
+            <div class="ai-title">BSS Thailand staff attrition at 14%</div>
+            <div class="ai-desc">2x regional average. Teaching staff turnover driving the gap. Retention plan needed before Aug intake.</div>
+            <a class="ai-action">HR deep-dive →</a>
+          </div>
+        </div>
+        <div class="ai-card">
+          <div class="ai-card-icon success">
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+          </div>
+          <div class="ai-card-body">
+            <div class="ai-title">BT SaaS revenue ahead of plan</div>
+            <div class="ai-desc">BEAMS360 ARR at Rs. 164M — 108% of YTD target. BSS Pakistan migration on track for July go-live.</div>
+            <a class="ai-action">View BT P&amp;L →</a>
+          </div>
+        </div>
+        <div class="ai-card">
+          <div class="ai-card-icon alert">
+            <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+          </div>
+          <div class="ai-card-body">
+            <div class="ai-title">3 BUs below 85% collections</div>
+            <div class="ai-desc">BSS UAE (71%), BEL (82%), BSS Thailand (83%). Regional finance office should set weekly reviews with local CFOs.</div>
+            <a class="ai-action">Weekly review agenda →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BU grid -->
+    <div class="section-title">
+      <h3>Business units <span class="muted">· rollup snapshot</span></h3>
+      <a class="section-action">All BUs <svg viewBox="0 0 24 24"><path d="M10 17l5-5-5-5v10z"/></svg></a>
+    </div>
+
+    <div class="bu-grid" id="buGrid">
+
+      <!-- BT -->
+      <a class="bu-card" href="home.html?bu=bt">
+        <div class="bu-card-head">
+          <div class="bu-identity">
+            <div class="bu-logo">BT</div>
+            <div>
+              <div class="bu-name">Beaconhouse Technology</div>
+              <div class="bu-region">Pakistan · SaaS</div>
+            </div>
+          </div>
+          <span class="bu-health health-ok" title="Healthy">
+            <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+          </span>
+        </div>
+        <div class="bu-metrics">
+          <div class="bu-metric"><span class="m-label">ARR</span><span class="m-value">Rs. 164M</span><span class="m-delta up">▲ 24%</span></div>
+          <div class="bu-metric"><span class="m-label">Customers</span><span class="m-value">27</span><span class="m-delta up">▲ 4</span></div>
+          <div class="bu-metric"><span class="m-label">Collections</span><span class="m-value">94%</span><span class="m-delta up">▲ 2 pts</span></div>
+          <div class="bu-metric"><span class="m-label">Staff</span><span class="m-value">38</span><span class="m-delta up">▲ 6</span></div>
+        </div>
+        <div class="bu-progress">
+          <div class="bp-head"><span>Target progress</span><strong>108%</strong></div>
+          <div class="bp-track"><div class="bp-fill" style="width:100%"></div></div>
+        </div>
+      </a>
+
+      <!-- BIC -->
+      <a class="bu-card" href="home.html?bu=bic">
+        <div class="bu-card-head">
+          <div class="bu-identity">
+            <div class="bu-logo teal">BIC</div>
+            <div>
+              <div class="bu-name">BIC</div>
+              <div class="bu-region">Pakistan · IB curriculum</div>
+            </div>
+          </div>
+          <span class="bu-health health-ok"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></span>
+        </div>
+        <div class="bu-metrics">
+          <div class="bu-metric"><span class="m-label">Students</span><span class="m-value">3,640</span><span class="m-delta up">▲ 7.3%</span></div>
+          <div class="bu-metric"><span class="m-label">Revenue</span><span class="m-value">Rs. 58M</span><span class="m-delta up">▲ 9%</span></div>
+          <div class="bu-metric"><span class="m-label">Collections</span><span class="m-value">91%</span><span class="m-delta flat">—</span></div>
+          <div class="bu-metric"><span class="m-label">Staff</span><span class="m-value">312</span><span class="m-delta up">▲ 2%</span></div>
+        </div>
+        <div class="bu-progress">
+          <div class="bp-head"><span>Target progress</span><strong>94%</strong></div>
+          <div class="bp-track"><div class="bp-fill" style="width:94%"></div></div>
+        </div>
+      </a>
+
+      <!-- BEL -->
+      <a class="bu-card" href="home.html?bu=bel">
+        <div class="bu-card-head">
+          <div class="bu-identity">
+            <div class="bu-logo amber">BEL</div>
+            <div>
+              <div class="bu-name">BEL</div>
+              <div class="bu-region">Pakistan · 6 campuses</div>
+            </div>
+          </div>
+          <span class="bu-health health-warn"><svg viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg></span>
+        </div>
+        <div class="bu-metrics">
+          <div class="bu-metric"><span class="m-label">Students</span><span class="m-value">5,120</span><span class="m-delta flat">—</span></div>
+          <div class="bu-metric"><span class="m-label">Revenue</span><span class="m-value">Rs. 72M</span><span class="m-delta down">▼ 3%</span></div>
+          <div class="bu-metric"><span class="m-label">Collections</span><span class="m-value">82%</span><span class="m-delta down">▼ 4 pts</span></div>
+          <div class="bu-metric"><span class="m-label">Staff</span><span class="m-value">418</span><span class="m-delta flat">—</span></div>
+        </div>
+        <div class="bu-progress">
+          <div class="bp-head"><span>Target progress</span><strong>87%</strong></div>
+          <div class="bp-track"><div class="bp-fill warn" style="width:87%"></div></div>
+        </div>
+      </a>
+
+      <!-- BSS MY -->
+      <a class="bu-card" href="home.html?bu=bss_my">
+        <div class="bu-card-head">
+          <div class="bu-identity">
+            <div class="bu-logo blue">MY</div>
+            <div>
+              <div class="bu-name">BSS Malaysia</div>
+              <div class="bu-region">SEA · 4 campuses</div>
+            </div>
+          </div>
+          <span class="bu-health health-ok"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></span>
+        </div>
+        <div class="bu-metrics">
+          <div class="bu-metric"><span class="m-label">Students</span><span class="m-value">8,240</span><span class="m-delta up">▲ 2.1%</span></div>
+          <div class="bu-metric"><span class="m-label">Revenue</span><span class="m-value">MYR 12.4M</span><span class="m-delta up">▲ 6%</span></div>
+          <div class="bu-metric"><span class="m-label">Collections</span><span class="m-value">93%</span><span class="m-delta up">▲ 1 pt</span></div>
+          <div class="bu-metric"><span class="m-label">Staff</span><span class="m-value">612</span><span class="m-delta up">▲ 1%</span></div>
+        </div>
+        <div class="bu-progress">
+          <div class="bp-head"><span>Target progress</span><strong>97%</strong></div>
+          <div class="bp-track"><div class="bp-fill" style="width:97%"></div></div>
+        </div>
+      </a>
+
+      <!-- BSS TH -->
+      <a class="bu-card" href="home.html?bu=bss_th">
+        <div class="bu-card-head">
+          <div class="bu-identity">
+            <div class="bu-logo purple">TH</div>
+            <div>
+              <div class="bu-name">BSS Thailand</div>
+              <div class="bu-region">SEA · 2 campuses</div>
+            </div>
+          </div>
+          <span class="bu-health health-warn"><svg viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg></span>
+        </div>
+        <div class="bu-metrics">
+          <div class="bu-metric"><span class="m-label">Students</span><span class="m-value">2,180</span><span class="m-delta down">▼ 1.4%</span></div>
+          <div class="bu-metric"><span class="m-label">Revenue</span><span class="m-value">THB 68M</span><span class="m-delta flat">—</span></div>
+          <div class="bu-metric"><span class="m-label">Collections</span><span class="m-value">83%</span><span class="m-delta down">▼ 2 pts</span></div>
+          <div class="bu-metric"><span class="m-label">Staff</span><span class="m-value">184</span><span class="m-delta down">▼ 14%</span></div>
+        </div>
+        <div class="bu-progress">
+          <div class="bp-head"><span>Target progress</span><strong>79%</strong></div>
+          <div class="bp-track"><div class="bp-fill warn" style="width:79%"></div></div>
+        </div>
+      </a>
+
+      <!-- BSS PH -->
+      <a class="bu-card" href="home.html?bu=bss_ph">
+        <div class="bu-card-head">
+          <div class="bu-identity">
+            <div class="bu-logo emerald">PH</div>
+            <div>
+              <div class="bu-name">BSS Philippines</div>
+              <div class="bu-region">SEA · 3 campuses</div>
+            </div>
+          </div>
+          <span class="bu-health health-ok"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></span>
+        </div>
+        <div class="bu-metrics">
+          <div class="bu-metric"><span class="m-label">Students</span><span class="m-value">4,860</span><span class="m-delta up">▲ 3.8%</span></div>
+          <div class="bu-metric"><span class="m-label">Revenue</span><span class="m-value">PHP 112M</span><span class="m-delta up">▲ 8%</span></div>
+          <div class="bu-metric"><span class="m-label">Collections</span><span class="m-value">89%</span><span class="m-delta up">▲ 1 pt</span></div>
+          <div class="bu-metric"><span class="m-label">Staff</span><span class="m-value">386</span><span class="m-delta up">▲ 3%</span></div>
+        </div>
+        <div class="bu-progress">
+          <div class="bp-head"><span>Target progress</span><strong>96%</strong></div>
+          <div class="bp-track"><div class="bp-fill" style="width:96%"></div></div>
+        </div>
+      </a>
+
+      <!-- BSS UAE -->
+      <a class="bu-card" href="home.html?bu=bss_ae">
+        <div class="bu-card-head">
+          <div class="bu-identity">
+            <div class="bu-logo coral">UAE</div>
+            <div>
+              <div class="bu-name">BSS UAE</div>
+              <div class="bu-region">MENA · 2 campuses</div>
+            </div>
+          </div>
+          <span class="bu-health health-alert"><svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></span>
+        </div>
+        <div class="bu-metrics">
+          <div class="bu-metric"><span class="m-label">Students</span><span class="m-value">1,640</span><span class="m-delta up">▲ 1.2%</span></div>
+          <div class="bu-metric"><span class="m-label">Revenue</span><span class="m-value">AED 38M</span><span class="m-delta up">▲ 4%</span></div>
+          <div class="bu-metric"><span class="m-label">Collections</span><span class="m-value">71%</span><span class="m-delta down">▼ 14 pts</span></div>
+          <div class="bu-metric"><span class="m-label">Staff</span><span class="m-value">148</span><span class="m-delta flat">—</span></div>
+        </div>
+        <div class="bu-progress">
+          <div class="bp-head"><span>Target progress</span><strong>68%</strong></div>
+          <div class="bp-track"><div class="bp-fill danger" style="width:68%"></div></div>
+        </div>
+      </a>
+
+      <!-- BSS Oman -->
+      <a class="bu-card" href="home.html?bu=bss_om">
+        <div class="bu-card-head">
+          <div class="bu-identity">
+            <div class="bu-logo rose">OM</div>
+            <div>
+              <div class="bu-name">BSS Oman</div>
+              <div class="bu-region">MENA · 1 campus</div>
+            </div>
+          </div>
+          <span class="bu-health health-ok"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></span>
+        </div>
+        <div class="bu-metrics">
+          <div class="bu-metric"><span class="m-label">Students</span><span class="m-value">920</span><span class="m-delta up">▲ 2.8%</span></div>
+          <div class="bu-metric"><span class="m-label">Revenue</span><span class="m-value">OMR 1.8M</span><span class="m-delta up">▲ 5%</span></div>
+          <div class="bu-metric"><span class="m-label">Collections</span><span class="m-value">90%</span><span class="m-delta up">▲ 2 pts</span></div>
+          <div class="bu-metric"><span class="m-label">Staff</span><span class="m-value">82</span><span class="m-delta up">▲ 1</span></div>
+        </div>
+        <div class="bu-progress">
+          <div class="bp-head"><span>Target progress</span><strong>93%</strong></div>
+          <div class="bp-track"><div class="bp-fill" style="width:93%"></div></div>
+        </div>
+      </a>
+
+      <!-- Regional OPS -->
+      <a class="bu-card" href="home.html?bu=ro_ops">
+        <div class="bu-card-head">
+          <div class="bu-identity">
+            <div class="bu-logo slate">RO</div>
+            <div>
+              <div class="bu-name">Regional Office</div>
+              <div class="bu-region">Overhead · shared services</div>
+            </div>
+          </div>
+          <span class="bu-health health-ok"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></span>
+        </div>
+        <div class="bu-metrics">
+          <div class="bu-metric"><span class="m-label">OpEx YTD</span><span class="m-value">Rs. 48M</span><span class="m-delta down">▼ 2%</span></div>
+          <div class="bu-metric"><span class="m-label">Budget</span><span class="m-value">97%</span><span class="m-delta flat">on track</span></div>
+          <div class="bu-metric"><span class="m-label">Headcount</span><span class="m-value">62</span><span class="m-delta up">▲ 4</span></div>
+          <div class="bu-metric"><span class="m-label">Open roles</span><span class="m-value">5</span><span class="m-delta flat">—</span></div>
+        </div>
+        <div class="bu-progress">
+          <div class="bp-head"><span>Budget discipline</span><strong>Healthy</strong></div>
+          <div class="bp-track"><div class="bp-fill" style="width:100%"></div></div>
+        </div>
+      </a>
+
+    </div>
+
+    <!-- Comparison table -->
+    <div class="section-title">
+      <h3>BU comparison <span class="muted">· ranked by YTD revenue</span></h3>
+      <a class="section-action">Download CSV <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg></a>
+    </div>
+
+    <div class="card" style="margin-bottom:26px;">
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th style="width:40px;">#</th>
+            <th>Business Unit</th>
+            <th class="num">Students</th>
+            <th class="num">YoY Δ</th>
+            <th class="num">Revenue</th>
+            <th>Collections</th>
+            <th class="num">AR &gt; 60d</th>
+            <th class="num">Staff</th>
+            <th>Health</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td><span class="rank-chip top">1</span></td><td>
+            <div class="bu-cell">
+              <div class="bu-logo blue">MY</div>
+              <div><div class="bn">BSS Malaysia</div><div class="br">SEA · 4 campuses</div></div>
+            </div>
+          </td><td class="num">8,240</td><td class="num" style="color:var(--green)">+2.1%</td><td class="num">Rs. 142M</td><td><span class="mini-bar"><span style="width:93%"></span></span>93%</td><td class="num">Rs. 2.1M</td><td class="num">612</td><td><span class="health-pill ok"><span class="dot"></span>Healthy</span></td></tr>
+
+          <tr><td><span class="rank-chip">2</span></td><td>
+            <div class="bu-cell">
+              <div class="bu-logo emerald">PH</div>
+              <div><div class="bn">BSS Philippines</div><div class="br">SEA · 3 campuses</div></div>
+            </div>
+          </td><td class="num">4,860</td><td class="num" style="color:var(--green)">+3.8%</td><td class="num">Rs. 94M</td><td><span class="mini-bar"><span style="width:89%"></span></span>89%</td><td class="num">Rs. 1.4M</td><td class="num">386</td><td><span class="health-pill ok"><span class="dot"></span>Healthy</span></td></tr>
+
+          <tr><td><span class="rank-chip">3</span></td><td>
+            <div class="bu-cell">
+              <div class="bu-logo amber">BEL</div>
+              <div><div class="bn">BEL</div><div class="br">Pakistan · 6 campuses</div></div>
+            </div>
+          </td><td class="num">5,120</td><td class="num" style="color:var(--text-muted)">0%</td><td class="num">Rs. 72M</td><td><span class="mini-bar"><span class="warn" style="width:82%"></span></span>82%</td><td class="num" style="color:var(--amber)">Rs. 4.2M</td><td class="num">418</td><td><span class="health-pill warn"><span class="dot"></span>Watch</span></td></tr>
+
+          <tr><td><span class="rank-chip">4</span></td><td>
+            <div class="bu-cell">
+              <div class="bu-logo teal">BIC</div>
+              <div><div class="bn">BIC</div><div class="br">Pakistan · IB</div></div>
+            </div>
+          </td><td class="num">3,640</td><td class="num" style="color:var(--green)">+7.3%</td><td class="num">Rs. 58M</td><td><span class="mini-bar"><span style="width:91%"></span></span>91%</td><td class="num">Rs. 1.1M</td><td class="num">312</td><td><span class="health-pill ok"><span class="dot"></span>Healthy</span></td></tr>
+
+          <tr><td><span class="rank-chip">5</span></td><td>
+            <div class="bu-cell">
+              <div class="bu-logo coral">UAE</div>
+              <div><div class="bn">BSS UAE</div><div class="br">MENA · 2 campuses</div></div>
+            </div>
+          </td><td class="num">1,640</td><td class="num" style="color:var(--green)">+1.2%</td><td class="num">Rs. 52M</td><td><span class="mini-bar"><span class="danger" style="width:71%"></span></span>71%</td><td class="num" style="color:var(--red)">Rs. 6.2M</td><td class="num">148</td><td><span class="health-pill alert"><span class="dot"></span>Critical</span></td></tr>
+
+          <tr><td><span class="rank-chip">6</span></td><td>
+            <div class="bu-cell">
+              <div class="bu-logo purple">TH</div>
+              <div><div class="bn">BSS Thailand</div><div class="br">SEA · 2 campuses</div></div>
+            </div>
+          </td><td class="num">2,180</td><td class="num" style="color:var(--red)">-1.4%</td><td class="num">Rs. 38M</td><td><span class="mini-bar"><span class="warn" style="width:83%"></span></span>83%</td><td class="num" style="color:var(--amber)">Rs. 2.8M</td><td class="num">184</td><td><span class="health-pill warn"><span class="dot"></span>Watch</span></td></tr>
+
+          <tr><td><span class="rank-chip">7</span></td><td>
+            <div class="bu-cell">
+              <div class="bu-logo rose">OM</div>
+              <div><div class="bn">BSS Oman</div><div class="br">MENA · 1 campus</div></div>
+            </div>
+          </td><td class="num">920</td><td class="num" style="color:var(--green)">+2.8%</td><td class="num">Rs. 28M</td><td><span class="mini-bar"><span style="width:90%"></span></span>90%</td><td class="num">Rs. 0.6M</td><td class="num">82</td><td><span class="health-pill ok"><span class="dot"></span>Healthy</span></td></tr>
+
+          <tr><td><span class="rank-chip bottom">8</span></td><td>
+            <div class="bu-cell">
+              <div class="bu-logo">BT</div>
+              <div><div class="bn">Beaconhouse Technology</div><div class="br">SaaS · Pakistan</div></div>
+            </div>
+          </td><td class="num">—</td><td class="num" style="color:var(--text-muted)">—</td><td class="num">Rs. 18M</td><td><span class="mini-bar"><span style="width:94%"></span></span>94%</td><td class="num">Rs. 0.1M</td><td class="num">38</td><td><span class="health-pill ok"><span class="dot"></span>Healthy</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Charts row -->
+    <div class="section-title">
+      <h3>Trends <span class="muted">· 12-month rolling</span></h3>
+    </div>
+
+    <div class="charts-row">
+
+      <div class="chart-card">
+        <h3>Enrolment &amp; revenue trend</h3>
+        <div class="chart-sub">Regional rollup · monthly</div>
+        <canvas id="trendChart" width="640" height="220"></canvas>
+        <div class="chart-legend">
+          <div class="legend-item"><span class="legend-dot" style="background:#635BFF"></span>Students (k)</div>
+          <div class="legend-item"><span class="legend-dot" style="background:#FFB224"></span>Revenue (Rs. M)</div>
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <h3>Revenue mix by BU</h3>
+        <div class="chart-sub">FY 2025–2026 · YTD</div>
+        <canvas id="donutChart" width="180" height="180" style="margin:0 auto;"></canvas>
+        <div class="pie-legend">
+          <div class="pl-row"><span class="dot" style="background:#0A8DCC"></span>BSS MY<span class="pct">29%</span></div>
+          <div class="pl-row"><span class="dot" style="background:#10B981"></span>BSS PH<span class="pct">19%</span></div>
+          <div class="pl-row"><span class="dot" style="background:#F59E0B"></span>BEL<span class="pct">15%</span></div>
+          <div class="pl-row"><span class="dot" style="background:#00D4AA"></span>BIC<span class="pct">12%</span></div>
+          <div class="pl-row"><span class="dot" style="background:#FF6B6B"></span>Others<span class="pct">25%</span></div>
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <h3>Collections by BU</h3>
+        <div class="chart-sub">Target 92% · MTD</div>
+        <canvas id="barChart" width="240" height="180"></canvas>
+        <div class="chart-legend">
+          <div class="legend-item"><span class="legend-dot" style="background:#1CB87E"></span>At / above target</div>
+          <div class="legend-item"><span class="legend-dot" style="background:#FFB224"></span>Watch</div>
+          <div class="legend-item"><span class="legend-dot" style="background:#DF1B41"></span>Below</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Red flags -->
+    <div class="section-title" style="margin-top:6px;">
+      <h3>Regional red flags <span class="muted">· cross-BU escalations</span></h3>
+    </div>
+
+    <div class="card flags-card" style="margin-bottom:10px;">
+      <div class="card-header">
+        <div>
+          <h3>5 issues awaiting your review</h3>
+          <div class="subtitle">Threshold breaches across the region</div>
+        </div>
+        <span class="badge">Rs. 14.8M exposure</span>
+      </div>
+
+      <div class="flag-row">
+        <div class="f-icon">
+          <svg viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+        </div>
+        <div>
+          <div class="f-title">BSS UAE — AR &gt; 60 days at 16% of revenue</div>
+          <div class="f-desc">Regional CFO and BU CFO to establish weekly review cadence</div>
+        </div>
+        <div class="f-bu">BSS UAE</div>
+        <div class="f-metric red">Rs. 6.2M</div>
+        <div class="f-metric">42 invoices</div>
+        <div class="f-metric">18 days</div>
+        <a class="f-cta">Open →</a>
+      </div>
+
+      <div class="flag-row">
+        <div class="f-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+        </div>
+        <div>
+          <div class="f-title">BSS Thailand — staff attrition 14% YTD</div>
+          <div class="f-desc">Teaching staff turnover 2x regional average</div>
+        </div>
+        <div class="f-bu">BSS Thailand</div>
+        <div class="f-metric">22 leavers</div>
+        <div class="f-metric">vs 184 hc</div>
+        <div class="f-metric">MTD</div>
+        <a class="f-cta">HR review →</a>
+      </div>
+
+      <div class="flag-row">
+        <div class="f-icon">
+          <svg viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+        </div>
+        <div>
+          <div class="f-title">BEL — collections 10 pts below target</div>
+          <div class="f-desc">Defence + Clifton campuses driving 70% of gap</div>
+        </div>
+        <div class="f-bu">BEL · Pakistan</div>
+        <div class="f-metric red">Rs. 4.2M</div>
+        <div class="f-metric">82% vs 92%</div>
+        <div class="f-metric">3 weeks</div>
+        <a class="f-cta">Drill down →</a>
+      </div>
+
+      <div class="flag-row">
+        <div class="f-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2L9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2z"/></svg>
+        </div>
+        <div>
+          <div class="f-title">BIC — Defence campus waitlist at 184</div>
+          <div class="f-desc">Capacity expansion review needed before Aug intake</div>
+        </div>
+        <div class="f-bu">BIC · Defence</div>
+        <div class="f-metric">+184</div>
+        <div class="f-metric">94% full</div>
+        <div class="f-metric">ongoing</div>
+        <a class="f-cta">Capacity plan →</a>
+      </div>
+
+      <div class="flag-row">
+        <div class="f-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+        </div>
+        <div>
+          <div class="f-title">BSS Malaysia — renewal cycle on-track</div>
+          <div class="f-desc">93% retention confirmed for AY 2026 · informational</div>
+        </div>
+        <div class="f-bu">BSS Malaysia</div>
+        <div class="f-metric">93%</div>
+        <div class="f-metric">+1 pt YoY</div>
+        <div class="f-metric">closed</div>
+        <a class="f-cta">Summary →</a>
+      </div>
+
+    </div>
+
+  </div>
+
+  <footer class="page-footer">
+    <span>© 2026 BEAMS360 · All Rights Reserved</span>
+    <span>·</span>
+    <span>Powered by</span>
+    <img src="b360-logo-1000.png" alt="BEAMS360">
+  </footer>
+
+</div>
+
+<!-- Waffle -->
+<div class="overlay" id="waffle" onclick="if(event.target===this)closeWaffle()">
+  <div class="waffle-panel">
+    <div class="waffle-header">
+      <div>
+        <h3>All Modules</h3>
+        <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">Drill into a functional area</div>
+      </div>
+      <button class="waffle-close" onclick="closeWaffle()">
+        <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+      </button>
+    </div>
+    <div class="waffle-body">
+      <div class="waffle-grid">
+        <a class="waffle-tile" href="admissions.html"><div class="waffle-tile-icon mod-grad-admissions"><svg viewBox="0 0 24 24"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg></div><div class="waffle-tile-label">Admissions</div></a>
+        <a class="waffle-tile" href="crm.html"><div class="waffle-tile-icon mod-grad-crm"><svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></div><div class="waffle-tile-label">CRM</div></a>
+        <a class="waffle-tile" href="sis.html"><div class="waffle-tile-icon mod-grad-sis"><svg viewBox="0 0 24 24"><path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/></svg></div><div class="waffle-tile-label">Student Info</div></a>
+        <a class="waffle-tile" href="fees.html"><div class="waffle-tile-icon mod-grad-fees"><svg viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg></div><div class="waffle-tile-label">Fee Invoices</div></a>
+        <a class="waffle-tile" href="hr.html"><div class="waffle-tile-icon mod-grad-hr"><svg viewBox="0 0 24 24"><path d="M16.5 12c1.38 0 2.5-1.12 2.5-2.5S17.88 7 16.5 7 14 8.12 14 9.5s1.12 2.5 2.5 2.5zM9 11c1.66 0 3-1.34 3-3S10.66 5 9 5 6 6.34 6 8s1.34 3 3 3zm7.5 3c-1.83 0-5.5.92-5.5 2.75V19h11v-2.25c0-1.83-3.67-2.75-5.5-2.75zM9 13c-2.33 0-7 1.17-7 3.5V19h9v-2.25c0-.85.33-2.34 2.37-3.47C12.5 13.1 10.66 13 9 13z"/></svg></div><div class="waffle-tile-label">Human Resources</div></a>
+        <a class="waffle-tile current" href="executive.html"><div class="waffle-tile-icon mod-grad-executive"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div><div class="waffle-tile-label">Executive</div></a>
+        <a class="waffle-tile" href="campus.html"><div class="waffle-tile-icon mod-grad-campus"><svg viewBox="0 0 24 24"><path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3zM5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z"/></svg></div><div class="waffle-tile-label">Campus</div></a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Persona scope switching
+  const PERSONAS = {
+    ro_director: {
+      name: 'Nasir Kasuri', role: 'Director · RO MENA &amp; SEA',
+      welcome: 'Nasir', badge: 'MENA &amp; SEA · 9 BUs',
+      sbScope: 'RO MENA &amp; SEA', sbSub: '9 business units · FY 2025–2026',
+      buCount: 9
+    },
+    ho_chairperson: {
+      name: 'Kasim Kasuri', role: 'Chairperson · Beaconhouse Group',
+      welcome: 'Kasim', badge: 'All 22 BUs',
+      sbScope: 'Beaconhouse Group', sbSub: '22 business units · FY 2025–2026',
+      buCount: 22
+    },
+    bss_pk_coo: {
+      name: 'Mansoor Sultan', role: 'COO · BSS Pakistan',
+      welcome: 'Mansoor', badge: 'BSS Pakistan · 17 BUs',
+      sbScope: 'BSS Pakistan', sbSub: '17 active BUs · FY 2025–2026',
+      buCount: 17
+    },
+    ho_head_audit: {
+      name: 'Saira Qazi', role: 'Head of Audit · HO',
+      welcome: 'Saira', badge: 'Group-wide · audit focus',
+      sbScope: 'Beaconhouse Group', sbSub: 'Audit scope · 22 BUs',
+      buCount: 22
+    }
+  };
+
+  function setPersona(p) {
+    const d = PERSONAS[p] || PERSONAS.ro_director;
+    document.getElementById('personaName').textContent = d.name;
+    document.getElementById('personaRole').innerHTML = d.role;
+    document.getElementById('welcomeName').textContent = d.welcome;
+    document.getElementById('sbScope').innerHTML = d.sbScope;
+    document.getElementById('sbScopeSub').textContent = d.sbSub;
+    document.getElementById('buCount').textContent = d.buCount;
+    document.getElementById('topScopePill').innerHTML =
+      '<svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 110-5 2.5 2.5 0 010 5z"/></svg>' + d.badge;
+    document.querySelectorAll('.scope-tab').forEach(t => {
+      t.classList.toggle('active', t.dataset.persona === p);
+    });
+  }
+
+  document.querySelectorAll('.scope-tab').forEach(t => {
+    t.addEventListener('click', () => setPersona(t.dataset.persona));
+  });
+
+  // Read role from session (coming from login.html)
+  const role = sessionStorage.getItem('b360-role');
+  if (role && PERSONAS[role]) setPersona(role);
+
+  function openWaffle() { document.getElementById('waffle').classList.add('open'); }
+  function closeWaffle() { document.getElementById('waffle').classList.remove('open'); }
+
+  document.addEventListener('keydown', e => {
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); openWaffle(); }
+    if (e.key === 'Escape') closeWaffle();
+  });
+
+  // ── Charts ──
+  // Line chart: enrolment + revenue trend
+  function drawTrend() {
+    const c = document.getElementById('trendChart'); if (!c) return;
+    const ctx = c.getContext('2d');
+    const W = c.width, H = c.height;
+    ctx.clearRect(0,0,W,H);
+    const pad = { l: 36, r: 36, t: 18, b: 28 };
+    const months = ['May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan','Feb','Mar','Apr'];
+    const students = [44.2, 44.5, 44.9, 45.6, 46.1, 46.4, 46.6, 46.9, 47.2, 47.4, 47.6, 47.8];
+    const revenue  = [35,   36,   38,   40,   41.5, 42,   42.5, 44,   45,   46,   47,   48.2];
+    const minS = 43, maxS = 49;
+    const minR = 32, maxR = 52;
+
+    const xStep = (W - pad.l - pad.r) / (months.length - 1);
+    const yTop = pad.t, yBot = H - pad.b;
+
+    // grid
+    ctx.strokeStyle = '#EEF2F7'; ctx.lineWidth = 1;
+    for (let i = 0; i <= 4; i++) {
+      const y = yTop + (yBot - yTop) * i / 4;
+      ctx.beginPath(); ctx.moveTo(pad.l, y); ctx.lineTo(W - pad.r, y); ctx.stroke();
+    }
+    // axis labels (months)
+    ctx.fillStyle = '#8898AA'; ctx.font = '10px Inter'; ctx.textAlign = 'center';
+    months.forEach((m, i) => {
+      ctx.fillText(m, pad.l + i * xStep, H - 10);
+    });
+
+    function mapS(v) { return yBot - (v - minS) / (maxS - minS) * (yBot - yTop); }
+    function mapR(v) { return yBot - (v - minR) / (maxR - minR) * (yBot - yTop); }
+
+    // Revenue area (amber)
+    ctx.fillStyle = 'rgba(255,178,36,0.14)';
+    ctx.beginPath();
+    ctx.moveTo(pad.l, mapR(revenue[0]));
+    revenue.forEach((v, i) => { ctx.lineTo(pad.l + i * xStep, mapR(v)); });
+    ctx.lineTo(pad.l + (revenue.length - 1) * xStep, yBot);
+    ctx.lineTo(pad.l, yBot);
+    ctx.closePath(); ctx.fill();
+
+    // Revenue line
+    ctx.strokeStyle = '#FFB224'; ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    revenue.forEach((v, i) => {
+      const x = pad.l + i * xStep, y = mapR(v);
+      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    });
+    ctx.stroke();
+
+    // Students line (indigo)
+    ctx.strokeStyle = '#635BFF'; ctx.lineWidth = 2.5;
+    ctx.beginPath();
+    students.forEach((v, i) => {
+      const x = pad.l + i * xStep, y = mapS(v);
+      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    });
+    ctx.stroke();
+
+    // Students dots
+    ctx.fillStyle = '#635BFF';
+    students.forEach((v, i) => {
+      ctx.beginPath();
+      ctx.arc(pad.l + i * xStep, mapS(v), 3, 0, 2 * Math.PI); ctx.fill();
+    });
+  }
+
+  // Donut
+  function drawDonut() {
+    const c = document.getElementById('donutChart'); if (!c) return;
+    const ctx = c.getContext('2d');
+    const W = c.width, H = c.height;
+    ctx.clearRect(0,0,W,H);
+    const slices = [
+      { v: 29, color: '#0A8DCC' },
+      { v: 19, color: '#10B981' },
+      { v: 15, color: '#F59E0B' },
+      { v: 12, color: '#00D4AA' },
+      { v: 25, color: '#FF6B6B' }
+    ];
+    const total = slices.reduce((a,b)=>a+b.v, 0);
+    const cx = W/2, cy = H/2, r = 70, rIn = 48;
+    let start = -Math.PI / 2;
+    slices.forEach(s => {
+      const ang = s.v / total * 2 * Math.PI;
+      ctx.beginPath();
+      ctx.arc(cx, cy, r, start, start + ang);
+      ctx.arc(cx, cy, rIn, start + ang, start, true);
+      ctx.closePath();
+      ctx.fillStyle = s.color; ctx.fill();
+      start += ang;
+    });
+    ctx.fillStyle = '#0A2540';
+    ctx.font = '700 22px Inter';
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.fillText('Rs. 482M', cx, cy - 4);
+    ctx.fillStyle = '#697386';
+    ctx.font = '500 11px Inter';
+    ctx.fillText('YTD', cx, cy + 14);
+  }
+
+  // Bar chart — collections by BU
+  function drawBars() {
+    const c = document.getElementById('barChart'); if (!c) return;
+    const ctx = c.getContext('2d');
+    const W = c.width, H = c.height;
+    ctx.clearRect(0,0,W,H);
+    const data = [
+      { l: 'MY', v: 93, ok: true },
+      { l: 'BT', v: 94, ok: true },
+      { l: 'OM', v: 90, ok: true },
+      { l: 'BIC',v: 91, ok: true },
+      { l: 'PH', v: 89, ok: true },
+      { l: 'TH', v: 83, warn: true },
+      { l: 'BEL',v: 82, warn: true },
+      { l: 'UAE',v: 71, danger: true }
+    ];
+    const pad = { l: 26, r: 10, t: 10, b: 28 };
+    const step = (W - pad.l - pad.r) / data.length;
+    const barW = step * 0.65;
+    const target = 92;
+
+    // y axis
+    ctx.fillStyle = '#8898AA'; ctx.font = '10px Inter';
+    ctx.textAlign = 'right';
+    [0, 50, 100].forEach(y => {
+      const yy = pad.t + (H - pad.t - pad.b) * (1 - y/100);
+      ctx.fillText(y, pad.l - 4, yy + 3);
+      ctx.strokeStyle = '#EEF2F7'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(pad.l, yy); ctx.lineTo(W - pad.r, yy); ctx.stroke();
+    });
+
+    // target line
+    const ty = pad.t + (H - pad.t - pad.b) * (1 - target/100);
+    ctx.strokeStyle = '#4F46E5'; ctx.setLineDash([4,3]); ctx.lineWidth = 1.2;
+    ctx.beginPath(); ctx.moveTo(pad.l, ty); ctx.lineTo(W - pad.r, ty); ctx.stroke();
+    ctx.setLineDash([]);
+
+    data.forEach((d, i) => {
+      const x = pad.l + i * step + (step - barW)/2;
+      const h = (d.v / 100) * (H - pad.t - pad.b);
+      const y = H - pad.b - h;
+      ctx.fillStyle = d.danger ? '#DF1B41' : d.warn ? '#FFB224' : '#1CB87E';
+      ctx.fillRect(x, y, barW, h);
+      ctx.fillStyle = '#425466'; ctx.font = '600 9px Inter';
+      ctx.textAlign = 'center';
+      ctx.fillText(d.l, x + barW/2, H - 14);
+    });
+  }
+
+  drawTrend(); drawDonut(); drawBars();
+</script>
+
+</body>
+</html>
