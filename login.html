@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>if(sessionStorage.getItem("b360-auth")!=="ok"){window.location.replace("./");}</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BEAMS360 — Sign In</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --indigo: #635BFF; --indigo-dark: #4F46E5; --indigo-light: #EEF2FF;
+    --slate-900: #0A2540; --slate-500: #425466; --slate-400: #697386;
+    --slate-200: #C1C9D2; --slate-100: #E3E8EE; --slate-50: #F6F9FC;
+    --red: #DF1B41; --red-light: #FFECEC;
+    --green: #1CB87E; --green-light: #D1FAE5;
+    --amber: #FFB224; --amber-light: #FFF3CD;
+    --text-primary: #0A2540; --text-secondary: #425466; --text-muted: #697386; --text-light: #8898AA;
+    --border: #E3E8EE; --border-light: #EEF2F7;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    min-height: 100vh;
+    background: #fff;
+    color: var(--text-primary);
+    letter-spacing: -0.005em;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .auth-shell {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 100vh;
+  }
+
+  /* ── Right visual panel ── */
+  .auth-visual {
+    position: relative;
+    background: linear-gradient(135deg, #0A2540 0%, #243B55 60%, #4F46E5 100%);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 44px;
+    color: #fff;
+    order: 2;
+  }
+  .auth-visual::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 70% 30%, rgba(99,91,255,0.35) 0%, transparent 40%),
+      radial-gradient(circle at 20% 80%, rgba(0,212,170,0.22) 0%, transparent 45%);
+    pointer-events: none;
+  }
+  .auth-visual::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+    background-size: 32px 32px;
+    mask-image: linear-gradient(180deg, rgba(0,0,0,0.7), rgba(0,0,0,0.2));
+    pointer-events: none;
+  }
+  .visual-top, .visual-bottom { position: relative; z-index: 1; }
+
+  .visual-brand {
+    display: flex; align-items: center; gap: 12px;
+    font-size: 16px; font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+  .visual-brand .brand-mark {
+    width: 32px; height: 32px; border-radius: 8px;
+    background: linear-gradient(135deg, #635BFF, #9B8FFF);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 12px rgba(99,91,255,0.36);
+  }
+  .visual-brand .brand-mark svg { width: 16px; height: 16px; fill: #fff; }
+
+  .visual-headline {
+    margin-top: 72px;
+    font-size: 32px; font-weight: 700;
+    line-height: 1.18; letter-spacing: -0.03em;
+    max-width: 440px;
+  }
+  .visual-headline span { color: #A5B4FC; }
+  .visual-sub {
+    font-size: 14.5px; color: rgba(255,255,255,0.72);
+    margin-top: 14px; line-height: 1.55;
+    max-width: 420px;
+  }
+
+  /* Role cards on the visual side */
+  .persona-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 26px;
+  }
+  .persona-card {
+    padding: 12px 14px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .persona-card:hover {
+    background: rgba(255,255,255,0.10);
+    border-color: rgba(165,180,252,0.5);
+  }
+  .persona-card.active {
+    background: rgba(99,91,255,0.22);
+    border-color: #A5B4FC;
+  }
+  .persona-card .p-title {
+    font-size: 13px; font-weight: 600;
+    color: #fff;
+    letter-spacing: -0.01em;
+  }
+  .persona-card .p-sub {
+    font-size: 11.5px; color: rgba(255,255,255,0.6);
+    margin-top: 2px; line-height: 1.4;
+  }
+  .persona-card .p-dest {
+    display: inline-flex; align-items: center; gap: 4px;
+    margin-top: 6px;
+    font-size: 10.5px; font-weight: 600;
+    color: #A5B4FC; text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .persona-card .p-dest svg { width: 10px; height: 10px; fill: currentColor; }
+
+  .visual-footer {
+    font-size: 12px; color: rgba(255,255,255,0.5);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+
+  /* ── Left form panel ── */
+  .auth-form {
+    padding: 48px 60px;
+    display: flex; flex-direction: column;
+    justify-content: center;
+    max-width: 520px; margin: 0 auto;
+    width: 100%;
+    order: 1;
+  }
+
+  .form-heading { text-align: center; margin-bottom: 28px; }
+  .form-logo {
+    display: inline-flex; align-items: center; gap: 12px;
+    margin-bottom: 28px;
+  }
+  .form-logo .brand-mark {
+    width: 40px; height: 40px; border-radius: 10px;
+    background: linear-gradient(135deg, #635BFF, #9B8FFF);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 12px rgba(99,91,255,0.28);
+  }
+  .form-logo .brand-mark svg { width: 20px; height: 20px; fill: #fff; }
+  .form-logo .brand-txt {
+    font-size: 20px; font-weight: 700; letter-spacing: -0.025em;
+  }
+  .form-heading h1 {
+    font-size: 24px; font-weight: 700; letter-spacing: -0.025em;
+    color: var(--text-primary);
+  }
+  .form-heading .sub {
+    font-size: 14px; color: var(--text-muted);
+    margin-top: 6px;
+  }
+
+  /* Demo-mode banner */
+  .demo-banner {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 12px 14px;
+    background: var(--indigo-light);
+    border: 1px solid rgba(99,91,255,0.25);
+    border-radius: 10px;
+    margin-bottom: 22px;
+  }
+  .demo-banner .db-icon {
+    width: 22px; height: 22px; border-radius: 6px;
+    background: var(--indigo); color: #fff;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .demo-banner .db-icon svg { width: 12px; height: 12px; fill: #fff; }
+  .demo-banner .db-body { flex: 1; }
+  .demo-banner .db-title {
+    font-size: 12.5px; font-weight: 600;
+    color: var(--indigo-dark); letter-spacing: -0.005em;
+  }
+  .demo-banner .db-desc {
+    font-size: 11.5px; color: var(--text-secondary);
+    margin-top: 2px; line-height: 1.45;
+  }
+
+  /* Role selector */
+  .role-select-wrap { margin-bottom: 18px; }
+  .role-select-label {
+    font-size: 12px; font-weight: 600; color: var(--text-secondary);
+    letter-spacing: -0.005em; margin-bottom: 6px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .role-select-label .chip {
+    font-size: 10px; font-weight: 700; color: var(--indigo);
+    background: var(--indigo-light);
+    border: 1px solid rgba(99,91,255,0.25);
+    padding: 2px 6px; border-radius: 4px;
+    text-transform: uppercase; letter-spacing: 0.06em;
+  }
+  .role-select {
+    width: 100%; height: 42px;
+    padding: 0 40px 0 14px;
+    border: 1px solid var(--border); border-radius: 8px;
+    background: var(--slate-50);
+    font-family: inherit; font-size: 14px; color: var(--text-primary);
+    letter-spacing: -0.005em;
+    appearance: none;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23697386'><path d='M7 10l5 5 5-5z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 16px;
+    outline: none;
+    transition: all 0.15s;
+  }
+  .role-select:focus {
+    background-color: #fff; border-color: var(--indigo);
+    box-shadow: 0 0 0 3px rgba(99,91,255,0.16);
+  }
+  .role-route-preview {
+    display: flex; align-items: center; gap: 6px;
+    margin-top: 6px;
+    font-size: 11.5px; color: var(--text-muted);
+  }
+  .role-route-preview strong { color: var(--indigo); font-weight: 600; }
+  .role-route-preview svg { width: 11px; height: 11px; fill: var(--text-light); }
+
+  .field { display: flex; flex-direction: column; margin-bottom: 14px; }
+  .field-label {
+    font-size: 12px; font-weight: 600; color: var(--text-secondary);
+    letter-spacing: -0.005em; margin-bottom: 6px;
+  }
+  .field-input-wrap { position: relative; }
+  .field-input {
+    width: 100%; height: 42px;
+    padding: 0 14px;
+    border: 1px solid var(--border); border-radius: 8px;
+    background: var(--slate-50);
+    font-family: inherit; font-size: 14px;
+    color: var(--text-primary);
+    letter-spacing: -0.005em;
+    transition: all 0.15s;
+    outline: none;
+  }
+  .field-input.with-toggle { padding-right: 44px; }
+  .field-input:focus {
+    background: #fff;
+    border-color: var(--indigo);
+    box-shadow: 0 0 0 3px rgba(99,91,255,0.16);
+  }
+  .field-input::placeholder { color: var(--text-light); }
+
+  .field-toggle {
+    position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+    width: 26px; height: 26px;
+    border: none; background: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--text-muted); border-radius: 5px;
+  }
+  .field-toggle:hover { background: var(--slate-100); color: var(--text-primary); }
+  .field-toggle svg { width: 15px; height: 15px; fill: currentColor; }
+
+  .form-row {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-top: 4px; margin-bottom: 20px;
+  }
+  .remember {
+    display: flex; align-items: center; gap: 7px;
+    font-size: 13px; color: var(--text-secondary);
+    cursor: pointer;
+  }
+  .remember input { accent-color: var(--indigo); cursor: pointer; }
+  .forgot {
+    font-size: 13px; color: var(--indigo);
+    text-decoration: none; font-weight: 600;
+  }
+  .forgot:hover { text-decoration: underline; }
+
+  .submit-btn {
+    width: 100%; height: 44px;
+    background: var(--indigo); color: #fff;
+    border: none; border-radius: 8px;
+    font-family: inherit; font-size: 14.5px; font-weight: 600;
+    letter-spacing: -0.005em;
+    cursor: pointer;
+    transition: all 0.12s;
+    box-shadow: 0 1px 3px rgba(99,91,255,0.3);
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+  }
+  .submit-btn:hover { background: var(--indigo-dark); }
+  .submit-btn:active { transform: translateY(1px); }
+  .submit-btn svg { width: 14px; height: 14px; fill: #fff; }
+
+  .divider {
+    display: flex; align-items: center; gap: 12px;
+    margin: 22px 0 16px;
+    font-size: 11.5px; font-weight: 600;
+    color: var(--text-light);
+    text-transform: uppercase; letter-spacing: 0.08em;
+  }
+  .divider::before, .divider::after {
+    content: ''; flex: 1; height: 1px; background: var(--border);
+  }
+
+  .sso-btn {
+    width: 100%; height: 40px;
+    background: #fff; color: var(--text-primary);
+    border: 1px solid var(--border); border-radius: 8px;
+    font-family: inherit; font-size: 13.5px; font-weight: 500;
+    cursor: pointer;
+    transition: all 0.12s;
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+  }
+  .sso-btn:hover { background: var(--slate-50); border-color: var(--slate-200); }
+
+  .form-link-row {
+    text-align: center;
+    font-size: 13.5px; color: var(--text-muted);
+    margin-top: 20px;
+  }
+  .form-link-row a {
+    color: var(--indigo);
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .form-link-row a:hover { text-decoration: underline; }
+
+  @media (max-width: 900px) {
+    .auth-shell { grid-template-columns: 1fr; }
+    .auth-visual { display: none; }
+    .auth-form { padding: 40px 28px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="auth-shell">
+
+  <!-- Left form panel -->
+  <main class="auth-form">
+    <div class="form-heading">
+      <div class="form-logo">
+        <span class="brand-mark">
+          <svg viewBox="0 0 24 24"><path d="M12 2L3 7v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-9-5z"/></svg>
+        </span>
+        <span class="brand-txt">BEAMS360</span>
+      </div>
+      <h1>Welcome back</h1>
+      <div class="sub">Sign in to continue to your dashboard</div>
+    </div>
+
+    <div class="demo-banner">
+      <div class="db-icon">
+        <svg viewBox="0 0 24 24"><path d="M12 2L9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2z"/></svg>
+      </div>
+      <div class="db-body">
+        <div class="db-title">Preview mode · Role demo</div>
+        <div class="db-desc">Pick a persona below to preview the landing view they'd see after sign-in. No real auth — this is a mockup.</div>
+      </div>
+    </div>
+
+    <form onsubmit="return submitLogin(event)">
+
+      <div class="role-select-wrap">
+        <div class="role-select-label">
+          Preview as
+          <span class="chip">Demo</span>
+        </div>
+        <select class="role-select" id="roleSelect" onchange="updateRouteHint()">
+          <optgroup label="Regional Office — MENA &amp; SEA">
+            <option value="ro_director" data-dest="home.html?role=ro_director" data-landing="Regional Executive Dashboard" selected>Nasir Kasuri — RO Director (BT · BIC · BEL · BSS MY/TH/PH/AE/OM)</option>
+            <option value="ro_head_education" data-dest="home.html?role=ro_head_education" data-landing="Academic Dashboard">Head of Education — RO MENA &amp; SEA</option>
+            <option value="ro_team_education" data-dest="sis.html?role=ro_team_education" data-landing="Academic Dashboard (team)">Head of Education — team member</option>
+            <option value="ro_head_marketing" data-dest="crm.html?role=ro_head_marketing" data-landing="Funnel Dashboard">Head of Marketing &amp; Admissions — RO</option>
+            <option value="ro_team_marketing" data-dest="crm.html?role=ro_team_marketing" data-landing="Funnel Dashboard (team)">Marketing &amp; Admissions — team</option>
+            <option value="ro_head_hr" data-dest="hr.html?role=ro_head_hr" data-landing="HR Operations Dashboard">Head of HR — RO</option>
+            <option value="ro_team_hr" data-dest="hr.html?role=ro_team_hr" data-landing="HR Operations Dashboard (team)">HR — team member</option>
+            <option value="ro_head_it" data-dest="home.html?role=ro_head_it" data-landing="System Admin Dashboard">Head of IT — RO</option>
+            <option value="ro_team_it" data-dest="home.html?role=ro_team_it" data-landing="System Admin Dashboard (team)">IT — team member</option>
+          </optgroup>
+          <optgroup label="School / Campus">
+            <option value="principal" data-dest="home.html?role=principal" data-landing="Campus Dashboard">School Principal</option>
+            <option value="head_secondary" data-dest="sis.html?role=head_secondary" data-landing="Campus Dashboard (Secondary)">Head of Secondary</option>
+            <option value="head_primary" data-dest="sis.html?role=head_primary" data-landing="Campus Dashboard (Primary)">Head of Primary</option>
+            <option value="admissions_officer" data-dest="admissions.html?role=admissions_officer" data-landing="Admissions Today">Admissions Officer / PRO</option>
+          </optgroup>
+          <optgroup label="HO — Beaconhouse Group (PK)">
+            <option value="ho_chairperson" data-dest="home.html?role=ho_chairperson" data-landing="Group Executive Dashboard">Chairperson — Beaconhouse Group</option>
+            <option value="ho_head_finance" data-dest="fees.html?role=ho_head_finance" data-landing="Finance Dashboard">Head of Finance — HO</option>
+            <option value="ho_team_finance" data-dest="fees.html?role=ho_team_finance" data-landing="Finance Dashboard (team)">Finance — team member</option>
+            <option value="ho_head_hr" data-dest="hr.html?role=ho_head_hr" data-landing="HR Dashboard (group)">Head of HR — HO</option>
+            <option value="ho_team_hr" data-dest="hr.html?role=ho_team_hr" data-landing="HR Dashboard (team)">HR — team member</option>
+            <option value="ho_head_audit" data-dest="home.html?role=ho_head_audit" data-landing="Audit Dashboard">Head of Audit — HO</option>
+            <option value="ho_team_audit" data-dest="home.html?role=ho_team_audit" data-landing="Audit Dashboard (team)">Audit — team member</option>
+            <option value="bss_pk_coo" data-dest="home.html?role=bss_pk_coo" data-landing="BSS PK Operating Dashboard">COO — BSS Pakistan</option>
+          </optgroup>
+        </select>
+        <div class="role-route-preview">
+          <svg viewBox="0 0 24 24"><path d="M10 17l5-5-5-5v10z"/></svg>
+          On sign-in, lands on <strong id="routeHint">Regional Executive Dashboard</strong>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Email</label>
+        <div class="field-input-wrap">
+          <input class="field-input" type="email" id="emailField" value="nasir.kasuri@beaconhouse.tech" required>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field-label">Password</label>
+        <div class="field-input-wrap">
+          <input class="field-input with-toggle" type="password" id="pwField" value="••••••••" required>
+          <button class="field-toggle" type="button" onclick="togglePw()" title="Show password">
+            <svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <label class="remember">
+          <input type="checkbox" checked>
+          Remember me
+        </label>
+        <a class="forgot" href="#">Forgot password?</a>
+      </div>
+
+      <button class="submit-btn" type="submit">
+        Log in
+        <svg viewBox="0 0 24 24"><path d="M10 17l5-5-5-5v10z"/></svg>
+      </button>
+
+      <div class="divider">or continue with</div>
+
+      <button class="sso-btn" type="button" onclick="alert('SSO mock — not wired')">
+        <svg width="16" height="16" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC04" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+        Sign in with Google Workspace
+      </button>
+
+      <div class="form-link-row">
+        Don't have an account? <a href="signup.html">Sign up</a>
+      </div>
+
+    </form>
+  </main>
+
+  <!-- Right visual panel -->
+  <aside class="auth-visual">
+    <div class="visual-top">
+      <div class="visual-brand">
+        <span class="brand-mark">
+          <svg viewBox="0 0 24 24"><path d="M12 2L3 7v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-9-5z"/></svg>
+        </span>
+        BEAMS360
+      </div>
+      <div class="visual-headline">
+        Every role gets the <span>right landing view.</span>
+      </div>
+      <div class="visual-sub">
+        Preview how the platform routes each persona. Pick a role on the left to jump straight into the dashboard and modules they'd see.
+      </div>
+
+      <div class="persona-grid">
+        <div class="persona-card active" onclick="selectPersona('ro_director')">
+          <div class="p-title">RO Director</div>
+          <div class="p-sub">9-BU rollup, read-only drill-down</div>
+          <span class="p-dest">Regional Executive <svg viewBox="0 0 24 24"><path d="M10 17l5-5-5-5v10z"/></svg></span>
+        </div>
+        <div class="persona-card" onclick="selectPersona('principal')">
+          <div class="p-title">School Principal</div>
+          <div class="p-sub">Single-campus operational view</div>
+          <span class="p-dest">Campus Dashboard <svg viewBox="0 0 24 24"><path d="M10 17l5-5-5-5v10z"/></svg></span>
+        </div>
+        <div class="persona-card" onclick="selectPersona('admissions_officer')">
+          <div class="p-title">Admissions Officer</div>
+          <div class="p-sub">Today's task queue, full CRM</div>
+          <span class="p-dest">Admissions Today <svg viewBox="0 0 24 24"><path d="M10 17l5-5-5-5v10z"/></svg></span>
+        </div>
+        <div class="persona-card" onclick="selectPersona('ho_head_finance')">
+          <div class="p-title">HO Head of Finance</div>
+          <div class="p-sub">Consolidated AR, cash, concessions</div>
+          <span class="p-dest">Finance Dashboard <svg viewBox="0 0 24 24"><path d="M10 17l5-5-5-5v10z"/></svg></span>
+        </div>
+        <div class="persona-card" onclick="selectPersona('ho_head_hr')">
+          <div class="p-title">HO Head of HR</div>
+          <div class="p-sub">Group-wide HR operations</div>
+          <span class="p-dest">HR Dashboard <svg viewBox="0 0 24 24"><path d="M10 17l5-5-5-5v10z"/></svg></span>
+        </div>
+        <div class="persona-card" onclick="selectPersona('bss_pk_coo')">
+          <div class="p-title">COO BSS Pakistan</div>
+          <div class="p-sub">17 BUs, 55/45/35 glide path</div>
+          <span class="p-dest">BSS PK Operating <svg viewBox="0 0 24 24"><path d="M10 17l5-5-5-5v10z"/></svg></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="visual-bottom">
+      <div class="visual-footer">
+        <span>© 2026 Beaconhouse Technology</span>
+        <span>v0.1 · Internal preview</span>
+      </div>
+    </div>
+  </aside>
+
+</div>
+
+<script>
+  const ROLE_EMAILS = {
+    ro_director:        'nasir.kasuri@beaconhouse.tech',
+    ro_head_education:  'edu.ro@beaconhouse.tech',
+    ro_team_education:  'edu.team@beaconhouse.tech',
+    ro_head_marketing:  'marketing.ro@beaconhouse.tech',
+    ro_team_marketing:  'marketing.team@beaconhouse.tech',
+    ro_head_hr:         'hr.ro@beaconhouse.tech',
+    ro_team_hr:         'hr.team@beaconhouse.tech',
+    ro_head_it:         'it.ro@beaconhouse.tech',
+    ro_team_it:         'it.team@beaconhouse.tech',
+    principal:          'principal@bss.edu.pk',
+    head_secondary:     'head.secondary@bss.edu.pk',
+    head_primary:       'head.primary@bss.edu.pk',
+    admissions_officer: 'pro@bss.edu.pk',
+    ho_chairperson:     'chairperson@beaconhouse.edu.pk',
+    ho_head_finance:    'finance.ho@beaconhouse.edu.pk',
+    ho_team_finance:    'finance.team@beaconhouse.edu.pk',
+    ho_head_hr:         'hr.ho@beaconhouse.edu.pk',
+    ho_team_hr:         'hr.team@beaconhouse.edu.pk',
+    ho_head_audit:      'audit.ho@beaconhouse.edu.pk',
+    ho_team_audit:      'audit.team@beaconhouse.edu.pk',
+    bss_pk_coo:         'coo@bss.edu.pk'
+  };
+
+  function updateRouteHint() {
+    const sel = document.getElementById('roleSelect');
+    const opt = sel.options[sel.selectedIndex];
+    document.getElementById('routeHint').textContent = opt.dataset.landing || '—';
+    const email = ROLE_EMAILS[sel.value];
+    if (email) document.getElementById('emailField').value = email;
+
+    // Highlight matching persona card if one exists
+    document.querySelectorAll('.persona-card').forEach(c => c.classList.remove('active'));
+    const card = document.querySelector('.persona-card[data-role="' + sel.value + '"]');
+    // not all roles have a card on the right; only 6 do
+  }
+
+  function selectPersona(role) {
+    const sel = document.getElementById('roleSelect');
+    sel.value = role;
+    updateRouteHint();
+    document.querySelectorAll('.persona-card').forEach(c => c.classList.remove('active'));
+    // Find the clicked card by iterating (no data-role markup below, so match by text intent)
+    event.currentTarget.classList.add('active');
+  }
+
+  function togglePw() {
+    const f = document.getElementById('pwField');
+    f.type = f.type === 'password' ? 'text' : 'password';
+  }
+
+  function submitLogin(e) {
+    e.preventDefault();
+    const sel = document.getElementById('roleSelect');
+    const opt = sel.options[sel.selectedIndex];
+    const dest = opt.dataset.dest || 'home.html';
+    // Store active role for downstream pages to filter on
+    sessionStorage.setItem('b360-role', sel.value);
+    sessionStorage.setItem('b360-role-label', opt.text.split('—')[0].trim());
+    window.location.href = dest;
+    return false;
+  }
+
+  // Init
+  updateRouteHint();
+</script>
+
+</body>
+</html>

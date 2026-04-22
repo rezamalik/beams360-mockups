@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>if(sessionStorage.getItem("b360-auth")!=="ok"){window.location.replace("./");}</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BEAMS360 — Create Account</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --indigo: #635BFF; --indigo-dark: #4F46E5; --indigo-light: #EEF2FF;
+    --slate-900: #0A2540; --slate-500: #425466; --slate-400: #697386;
+    --slate-200: #C1C9D2; --slate-100: #E3E8EE; --slate-50: #F6F9FC;
+    --red: #DF1B41; --red-light: #FFECEC;
+    --text-primary: #0A2540; --text-secondary: #425466; --text-muted: #697386; --text-light: #8898AA;
+    --border: #E3E8EE; --border-light: #EEF2F7;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    min-height: 100vh;
+    background: #fff;
+    color: var(--text-primary);
+    letter-spacing: -0.005em;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .auth-shell {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: 100vh;
+  }
+
+  /* ── Left image panel ── */
+  .auth-visual {
+    position: relative;
+    background: linear-gradient(135deg, #0A2540 0%, #243B55 60%, #4F46E5 100%);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 44px;
+    color: #fff;
+  }
+  .auth-visual::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(circle at 20% 30%, rgba(99,91,255,0.35) 0%, transparent 40%),
+      radial-gradient(circle at 80% 70%, rgba(0,212,170,0.22) 0%, transparent 45%);
+    pointer-events: none;
+  }
+  .auth-visual::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+    background-size: 32px 32px;
+    mask-image: linear-gradient(180deg, rgba(0,0,0,0.7), rgba(0,0,0,0.2));
+    pointer-events: none;
+  }
+  .visual-top, .visual-bottom { position: relative; z-index: 1; }
+
+  .visual-brand {
+    display: flex; align-items: center; gap: 12px;
+    font-size: 16px; font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+  .visual-brand .brand-mark {
+    width: 32px; height: 32px; border-radius: 8px;
+    background: linear-gradient(135deg, #635BFF, #9B8FFF);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 12px rgba(99,91,255,0.36);
+  }
+  .visual-brand .brand-mark svg { width: 16px; height: 16px; fill: #fff; }
+
+  .visual-headline {
+    margin-top: 88px;
+    font-size: 34px; font-weight: 700;
+    line-height: 1.15; letter-spacing: -0.03em;
+    max-width: 440px;
+  }
+  .visual-headline span { color: #A5B4FC; }
+  .visual-sub {
+    font-size: 15px; color: rgba(255,255,255,0.72);
+    margin-top: 16px; line-height: 1.55;
+    max-width: 420px;
+  }
+
+  .visual-stats {
+    display: flex; gap: 36px;
+    padding-top: 32px;
+    border-top: 1px solid rgba(255,255,255,0.12);
+    margin-top: 36px;
+  }
+  .visual-stat .num {
+    font-size: 26px; font-weight: 700; letter-spacing: -0.02em;
+  }
+  .visual-stat .lbl {
+    font-size: 12px; color: rgba(255,255,255,0.55);
+    margin-top: 2px; letter-spacing: -0.005em;
+  }
+
+  .visual-footer {
+    font-size: 12px; color: rgba(255,255,255,0.5);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+
+  /* ── Right form panel ── */
+  .auth-form {
+    padding: 48px 60px;
+    display: flex; flex-direction: column;
+    justify-content: center;
+    max-width: 560px; margin: 0 auto;
+    width: 100%;
+  }
+
+  .form-heading { text-align: center; margin-bottom: 26px; }
+  .form-heading .eyebrow {
+    font-size: 12px; font-weight: 600; color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: 0.08em;
+    margin-bottom: 10px;
+  }
+  .form-heading h1 {
+    font-size: 28px; font-weight: 700; letter-spacing: -0.03em;
+    color: var(--text-primary);
+  }
+  .form-heading h1 span { color: var(--indigo); }
+  .form-heading .sub {
+    font-size: 14px; color: var(--text-muted);
+    margin-top: 6px;
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  .field { display: flex; flex-direction: column; }
+  .field.full { grid-column: 1 / -1; }
+  .field-label {
+    font-size: 12px; font-weight: 600; color: var(--text-secondary);
+    letter-spacing: -0.005em; margin-bottom: 6px;
+  }
+  .field-label .req { color: var(--red); margin-left: 2px; }
+  .field-input-wrap { position: relative; }
+  .field-input {
+    width: 100%; height: 42px;
+    padding: 0 14px;
+    border: 1px solid var(--border); border-radius: 8px;
+    background: var(--slate-50);
+    font-family: inherit; font-size: 14px;
+    color: var(--text-primary);
+    letter-spacing: -0.005em;
+    transition: all 0.15s;
+    outline: none;
+  }
+  .field-input.with-icon { padding-left: 40px; }
+  .field-input.with-toggle { padding-right: 44px; }
+  .field-input:focus {
+    background: #fff;
+    border-color: var(--indigo);
+    box-shadow: 0 0 0 3px rgba(99,91,255,0.16);
+  }
+  .field-input::placeholder { color: var(--text-light); }
+
+  .field-prefix-icon {
+    position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+    width: 16px; height: 16px; fill: var(--text-light); pointer-events: none;
+  }
+  .field-toggle {
+    position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+    width: 26px; height: 26px;
+    border: none; background: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--text-muted); border-radius: 5px;
+  }
+  .field-toggle:hover { background: var(--slate-100); color: var(--text-primary); }
+  .field-toggle svg { width: 15px; height: 15px; fill: currentColor; }
+
+  .field-hint {
+    font-size: 11.5px; color: var(--text-muted);
+    margin-top: 4px;
+  }
+
+  .captcha-row {
+    margin-top: 8px;
+    display: flex; align-items: center;
+    padding: 10px 14px;
+    background: var(--slate-50);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    gap: 12px;
+  }
+  .captcha-check {
+    width: 22px; height: 22px;
+    border: 2px solid var(--slate-200);
+    border-radius: 4px; background: #fff;
+    cursor: pointer; flex-shrink: 0;
+  }
+  .captcha-label {
+    font-size: 13px; color: var(--text-secondary); flex: 1;
+  }
+  .captcha-brand {
+    font-size: 10px; color: var(--text-light);
+    text-align: right; line-height: 1.2;
+  }
+  .captcha-brand strong { font-size: 11px; font-weight: 600; color: var(--text-muted); display: block; }
+
+  .submit-btn {
+    width: 100%; height: 44px;
+    margin-top: 20px;
+    background: var(--indigo); color: #fff;
+    border: none; border-radius: 8px;
+    font-family: inherit; font-size: 14.5px; font-weight: 600;
+    letter-spacing: -0.005em;
+    cursor: pointer;
+    transition: all 0.12s;
+    box-shadow: 0 1px 3px rgba(99,91,255,0.3);
+  }
+  .submit-btn:hover { background: var(--indigo-dark); }
+  .submit-btn:active { transform: translateY(1px); }
+
+  .form-link-row {
+    text-align: center;
+    font-size: 13.5px; color: var(--text-muted);
+    margin-top: 16px;
+  }
+  .form-link-row a {
+    color: var(--indigo);
+    text-decoration: none;
+    font-weight: 600;
+  }
+  .form-link-row a:hover { text-decoration: underline; }
+
+  .form-tos {
+    text-align: center;
+    font-size: 12px; color: var(--text-light);
+    margin-top: 18px;
+    padding-top: 18px;
+    border-top: 1px solid var(--border-light);
+    line-height: 1.5;
+  }
+  .form-tos a { color: var(--indigo); text-decoration: none; }
+  .form-tos a:hover { text-decoration: underline; }
+
+  @media (max-width: 900px) {
+    .auth-shell { grid-template-columns: 1fr; }
+    .auth-visual { display: none; }
+    .auth-form { padding: 40px 28px; }
+    .form-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="auth-shell">
+
+  <!-- Left visual panel -->
+  <aside class="auth-visual">
+    <div class="visual-top">
+      <div class="visual-brand">
+        <span class="brand-mark">
+          <svg viewBox="0 0 24 24"><path d="M12 2L3 7v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V7l-9-5z"/></svg>
+        </span>
+        BEAMS360
+      </div>
+      <div class="visual-headline">
+        AI-powered <span>school management</span> for ambitious operators.
+      </div>
+      <div class="visual-sub">
+        Admissions, CRM, SIS, Fees, HR, and more — unified on a single platform with role-scoped dashboards for every stakeholder in your network.
+      </div>
+    </div>
+
+    <div class="visual-bottom">
+      <div class="visual-stats">
+        <div class="visual-stat">
+          <div class="num">22 BUs</div>
+          <div class="lbl">Across Beaconhouse Group</div>
+        </div>
+        <div class="visual-stat">
+          <div class="num">250K+</div>
+          <div class="lbl">Students managed</div>
+        </div>
+        <div class="visual-stat">
+          <div class="num">15+ roles</div>
+          <div class="lbl">Persona-scoped views</div>
+        </div>
+      </div>
+      <div class="visual-footer" style="margin-top:28px;">
+        <span>© 2026 Beaconhouse Technology</span>
+        <span>v0.1 · Internal preview</span>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Right form panel -->
+  <main class="auth-form">
+    <div class="form-heading">
+      <div class="eyebrow">Get Started With</div>
+      <h1>Create your <span>BEAMS360</span> account</h1>
+      <div class="sub">AI-powered management school system</div>
+    </div>
+
+    <form onsubmit="return submitSignup(event)">
+      <div class="form-grid">
+
+        <div class="field">
+          <label class="field-label">First Name<span class="req">*</span></label>
+          <div class="field-input-wrap">
+            <input class="field-input" type="text" placeholder="Reza" required>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="field-label">Last Name<span class="req">*</span></label>
+          <div class="field-input-wrap">
+            <input class="field-input" type="text" placeholder="Malik" required>
+          </div>
+        </div>
+
+        <div class="field full">
+          <label class="field-label">Work Email<span class="req">*</span></label>
+          <div class="field-input-wrap">
+            <svg class="field-prefix-icon" viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+            <input class="field-input with-icon" type="email" placeholder="name@company.com" required>
+          </div>
+          <div class="field-hint">Use your organisation email — we'll route provisioning to your admin.</div>
+        </div>
+
+        <div class="field">
+          <label class="field-label">Phone Number<span class="req">*</span></label>
+          <div class="field-input-wrap">
+            <svg class="field-prefix-icon" viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+            <input class="field-input with-icon" type="tel" placeholder="+92 300 1234567" required>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="field-label">Company / School<span class="req">*</span></label>
+          <div class="field-input-wrap">
+            <svg class="field-prefix-icon" viewBox="0 0 24 24"><path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10zm-2-8h-2v2h2v-2zm0 4h-2v2h2v-2z"/></svg>
+            <input class="field-input with-icon" type="text" placeholder="Beaconhouse School System" required>
+          </div>
+        </div>
+
+        <div class="field full">
+          <label class="field-label">Password<span class="req">*</span></label>
+          <div class="field-input-wrap">
+            <input class="field-input with-toggle" type="password" id="pw1" placeholder="At least 10 characters" required minlength="10">
+            <button class="field-toggle" type="button" onclick="togglePw('pw1', this)" title="Show password">
+              <svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+            </button>
+          </div>
+          <div class="field-hint">Min. 10 characters, with letters and numbers.</div>
+        </div>
+
+        <div class="field full">
+          <label class="field-label">Confirm Password<span class="req">*</span></label>
+          <div class="field-input-wrap">
+            <input class="field-input with-toggle" type="password" id="pw2" placeholder="Re-enter password" required minlength="10">
+            <button class="field-toggle" type="button" onclick="togglePw('pw2', this)" title="Show password">
+              <svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="field full">
+          <div class="captcha-row">
+            <div class="captcha-check" id="captchaBox" onclick="toggleCaptcha()"></div>
+            <div class="captcha-label">I'm not a robot</div>
+            <div class="captcha-brand">
+              <strong>reCAPTCHA</strong>
+              Privacy · Terms
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <button class="submit-btn" type="submit">Create Account</button>
+
+      <div class="form-link-row">
+        Have an account? <a href="login.html">Sign in</a>
+      </div>
+    </form>
+
+    <div class="form-tos">
+      By continuing you indicate you read and agreed to the <a href="#">Terms &amp; Conditions</a>
+    </div>
+  </main>
+
+</div>
+
+<script>
+  function togglePw(id, btn) {
+    const f = document.getElementById(id);
+    if (f.type === 'password') { f.type = 'text'; } else { f.type = 'password'; }
+  }
+  function toggleCaptcha() {
+    const b = document.getElementById('captchaBox');
+    b.style.background = b.style.background === 'rgb(99, 91, 255)' ? '#fff' : 'rgb(99,91,255)';
+    b.style.borderColor = b.style.borderColor === 'rgb(99, 91, 255)' ? 'var(--slate-200)' : 'rgb(99,91,255)';
+  }
+  function submitSignup(e) {
+    e.preventDefault();
+    const pw1 = document.getElementById('pw1').value;
+    const pw2 = document.getElementById('pw2').value;
+    if (pw1 !== pw2) { alert('Passwords do not match'); return false; }
+    // Mockup only — route to login
+    window.location.href = 'login.html';
+    return false;
+  }
+</script>
+
+</body>
+</html>

@@ -50,6 +50,40 @@
   }
   .signout:hover { background: var(--slate-50); color: var(--text-primary); }
 
+  .role-switch-wrap {
+    display: flex; align-items: center; gap: 8px;
+  }
+  .role-switch-label {
+    font-size: 11px; font-weight: 600; color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: 0.06em;
+  }
+  .role-switch {
+    height: 30px; padding: 0 32px 0 10px;
+    border: 1px solid var(--border); border-radius: 6px;
+    background: #fff; font-family: inherit; font-size: 12.5px;
+    color: var(--text-primary); cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23697386'><path d='M7 10l5 5 5-5z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    background-size: 14px;
+    max-width: 280px;
+    outline: none;
+  }
+  .role-switch:focus { border-color: var(--indigo); box-shadow: 0 0 0 3px rgba(99,91,255,0.15); }
+  .role-landing-hint {
+    font-size: 12px; color: var(--text-secondary);
+    margin-top: 8px;
+    padding: 10px 14px;
+    background: var(--indigo-light);
+    border: 1px solid rgba(99,91,255,0.18);
+    border-radius: 8px;
+    display: flex; align-items: center; gap: 8px;
+    max-width: 780px; margin-left: auto; margin-right: auto;
+  }
+  .role-landing-hint svg { width: 14px; height: 14px; fill: var(--indigo); flex-shrink: 0; }
+  .role-landing-hint strong { color: var(--indigo); font-weight: 600; }
+
   .hero {
     padding: 60px 40px 32px;
     text-align: center;
@@ -83,8 +117,11 @@
 
   .mockup-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+  }
+  @media (max-width: 1100px) {
+    .mockup-grid { grid-template-columns: repeat(2, 1fr); }
   }
   .mockup-card {
     background: #fff;
@@ -120,6 +157,9 @@
   .mockup-card.crm::after        { background: #00D4AA; }
   .mockup-card.sis::after        { background: #0A8DCC; }
   .mockup-card.fees::after       { background: #FFB224; }
+  .mockup-card.hr::after         { background: #F59E0B; }
+  .mockup-card.auth::after       { background: #4F46E5; }
+  .mockup-card.hidden-by-role    { display: none; }
 
   .card-icon {
     width: 48px; height: 48px; border-radius: 12px;
@@ -131,6 +171,8 @@
   .grad-crm        { background: linear-gradient(135deg, #00D4AA, #1CB87E); }
   .grad-sis        { background: linear-gradient(135deg, #0A8DCC, #3FB5E8); }
   .grad-fees       { background: linear-gradient(135deg, #FFB224, #FFD166); }
+  .grad-hr         { background: linear-gradient(135deg, #F59E0B, #FCD34D); }
+  .grad-auth       { background: linear-gradient(135deg, #4F46E5, #818CF8); }
 
   .card-head {
     display: flex; align-items: flex-start; justify-content: space-between;
@@ -224,20 +266,56 @@
     </span>
     BEAMS360 Preview
   </div>
-  <button class="signout" onclick="signOut()">Sign out</button>
+  <div class="role-switch-wrap">
+    <span class="role-switch-label">Preview as</span>
+    <select class="role-switch" id="roleSwitch" onchange="applyRole()">
+      <optgroup label="Regional Office — MENA &amp; SEA">
+        <option value="ro_director" selected>Nasir Kasuri · RO Director (BT, BIC, BEL, BSS MY/TH/PH/AE/OM)</option>
+        <option value="ro_head_education">Head of Education · RO</option>
+        <option value="ro_team_education">Education · team member</option>
+        <option value="ro_head_marketing">Head of Marketing &amp; Admissions · RO</option>
+        <option value="ro_team_marketing">Marketing &amp; Admissions · team</option>
+        <option value="ro_head_hr">Head of HR · RO</option>
+        <option value="ro_team_hr">HR · team member</option>
+        <option value="ro_head_it">Head of IT · RO</option>
+        <option value="ro_team_it">IT · team member</option>
+      </optgroup>
+      <optgroup label="School / Campus">
+        <option value="principal">School Principal</option>
+        <option value="head_secondary">Head of Secondary</option>
+        <option value="head_primary">Head of Primary</option>
+        <option value="admissions_officer">Admissions Officer / PRO</option>
+      </optgroup>
+      <optgroup label="HO — Beaconhouse Group (PK)">
+        <option value="ho_chairperson">Chairperson · Beaconhouse Group</option>
+        <option value="ho_head_finance">Head of Finance · HO</option>
+        <option value="ho_team_finance">Finance · team member</option>
+        <option value="ho_head_hr">Head of HR · HO</option>
+        <option value="ho_team_hr">HR · team member</option>
+        <option value="ho_head_audit">Head of Audit · HO</option>
+        <option value="ho_team_audit">Audit · team member</option>
+        <option value="bss_pk_coo">COO · BSS Pakistan</option>
+      </optgroup>
+    </select>
+    <button class="signout" onclick="signOut()">Sign out</button>
+  </div>
 </nav>
 
 <section class="hero">
   <h1>UX redesign <span>mockups</span></h1>
-  <p>Four reference modules rebuilt around a task-first design system. Click into any module to explore the dashboard, then try <span class="kbd">⌘K</span> or the waffle launcher in the top bar to navigate.</p>
-  <div class="meta">Version 0.1 · Internal preview · Password-gated</div>
+  <p>Reference modules rebuilt around a task-first design system. Click into any module to explore its dashboard, then try <span class="kbd">⌘K</span> or the waffle launcher in the top bar to navigate.</p>
+  <div class="role-landing-hint" id="roleHint">
+    <svg viewBox="0 0 24 24"><path d="M12 2L9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2z"/></svg>
+    <span id="roleHintText">Previewing as <strong>Nasir Kasuri · RO Director</strong> — lands on <strong>Regional Executive Dashboard</strong>. Only modules scoped to this role are shown below.</span>
+  </div>
+  <div class="meta">Version 0.2 · Internal preview · Password-gated</div>
 </section>
 
 <main class="grid-wrap">
-  <div class="section-label">Reference mockups</div>
-  <div class="mockup-grid">
+  <div class="section-label" id="moduleSectionLabel">Reference mockups</div>
+  <div class="mockup-grid" id="moduleGrid">
 
-    <a class="mockup-card admissions" href="admissions.html">
+    <a class="mockup-card admissions" data-module="admissions" href="admissions.html">
       <div class="card-head">
         <div class="card-icon grad-admissions">
           <svg viewBox="0 0 24 24"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
@@ -254,7 +332,7 @@
       <span class="card-link">Open module →</span>
     </a>
 
-    <a class="mockup-card crm" href="crm.html">
+    <a class="mockup-card crm" data-module="crm" href="crm.html">
       <div class="card-head">
         <div class="card-icon grad-crm">
           <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
@@ -271,7 +349,7 @@
       <span class="card-link">Open module →</span>
     </a>
 
-    <a class="mockup-card sis" href="sis.html">
+    <a class="mockup-card sis" data-module="sis" href="sis.html">
       <div class="card-head">
         <div class="card-icon grad-sis">
           <svg viewBox="0 0 24 24"><path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z"/></svg>
@@ -288,7 +366,7 @@
       <span class="card-link">Open module →</span>
     </a>
 
-    <a class="mockup-card fees" href="fees.html">
+    <a class="mockup-card fees" data-module="fees" href="fees.html">
       <div class="card-head">
         <div class="card-icon grad-fees">
           <svg viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>
@@ -303,6 +381,62 @@
         <span class="card-bullet">Overdue records</span>
       </div>
       <span class="card-link">Open module →</span>
+    </a>
+
+    <a class="mockup-card hr" data-module="hr" href="hr.html">
+      <div class="card-head">
+        <div class="card-icon grad-hr">
+          <svg viewBox="0 0 24 24"><path d="M16.5 12c1.38 0 2.5-1.12 2.5-2.5S17.88 7 16.5 7 14 8.12 14 9.5s1.12 2.5 2.5 2.5zM9 11c1.66 0 3-1.34 3-3S10.66 5 9 5 6 6.34 6 8s1.34 3 3 3zm7.5 3c-1.83 0-5.5.92-5.5 2.75V19h11v-2.25c0-1.83-3.67-2.75-5.5-2.75zM9 13c-2.33 0-7 1.17-7 3.5V19h9v-2.25c0-.85.33-2.34 2.37-3.47C12.5 13.1 10.66 13 9 13z"/></svg>
+        </div>
+        <div class="card-meta">Human Resources</div>
+      </div>
+      <div class="card-title">People &amp; attendance</div>
+      <div class="card-desc">Personal HR portal with check-in, leaves, and employee records. Configurations for cadres, departments, designations, schedule and leave policy.</div>
+      <div class="card-bullets">
+        <span class="card-bullet">Attendance</span>
+        <span class="card-bullet">Leave apps</span>
+        <span class="card-bullet">Configurations</span>
+      </div>
+      <span class="card-link">Open module →</span>
+    </a>
+
+  </div>
+
+  <div class="section-label" style="margin-top:28px;">Authentication flow</div>
+  <div class="mockup-grid">
+
+    <a class="mockup-card auth" href="login.html">
+      <div class="card-head">
+        <div class="card-icon grad-auth">
+          <svg viewBox="0 0 24 24"><path d="M12 17c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm6-9h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6h1.9c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2z"/></svg>
+        </div>
+        <div class="card-meta">Sign In · Role demo</div>
+      </div>
+      <div class="card-title">Login + persona router</div>
+      <div class="card-desc">Sign-in screen with a persona selector that routes each role to the correct landing view. Demonstrates how the platform scopes by user.</div>
+      <div class="card-bullets">
+        <span class="card-bullet">Split-panel</span>
+        <span class="card-bullet">Role routing</span>
+        <span class="card-bullet">SSO</span>
+      </div>
+      <span class="card-link">Open screen →</span>
+    </a>
+
+    <a class="mockup-card auth" href="signup.html">
+      <div class="card-head">
+        <div class="card-icon grad-auth">
+          <svg viewBox="0 0 24 24"><path d="M15 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm-9-2V7H4v3H1v2h3v3h2v-3h3v-2H6zm9 4c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+        </div>
+        <div class="card-meta">Sign Up</div>
+      </div>
+      <div class="card-title">New account provisioning</div>
+      <div class="card-desc">Full registration form with first/last name, work email, phone, company, password, and CAPTCHA. Matches the production visual layout.</div>
+      <div class="card-bullets">
+        <span class="card-bullet">Split-panel</span>
+        <span class="card-bullet">reCAPTCHA</span>
+        <span class="card-bullet">TOS</span>
+      </div>
+      <span class="card-link">Open screen →</span>
     </a>
 
   </div>
@@ -325,8 +459,57 @@
 <script>
   function signOut() {
     sessionStorage.removeItem('b360-auth');
+    sessionStorage.removeItem('b360-role');
+    sessionStorage.removeItem('b360-role-label');
     window.location.replace('./');
   }
+
+  // Role → module visibility + landing view
+  // ALL = ['admissions','crm','sis','fees','hr']
+  const ROLE_META = {
+    ro_director:        { label: 'Nasir Kasuri · RO Director',            landing: 'Regional Executive Dashboard',   modules: ['admissions','crm','sis','fees','hr'] },
+    ro_head_education:  { label: 'Head of Education · RO',                 landing: 'Academic Dashboard',              modules: ['sis'] },
+    ro_team_education:  { label: 'Education · team member',                landing: 'Academic Dashboard (team)',       modules: ['sis'] },
+    ro_head_marketing:  { label: 'Head of Marketing &amp; Admissions · RO',landing: 'Funnel Dashboard',                modules: ['crm','admissions','sis'] },
+    ro_team_marketing:  { label: 'Marketing &amp; Admissions · team',      landing: 'Funnel Dashboard (team)',         modules: ['crm','admissions'] },
+    ro_head_hr:         { label: 'Head of HR · RO',                        landing: 'HR Operations Dashboard',         modules: ['hr'] },
+    ro_team_hr:         { label: 'HR · team member',                       landing: 'HR Operations Dashboard (team)',  modules: ['hr'] },
+    ro_head_it:         { label: 'Head of IT · RO',                        landing: 'System Admin Dashboard',          modules: ['admissions','crm','sis','fees','hr'] },
+    ro_team_it:         { label: 'IT · team member',                       landing: 'System Admin Dashboard (team)',   modules: ['admissions','crm','sis','fees','hr'] },
+    principal:          { label: 'School Principal',                       landing: 'Campus Dashboard',                modules: ['admissions','crm','sis','fees','hr'] },
+    head_secondary:     { label: 'Head of Secondary',                      landing: 'Campus Dashboard (Secondary)',    modules: ['sis','hr'] },
+    head_primary:       { label: 'Head of Primary',                        landing: 'Campus Dashboard (Primary)',      modules: ['sis','hr'] },
+    admissions_officer: { label: 'Admissions Officer / PRO',               landing: 'Admissions Today',                modules: ['admissions','crm','sis'] },
+    ho_chairperson:     { label: 'Chairperson · Beaconhouse Group',        landing: 'Group Executive Dashboard',       modules: ['admissions','crm','sis','fees','hr'] },
+    ho_head_finance:    { label: 'Head of Finance · HO',                   landing: 'Finance Dashboard',               modules: ['fees','hr'] },
+    ho_team_finance:    { label: 'Finance · team member',                  landing: 'Finance Dashboard (team)',        modules: ['fees'] },
+    ho_head_hr:         { label: 'Head of HR · HO',                        landing: 'HR Dashboard (group)',            modules: ['hr'] },
+    ho_team_hr:         { label: 'HR · team member',                       landing: 'HR Dashboard (team)',             modules: ['hr'] },
+    ho_head_audit:      { label: 'Head of Audit · HO',                     landing: 'Audit Dashboard',                 modules: ['admissions','crm','sis','fees','hr'] },
+    ho_team_audit:      { label: 'Audit · team member',                    landing: 'Audit Dashboard (team)',          modules: ['admissions','crm','sis','fees','hr'] },
+    bss_pk_coo:         { label: 'COO · BSS Pakistan',                     landing: 'BSS PK Operating Dashboard',      modules: ['admissions','crm','sis','fees','hr'] }
+  };
+
+  function applyRole() {
+    const sel = document.getElementById('roleSwitch');
+    const role = sel.value;
+    const meta = ROLE_META[role] || ROLE_META.ro_director;
+    sessionStorage.setItem('b360-role', role);
+    sessionStorage.setItem('b360-role-label', meta.label.replace(/<[^>]+>/g,''));
+    document.getElementById('roleHintText').innerHTML =
+      'Previewing as <strong>' + meta.label + '</strong> — lands on <strong>' + meta.landing + '</strong>. Only modules scoped to this role are shown below.';
+    document.querySelectorAll('.mockup-card[data-module]').forEach(card => {
+      const mod = card.dataset.module;
+      card.classList.toggle('hidden-by-role', !meta.modules.includes(mod));
+    });
+  }
+
+  // Initialise from sessionStorage if set (e.g. coming from login.html)
+  const storedRole = sessionStorage.getItem('b360-role');
+  if (storedRole && ROLE_META[storedRole]) {
+    document.getElementById('roleSwitch').value = storedRole;
+  }
+  applyRole();
 </script>
 
 </body>
