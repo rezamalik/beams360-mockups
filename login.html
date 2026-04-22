@@ -384,8 +384,9 @@
           <span class="chip">Demo</span>
         </div>
         <select class="role-select" id="roleSelect" onchange="updateRouteHint()">
-          <optgroup label="Regional Office — MENA &amp; SEA">
-            <option value="ro_director" data-dest="executive.html?role=ro_director" data-landing="Regional Executive Dashboard" selected>Nasir Kasuri — RO Director (BT · BIC · BEL · BSS MY/TH/PH/AE/OM)</option>
+          <optgroup label="Regional Office">
+            <option value="ro_director" data-dest="executive.html?role=ro_director" data-landing="Regional Executive Dashboard" selected>Nasir Kasuri — RO Director (MENA + BIC + BEL + BT)</option>
+            <option value="ro_director_sea" data-dest="executive.html?role=ro_director_sea" data-landing="Regional Executive Dashboard">Basit Humayun — RO Director (SEA: BSS MY/TH/PH)</option>
             <option value="ro_head_education" data-dest="home.html?role=ro_head_education" data-landing="Academic Dashboard">Head of Education — RO MENA &amp; SEA</option>
             <option value="ro_team_education" data-dest="sis.html?role=ro_team_education" data-landing="Academic Dashboard (team)">Head of Education — team member</option>
             <option value="ro_head_marketing" data-dest="crm.html?role=ro_head_marketing" data-landing="Funnel Dashboard">Head of Marketing &amp; Admissions — RO</option>
@@ -525,6 +526,7 @@
 <script>
   const ROLE_EMAILS = {
     ro_director:        'nasir.kasuri@beaconhouse.tech',
+    ro_director_sea:    'basit.humayun@beaconhouse.tech',
     ro_head_education:  'edu.ro@beaconhouse.tech',
     ro_team_education:  'edu.team@beaconhouse.tech',
     ro_head_marketing:  'marketing.ro@beaconhouse.tech',

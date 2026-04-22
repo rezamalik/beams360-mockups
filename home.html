@@ -273,8 +273,9 @@
   <div class="role-switch-wrap">
     <span class="role-switch-label">Preview as</span>
     <select class="role-switch" id="roleSwitch" onchange="applyRole()">
-      <optgroup label="Regional Office — MENA &amp; SEA">
-        <option value="ro_director" selected>Nasir Kasuri · RO Director (BT, BIC, BEL, BSS MY/TH/PH/AE/OM)</option>
+      <optgroup label="Regional Office">
+        <option value="ro_director" selected>Nasir Kasuri · RO Director (MENA + BIC + BEL + BT)</option>
+        <option value="ro_director_sea">Basit Humayun · RO Director (SEA: BSS MY/TH/PH)</option>
         <option value="ro_head_education">Head of Education · RO</option>
         <option value="ro_team_education">Education · team member</option>
         <option value="ro_head_marketing">Head of Marketing &amp; Admissions · RO</option>
@@ -512,7 +513,8 @@
   // Role → module visibility + landing view
   // Modules: 'admissions','crm','sis','fees','hr','executive','campus'
   const ROLE_META = {
-    ro_director:        { label: 'Nasir Kasuri · RO Director',             landing: 'Regional Executive Dashboard',   modules: ['executive','admissions','crm','sis','fees','hr'] },
+    ro_director:        { label: 'Nasir Kasuri · RO Director (MENA + BIC + BEL + BT)', landing: 'Regional Executive Dashboard', modules: ['executive','admissions','crm','sis','fees','hr'] },
+    ro_director_sea:    { label: 'Basit Humayun · RO Director (SEA)',      landing: 'Regional Executive Dashboard',   modules: ['executive','admissions','crm','sis','fees','hr'] },
     ro_head_education:  { label: 'Head of Education · RO',                 landing: 'Academic Dashboard',              modules: ['sis'] },
     ro_team_education:  { label: 'Education · team member',                landing: 'Academic Dashboard (team)',       modules: ['sis'] },
     ro_head_marketing:  { label: 'Head of Marketing &amp; Admissions · RO',landing: 'Funnel Dashboard',                modules: ['crm','admissions','sis'] },

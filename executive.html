@@ -902,9 +902,10 @@
       <div class="scope-strip-left">
         <span class="label">Persona</span>
         <div class="scope-tabs" id="scopeTabs">
-          <button class="scope-tab active" data-persona="ro_director">Nasir Kasuri · RO <span class="count">9</span></button>
+          <button class="scope-tab active" data-persona="ro_director">Nasir · RO MENA + BIC/BEL/BT <span class="count">5</span></button>
+          <button class="scope-tab" data-persona="ro_director_sea">Basit · RO SEA <span class="count">3</span></button>
           <button class="scope-tab" data-persona="ho_chairperson">Chairperson · BG <span class="count">22</span></button>
-          <button class="scope-tab" data-persona="bss_pk_coo">COO · BSS Pakistan <span class="count">17</span></button>
+          <button class="scope-tab" data-persona="bss_pk_coo">Ali Khan · BSS PK <span class="count">17</span></button>
           <button class="scope-tab" data-persona="ho_head_audit">Head of Audit <span class="count">22</span></button>
         </div>
       </div>
@@ -1045,10 +1046,15 @@
       <a class="section-action">All BUs <svg viewBox="0 0 24 24"><path d="M10 17l5-5-5-5v10z"/></svg></a>
     </div>
 
+    <!-- PK-schools placeholder note (shown only when Ali Khan is the persona) -->
+    <div id="pkNote" style="display:none; margin-bottom:14px; padding:14px 16px; background:#FFF8EB; border:1px solid #FCD34D; border-radius:8px; font-size:13px; color:#B45309;">
+      <strong>BSS Pakistan scope</strong> — 17 PK-based schools would render here. This mockup set only has the RO portfolio (BT + BIC + BEL + BSS MY/TH/PH/AE/OM) wired up; use the BSS PK implementation to see per-campus rollup tiles.
+    </div>
+
     <div class="bu-grid" id="buGrid">
 
       <!-- BT -->
-      <a class="bu-card" href="home.html?bu=bt">
+      <a class="bu-card" data-scope="bt" href="home.html?bu=bt">
         <div class="bu-card-head">
           <div class="bu-identity">
             <div class="bu-logo">BT</div>
@@ -1074,7 +1080,7 @@
       </a>
 
       <!-- BIC -->
-      <a class="bu-card" href="home.html?bu=bic">
+      <a class="bu-card" data-scope="bic" href="home.html?bu=bic">
         <div class="bu-card-head">
           <div class="bu-identity">
             <div class="bu-logo teal">BIC</div>
@@ -1098,7 +1104,7 @@
       </a>
 
       <!-- BEL — Beacon Energy Limited (solar) -->
-      <a class="bu-card" href="home.html?bu=bel">
+      <a class="bu-card" data-scope="bel" href="home.html?bu=bel">
         <div class="bu-card-head">
           <div class="bu-identity">
             <div class="bu-logo amber">BEL</div>
@@ -1122,7 +1128,7 @@
       </a>
 
       <!-- BSS MY -->
-      <a class="bu-card" href="home.html?bu=bss_my">
+      <a class="bu-card" data-scope="bss_my" href="home.html?bu=bss_my">
         <div class="bu-card-head">
           <div class="bu-identity">
             <div class="bu-logo blue">MY</div>
@@ -1146,7 +1152,7 @@
       </a>
 
       <!-- BSS TH -->
-      <a class="bu-card" href="home.html?bu=bss_th">
+      <a class="bu-card" data-scope="bss_th" href="home.html?bu=bss_th">
         <div class="bu-card-head">
           <div class="bu-identity">
             <div class="bu-logo purple">TH</div>
@@ -1170,7 +1176,7 @@
       </a>
 
       <!-- BSS PH -->
-      <a class="bu-card" href="home.html?bu=bss_ph">
+      <a class="bu-card" data-scope="bss_ph" href="home.html?bu=bss_ph">
         <div class="bu-card-head">
           <div class="bu-identity">
             <div class="bu-logo emerald">PH</div>
@@ -1194,7 +1200,7 @@
       </a>
 
       <!-- BSS UAE -->
-      <a class="bu-card" href="home.html?bu=bss_ae">
+      <a class="bu-card" data-scope="bss_ae" href="home.html?bu=bss_ae">
         <div class="bu-card-head">
           <div class="bu-identity">
             <div class="bu-logo coral">UAE</div>
@@ -1218,7 +1224,7 @@
       </a>
 
       <!-- BSS Oman -->
-      <a class="bu-card" href="home.html?bu=bss_om">
+      <a class="bu-card" data-scope="bss_om" href="home.html?bu=bss_om">
         <div class="bu-card-head">
           <div class="bu-identity">
             <div class="bu-logo rose">OM</div>
@@ -1242,7 +1248,7 @@
       </a>
 
       <!-- Regional OPS -->
-      <a class="bu-card" href="home.html?bu=ro_ops">
+      <a class="bu-card" data-scope="ro_ops" href="home.html?bu=ro_ops">
         <div class="bu-card-head">
           <div class="bu-identity">
             <div class="bu-logo slate">RO</div>
@@ -1289,56 +1295,56 @@
           </tr>
         </thead>
         <tbody>
-          <tr><td><span class="rank-chip top">1</span></td><td>
+          <tr data-scope="bss_my"><td><span class="rank-chip top">1</span></td><td>
             <div class="bu-cell">
               <div class="bu-logo blue">MY</div>
               <div><div class="bn">BSS Malaysia</div><div class="br">SEA · 4 campuses</div></div>
             </div>
           </td><td class="num">8,240</td><td class="num" style="color:var(--green)">+2.1%</td><td class="num">Rs. 142M</td><td><span class="mini-bar"><span style="width:93%"></span></span>93%</td><td class="num">Rs. 2.1M</td><td class="num">612</td><td><span class="health-pill ok"><span class="dot"></span>Healthy</span></td></tr>
 
-          <tr><td><span class="rank-chip">2</span></td><td>
+          <tr data-scope="bss_ph"><td><span class="rank-chip">2</span></td><td>
             <div class="bu-cell">
               <div class="bu-logo emerald">PH</div>
               <div><div class="bn">BSS Philippines</div><div class="br">SEA · 3 campuses</div></div>
             </div>
           </td><td class="num">4,860</td><td class="num" style="color:var(--green)">+3.8%</td><td class="num">Rs. 94M</td><td><span class="mini-bar"><span style="width:89%"></span></span>89%</td><td class="num">Rs. 1.4M</td><td class="num">386</td><td><span class="health-pill ok"><span class="dot"></span>Healthy</span></td></tr>
 
-          <tr><td><span class="rank-chip">3</span></td><td>
+          <tr data-scope="bel"><td><span class="rank-chip">3</span></td><td>
             <div class="bu-cell">
               <div class="bu-logo amber">BEL</div>
               <div><div class="bn">Beacon Energy</div><div class="br">Pakistan · Solar &amp; EPC</div></div>
             </div>
           </td><td class="num" style="color:var(--text-light)">—</td><td class="num" style="color:var(--text-muted)">0%</td><td class="num">Rs. 72M</td><td><span class="mini-bar"><span class="warn" style="width:82%"></span></span>82%</td><td class="num" style="color:var(--amber)">Rs. 4.2M</td><td class="num">142</td><td><span class="health-pill warn"><span class="dot"></span>Watch</span></td></tr>
 
-          <tr><td><span class="rank-chip">4</span></td><td>
+          <tr data-scope="bic"><td><span class="rank-chip">4</span></td><td>
             <div class="bu-cell">
               <div class="bu-logo teal">BIC</div>
               <div><div class="bn">BIC</div><div class="br">Pakistan · IB</div></div>
             </div>
           </td><td class="num">3,640</td><td class="num" style="color:var(--green)">+7.3%</td><td class="num">Rs. 58M</td><td><span class="mini-bar"><span style="width:91%"></span></span>91%</td><td class="num">Rs. 1.1M</td><td class="num">312</td><td><span class="health-pill ok"><span class="dot"></span>Healthy</span></td></tr>
 
-          <tr><td><span class="rank-chip">5</span></td><td>
+          <tr data-scope="bss_ae"><td><span class="rank-chip">5</span></td><td>
             <div class="bu-cell">
               <div class="bu-logo coral">UAE</div>
               <div><div class="bn">BSS UAE</div><div class="br">MENA · 2 campuses</div></div>
             </div>
           </td><td class="num">1,640</td><td class="num" style="color:var(--green)">+1.2%</td><td class="num">Rs. 52M</td><td><span class="mini-bar"><span class="danger" style="width:71%"></span></span>71%</td><td class="num" style="color:var(--red)">Rs. 6.2M</td><td class="num">148</td><td><span class="health-pill alert"><span class="dot"></span>Critical</span></td></tr>
 
-          <tr><td><span class="rank-chip">6</span></td><td>
+          <tr data-scope="bss_th"><td><span class="rank-chip">6</span></td><td>
             <div class="bu-cell">
               <div class="bu-logo purple">TH</div>
               <div><div class="bn">BSS Thailand</div><div class="br">SEA · 2 campuses</div></div>
             </div>
           </td><td class="num">2,180</td><td class="num" style="color:var(--red)">-1.4%</td><td class="num">Rs. 38M</td><td><span class="mini-bar"><span class="warn" style="width:83%"></span></span>83%</td><td class="num" style="color:var(--amber)">Rs. 2.8M</td><td class="num">184</td><td><span class="health-pill warn"><span class="dot"></span>Watch</span></td></tr>
 
-          <tr><td><span class="rank-chip">7</span></td><td>
+          <tr data-scope="bss_om"><td><span class="rank-chip">7</span></td><td>
             <div class="bu-cell">
               <div class="bu-logo rose">OM</div>
               <div><div class="bn">BSS Oman</div><div class="br">MENA · 1 campus</div></div>
             </div>
           </td><td class="num">920</td><td class="num" style="color:var(--green)">+2.8%</td><td class="num">Rs. 28M</td><td><span class="mini-bar"><span style="width:90%"></span></span>90%</td><td class="num">Rs. 0.6M</td><td class="num">82</td><td><span class="health-pill ok"><span class="dot"></span>Healthy</span></td></tr>
 
-          <tr><td><span class="rank-chip bottom">8</span></td><td>
+          <tr data-scope="bt"><td><span class="rank-chip bottom">8</span></td><td>
             <div class="bu-cell">
               <div class="bu-logo">BT</div>
               <div><div class="bn">Beaconhouse Technology</div><div class="br">SaaS · Pakistan</div></div>
@@ -1523,28 +1529,39 @@
   // Persona scope switching
   const PERSONAS = {
     ro_director: {
-      name: 'Nasir Kasuri', role: 'Director · RO MENA &amp; SEA',
-      welcome: 'Nasir', badge: 'MENA &amp; SEA · 9 BUs',
-      sbScope: 'RO MENA &amp; SEA', sbSub: '9 business units · FY 2025–2026',
-      buCount: 9
+      name: 'Nasir Kasuri', role: 'RO Director · MENA + BIC + BEL + BT',
+      welcome: 'Nasir', badge: 'MENA + BIC + BEL + BT · 5 BUs',
+      sbScope: 'RO MENA + BIC + BEL + BT', sbSub: '5 BUs · BSS UAE, BSS Oman, BIC, BEL, BT · FY 2025–2026',
+      buCount: 5,
+      scopes: ['bt','bic','bel','bss_ae','bss_om','ro_ops']
+    },
+    ro_director_sea: {
+      name: 'Basit Humayun', role: 'RO Director · SEA',
+      welcome: 'Basit', badge: 'SEA · 3 BUs',
+      sbScope: 'RO SEA', sbSub: '3 BUs · BSS MY, BSS TH, BSS PH · FY 2025–2026',
+      buCount: 3,
+      scopes: ['bss_my','bss_th','bss_ph','ro_ops']
     },
     ho_chairperson: {
       name: 'Kasim Kasuri', role: 'Chairperson · Beaconhouse Group',
       welcome: 'Kasim', badge: 'All 22 BUs',
       sbScope: 'Beaconhouse Group', sbSub: '22 business units · FY 2025–2026',
-      buCount: 22
+      buCount: 22,
+      scopes: null // null = all visible
     },
     bss_pk_coo: {
-      name: 'Ali Khan', role: 'COO · BSS Pakistan',
-      welcome: 'Ali', badge: 'BSS Pakistan · 17 BUs',
-      sbScope: 'BSS Pakistan', sbSub: '17 active BUs · FY 2025–2026',
-      buCount: 17
+      name: 'Ali Khan', role: 'COO · BSS Pakistan (PK schools)',
+      welcome: 'Ali', badge: 'Pakistan schools · 17 BUs',
+      sbScope: 'BSS Pakistan', sbSub: '17 PK-based schools · FY 2025–2026',
+      buCount: 17,
+      scopes: [] // none of the current Int'l+BIC+BEL+BT cards match Ali's PK-schools portfolio
     },
     ho_head_audit: {
       name: 'Saira Qazi', role: 'Head of Audit · HO',
       welcome: 'Saira', badge: 'Group-wide · audit focus',
       sbScope: 'Beaconhouse Group', sbSub: 'Audit scope · 22 BUs',
-      buCount: 22
+      buCount: 22,
+      scopes: null
     }
   };
 
@@ -1561,6 +1578,19 @@
     document.querySelectorAll('.scope-tab').forEach(t => {
       t.classList.toggle('active', t.dataset.persona === p);
     });
+
+    // Filter BU cards + comparison rows by scope
+    const scopes = d.scopes; // null = show all; [] = show none; [...] = show matching
+    document.querySelectorAll('[data-scope]').forEach(el => {
+      if (scopes === null) { el.style.display = ''; return; }
+      const bu = el.dataset.scope;
+      const show = scopes.includes(bu);
+      el.style.display = show ? '' : 'none';
+    });
+
+    // If Ali Khan (PK schools), show a note that BSS PK campus data would render here in production
+    const note = document.getElementById('pkNote');
+    if (note) note.style.display = (p === 'bss_pk_coo') ? '' : 'none';
   }
 
   document.querySelectorAll('.scope-tab').forEach(t => {
